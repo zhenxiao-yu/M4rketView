@@ -5,54 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5112e2-a3c7-40b2-9923-e84b22a8c3e9" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/postcss.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/logo192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/logo512.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/App.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/facebook-fill.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/github-fill.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/pagination-arrow.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/reddit-fill.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/reset.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/search-icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/select-icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/star.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/submit-icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/twitter-circle-filled.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Chart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CryptoDetails.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Filters.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Logo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Navigation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Pagination.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Search.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TableComponent.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TrendingCoin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/context/CryptoContext.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/context/StorageContext.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/context/TrendingContext.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Crypto.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Home.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Saved.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Trending.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/reportWebVitals.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/setupTests.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/react.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +39,14 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Github Repos\M4rketView" />
+      <recent name="F:\Github Repos\M4rketView\src" />
+      <recent name="F:\Github Repos\M4rketView\src\assets" />
+      <recent name="F:\Github Repos\M4rketView\public" />
+    </key>
+  </component>
   <component name="RunManager" selected="npm.start">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -128,7 +90,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732574054753</updated>
-      <workItem from="1732574057146" duration="728000" />
+      <workItem from="1732574057146" duration="1362000" />
     </task>
     <servers />
   </component>
