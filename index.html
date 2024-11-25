@@ -1,13 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Title of the Application -->
+  <title>M4rketView</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+
+  <!-- Preconnect to improve resource loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Web App Manifest for better PWA support -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="M4rketView - Stay ahead with the latest market trends and insights." />
+  <meta name="keywords" content="crypto, market, trends, analysis, M4rketView" />
+  <meta name="author" content="M4rketView Team" />
+
+  <!-- Social Media / Open Graph Tags -->
+  <meta property="og:title" content="M4rketView" />
+  <meta property="og:description" content="Stay ahead with the latest market trends and insights." />
+
+  <!-- Scripts for Performance -->
+  <script>
+    // Polyfills for older browsers
+    if (!window.Promise) {
+      document.write('<script src="https://cdn.polyfill.io/v3/polyfill.min.js"><\/script>');
+    }
+  </script>
+</head>
+<body>
+<!-- Main Root Element -->
+<div id="root"></div>
+
+<!-- Load Main React App -->
+<script type="module" src="/src/main.jsx" defer></script>
+</body>
 </html>
