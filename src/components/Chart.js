@@ -42,7 +42,7 @@ const ChartComponent = ({ data, currency, type }) => {
           stroke="#14ffec"
           strokeWidth={"1px"}
         />
-        <CartesianGrid stroke="#323232" />
+        <CartesianGrid stroke="#5B8FB9" />
         <XAxis dataKey="date" hide />
         <YAxis dataKey={type} hide domain={["auto", "auto"]} />
         <Tooltip
