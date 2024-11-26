@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="1a5112e2-a3c7-40b2-9923-e84b22a8c3e9" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TrendingCoin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TrendingCoin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/logo.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CryptoDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CryptoDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Logo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Logo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +31,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "F:/Github Repos/M4rketView",
+    "last_opened_file_path": "F:/Github Repos/M4rketView/src/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -39,15 +41,19 @@
     "nodejs_package_manager_path": "npm",
     "npm.dev.executor": "Run",
     "npm.start.executor": "Run",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Github Repos\M4rketView\src\assets" />
       <recent name="F:\Github Repos\M4rketView" />
       <recent name="F:\Github Repos\M4rketView\src" />
-      <recent name="F:\Github Repos\M4rketView\src\assets" />
       <recent name="F:\Github Repos\M4rketView\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Github Repos\M4rketView\src\assets" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -94,7 +100,7 @@
       <option name="presentableId" value="Default" />
       <updated>1732574054753</updated>
       <workItem from="1732574057146" duration="1362000" />
-      <workItem from="1732577548753" duration="4601000" />
+      <workItem from="1732577548753" duration="7114000" />
     </task>
     <servers />
   </component>
@@ -109,6 +115,12 @@
           <line>1</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/tailwind.config.js</url>
+          <line>22</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
