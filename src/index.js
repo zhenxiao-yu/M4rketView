@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         element: <Trending />,
         children: [
           {
-            // Dynamic route for specific coin details in Trending
+            // Dynamic route for specific coin det1ails in Trending
             path: ":coinId",
             element: <CryptoDetails />
           }
