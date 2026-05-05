@@ -138,3 +138,15 @@ export interface MarketParams {
 
 export type ChartType = 'prices' | 'market_caps' | 'total_volumes'
 export type ChartDays = 1 | 7 | 14 | 30 | 90 | 365
+
+export interface BitcoinStats {
+  hash_rate: number
+  difficulty: number
+  n_tx: number
+  miners_revenue_btc: number
+  miners_revenue_usd: number
+  blocks_size: number
+  total_fees_btc: number
+  n_btc_mined: number
+  timestamp: number
+}

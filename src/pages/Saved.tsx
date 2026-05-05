@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Star, StarOff, RefreshCw, Download, TrendingUp, TrendingDown } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 import { useWatchlistStore } from '@/store/watchlistStore'
 import { useMarketStore } from '@/store/marketStore'
 import { formatCurrency, formatPercent } from '@/lib/utils'
@@ -69,7 +70,7 @@ const Saved = () => {
         <div className="flex gap-2">
           {savedData && (
             <button
-              onClick={() => exportWatchlistCSV(savedData, currency)}
+              onClick={() => { exportWatchlistCSV(savedData, currency); toast.success('Exported to CSV') }}
               className="flex items-center gap-1.5 text-sm text-gray-100 hover:text-cyan transition-colors"
             >
               <Download size={16} /> Export CSV

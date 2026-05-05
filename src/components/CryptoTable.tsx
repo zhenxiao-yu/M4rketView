@@ -1,6 +1,10 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star, StarOff, TrendingUp, TrendingDown, GitCompare } from 'lucide-react'
+import { Star, StarOff, TrendingUp, TrendingDown, GitCompare, Wifi } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { toast } from 'react-hot-toast'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
+import { useLivePrices } from '@/hooks/useLivePrices'
 import { useMarketStore } from '@/store/marketStore'
 import { useWatchlistStore } from '@/store/watchlistStore'
 import { useUIStore } from '@/store/uiStore'
@@ -33,14 +37,55 @@ const PctBadge = ({ value }: { value: number | undefined }) => {
   )
 }
 
+const PriceCell = ({ coinId, basePrice, currency, livePrice }: {
+  coinId: string
+  basePrice: number
+  currency: string
+  livePrice?: number
+}) => {
+  const price = livePrice ?? basePrice
+  const [flash, setFlash] = useState<'up' | 'down' | null>(null)
+  const prevRef = useRef(price)
+
+  useEffect(() => {
+    if (prevRef.current === price) return
+    setFlash(price > prevRef.current ? 'up' : 'down')
+    prevRef.current = price
+    const t = setTimeout(() => setFlash(null), 800)
+    return () => clearTimeout(t)
+  }, [price])
+
+  return (
+    <motion.span
+      key={`${coinId}-${price}`}
+      className={`font-mono transition-colors duration-300 ${
+        flash === 'up' ? 'text-green' : flash === 'down' ? 'text-red' : ''
+      }`}
+      animate={flash ? { scale: [1, 1.06, 1] } : {}}
+      transition={{ duration: 0.3 }}
+    >
+      {formatCurrency(price, currency)}
+    </motion.span>
+  )
+}
+
 const SaveBtn = ({ coin }: { coin: CoinMarket }) => {
   const { toggleCoin, isWatched } = useWatchlistStore()
   const saved = isWatched(coin.id)
 
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const willAdd = !saved
+    toggleCoin(coin.id)
+    toast(willAdd ? `${coin.name} added to watchlist` : `${coin.name} removed from watchlist`, {
+      icon: willAdd ? '⭐' : '🗑',
+    })
+  }
+
   return (
     <button
       className="flex-shrink-0 text-gray-100 hover:text-cyan transition-all hover:scale-110"
-      onClick={(e) => { e.preventDefault(); toggleCoin(coin.id) }}
+      onClick={handleToggle}
       aria-label={saved ? 'Remove from watchlist' : 'Add to watchlist'}
     >
       {saved ? <Star size={16} className="fill-cyan text-cyan" /> : <StarOff size={16} />}
@@ -71,6 +116,7 @@ const CompareBtn = ({ coin }: { coin: CoinMarket }) => {
 const CryptoTable = () => {
   const { currency } = useMarketStore()
   const { data, isLoading, error } = useCryptoMarkets()
+  const { prices, connected } = useLivePrices()
 
   return (
     <>
@@ -85,7 +131,12 @@ const CryptoTable = () => {
               <tr>
                 <th className="py-3 px-2 text-left">Asset</th>
                 <th className="py-3 px-2">Name</th>
-                <th className="py-3 px-2">Price</th>
+                <th className="py-3 px-2">
+                  Price
+                  {connected && (
+                    <Wifi size={11} className="inline ml-1 text-green animate-pulse" aria-label="Live prices" />
+                  )}
+                </th>
                 <th className="py-3 px-2 hidden md:table-cell">Volume</th>
                 <th className="py-3 px-2 hidden md:table-cell">MktCap Δ</th>
                 <th className="py-3 px-2 hidden lg:table-cell">1H</th>
@@ -120,8 +171,13 @@ const CryptoTable = () => {
                         {coin.name}
                       </Link>
                     </td>
-                    <td className="py-3 px-2 font-mono">
-                      {formatCurrency(coin.current_price, currency)}
+                    <td className="py-3 px-2">
+                      <PriceCell
+                        coinId={coin.id}
+                        basePrice={coin.current_price}
+                        currency={currency}
+                        livePrice={prices[coin.id]}
+                      />
                     </td>
                     <td className="py-3 px-2 hidden md:table-cell text-gray-100">
                       {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(coin.total_volume)}

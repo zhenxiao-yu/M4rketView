@@ -16,6 +16,8 @@ const Saved      = lazy(() => import('@/pages/Saved'))
 const Portfolio  = lazy(() => import('@/pages/Portfolio'))
 const Compare    = lazy(() => import('@/pages/Compare'))
 const CoinDetail = lazy(() => import('@/pages/CoinDetail'))
+const News       = lazy(() => import('@/pages/News'))
+const Heatmap    = lazy(() => import('@/pages/Heatmap'))
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
       { path: 'portfolio',    element: <Suspense fallback={<PageSkeleton />}><Portfolio /></Suspense> },
       { path: 'compare',      element: <Suspense fallback={<PageSkeleton />}><Compare /></Suspense> },
       { path: 'coin/:coinId', element: <Suspense fallback={<PageSkeleton />}><CoinDetail /></Suspense> },
+      { path: 'news',        element: <Suspense fallback={<PageSkeleton />}><News /></Suspense> },
+      { path: 'heatmap',     element: <Suspense fallback={<PageSkeleton />}><Heatmap /></Suspense> },
     ],
   },
 ])

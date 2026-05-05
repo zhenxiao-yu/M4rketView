@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { Toaster, toast } from 'react-hot-toast'
 import Logo from '@/components/Logo'
 import Navigation from '@/components/Navigation'
 import SearchCommand from '@/components/SearchCommand'
@@ -31,12 +32,10 @@ const AlertChecker = () => {
         alert.direction === 'above' ? price >= alert.targetPrice : price <= alert.targetPrice
       if (triggered) {
         markTriggered(alert.id)
-        if (Notification.permission === 'granted') {
-          new Notification(`Price Alert: ${alert.coinName}`, {
-            body: `Price ${alert.direction === 'above' ? 'crossed above' : 'dropped below'} ${alert.targetPrice} ${currency.toUpperCase()}`,
-            icon: alert.coinImage,
-          })
-        }
+        toast.success(
+          `${alert.coinName} price ${alert.direction === 'above' ? 'crossed above' : 'dropped below'} ${alert.targetPrice} ${currency.toUpperCase()}`,
+          { duration: 6000, icon: '🔔' }
+        )
       }
     })
   }, [data, alerts, markTriggered, currency])
@@ -51,6 +50,12 @@ const Home = () => {
   return (
     <main className="w-full min-h-screen flex flex-col items-center font-nunito text-white">
       <div className="fixed inset-0 bg-gray-300 -z-10" />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: { background: '#1a1a2e', color: '#fff', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px' },
+        }}
+      />
       <AlertChecker />
       <SearchCommand />
       <Logo />

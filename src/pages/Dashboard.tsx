@@ -5,6 +5,9 @@ import { useFearGreed } from '@/hooks/useFearGreed'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { formatCompact, formatPercent } from '@/lib/utils'
 import type { CoinMarket } from '@/types/coingecko'
+import BitcoinStats from '@/components/dashboard/BitcoinStats'
+import DeFiTVL from '@/components/dashboard/DeFiTVL'
+import MarketHeatmap from '@/components/MarketHeatmap'
 
 const MetricCard = ({
   title, value, sub, icon, trend,
@@ -130,6 +133,11 @@ const Dashboard = () => {
           </div>
         </div>
       )}
+
+      {markets && <MarketHeatmap coins={markets} />}
+
+      <BitcoinStats />
+      <DeFiTVL />
 
       <div className="flex justify-center">
         <Link

@@ -1,10 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import CryptoTable from '@/components/CryptoTable'
 import { useWatchlistStore } from '@/store/watchlistStore'
 import { useMarketStore } from '@/store/marketStore'
+
+vi.mock('@/hooks/useLivePrices', () => ({
+  useLivePrices: () => ({ prices: {}, connected: false }),
+}))
 
 const makeClient = () =>
   new QueryClient({

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Sun, Moon, BarChart3, GitCompare, Bell, LayoutDashboard, TrendingUp, Bookmark, Search } from 'lucide-react'
+import { Sun, Moon, BarChart3, GitCompare, Bell, LayoutDashboard, TrendingUp, Bookmark, Search, Newspaper, Grid2X2 } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
 import { useUIStore } from '@/store/uiStore'
 import { useAlertStore } from '@/store/alertStore'
@@ -48,6 +48,14 @@ const Navigation = () => {
                 {compareCoins.length}
               </span>
             )}
+          </NavLink>
+          <NavLink to="/news" className={navLinkClass}>
+            <Newspaper size={13} />
+            News
+          </NavLink>
+          <NavLink to="/heatmap" className={navLinkClass}>
+            <Grid2X2 size={13} />
+            Heatmap
           </NavLink>
         </div>
 
