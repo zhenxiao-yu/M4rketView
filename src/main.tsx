@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -6,28 +6,29 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import './index.css'
 import { queryClient } from '@/lib/queryClient'
-
 import Home from '@/pages/Home'
-import Dashboard from '@/pages/Dashboard'
-import Crypto from '@/pages/Crypto'
-import Trending from '@/pages/Trending'
-import Saved from '@/pages/Saved'
-import Portfolio from '@/pages/Portfolio'
-import Compare from '@/pages/Compare'
-import CoinDetail from '@/pages/CoinDetail'
+import PageSkeleton from '@/components/PageSkeleton'
+
+const Dashboard  = lazy(() => import('@/pages/Dashboard'))
+const Crypto     = lazy(() => import('@/pages/Crypto'))
+const Trending   = lazy(() => import('@/pages/Trending'))
+const Saved      = lazy(() => import('@/pages/Saved'))
+const Portfolio  = lazy(() => import('@/pages/Portfolio'))
+const Compare    = lazy(() => import('@/pages/Compare'))
+const CoinDetail = lazy(() => import('@/pages/CoinDetail'))
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
     children: [
-      { index: true, element: <Dashboard /> },
-      { path: 'markets', element: <Crypto /> },
-      { path: 'trending', element: <Trending /> },
-      { path: 'saved', element: <Saved /> },
-      { path: 'portfolio', element: <Portfolio /> },
-      { path: 'compare', element: <Compare /> },
-      { path: 'coin/:coinId', element: <CoinDetail /> },
+      { index: true,          element: <Suspense fallback={<PageSkeleton />}><Dashboard /></Suspense> },
+      { path: 'markets',      element: <Suspense fallback={<PageSkeleton />}><Crypto /></Suspense> },
+      { path: 'trending',     element: <Suspense fallback={<PageSkeleton />}><Trending /></Suspense> },
+      { path: 'saved',        element: <Suspense fallback={<PageSkeleton />}><Saved /></Suspense> },
+      { path: 'portfolio',    element: <Suspense fallback={<PageSkeleton />}><Portfolio /></Suspense> },
+      { path: 'compare',      element: <Suspense fallback={<PageSkeleton />}><Compare /></Suspense> },
+      { path: 'coin/:coinId', element: <Suspense fallback={<PageSkeleton />}><CoinDetail /></Suspense> },
     ],
   },
 ])

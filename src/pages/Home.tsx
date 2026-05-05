@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import Logo from '@/components/Logo'
 import Navigation from '@/components/Navigation'
+import SearchCommand from '@/components/SearchCommand'
 import { useTheme } from '@/hooks/useTheme'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { useAlertStore } from '@/store/alertStore'
@@ -51,6 +52,7 @@ const Home = () => {
     <main className="w-full min-h-screen flex flex-col items-center font-nunito text-white">
       <div className="fixed inset-0 bg-gray-300 -z-10" />
       <AlertChecker />
+      <SearchCommand />
       <Logo />
       <Navigation />
       <div className="w-full max-w-7xl px-4">
