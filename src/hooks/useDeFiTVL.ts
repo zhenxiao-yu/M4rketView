@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchDeFiProtocols, fetchDeFiChains, fetchGlobalTvlHistory } from '@/api/defiLlama'
 
-const OPTIONS = { staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000 }
+const OPTIONS = { staleTime: 15 * 60 * 1000, gcTime: 30 * 60 * 1000 }
 
 export function useDeFiProtocols() {
   return useQuery({ queryKey: ['defi', 'protocols'], queryFn: fetchDeFiProtocols, ...OPTIONS })

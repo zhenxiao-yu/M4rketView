@@ -1,6 +1,7 @@
 import { Cpu, Zap, ArrowRightLeft, DollarSign } from 'lucide-react'
 import { useBitcoinStats } from '@/hooks/useBitcoinStats'
 import { formatCompact } from '@/lib/utils'
+import ErrorCard from '@/components/ui/ErrorCard'
 
 const StatCard = ({
   icon,
@@ -24,23 +25,14 @@ const StatCard = ({
 )
 
 const BitcoinStats = () => {
-  const { data, isLoading } = useBitcoinStats()
+  const { data, isLoading, error, refetch } = useBitcoinStats()
 
-  const hashRate = data
-    ? `${(data.hash_rate / 1e18).toFixed(2)} EH/s`
-    : isLoading ? '...' : '—'
+  const fmt = (loading: boolean, val: string) => isLoading && loading ? '...' : val
 
-  const difficulty = data
-    ? formatCompact(data.difficulty)
-    : isLoading ? '...' : '—'
-
-  const txToday = data
-    ? formatCompact(data.n_tx)
-    : isLoading ? '...' : '—'
-
-  const minerRevenue = data
-    ? `$${formatCompact(data.miners_revenue_usd)}`
-    : isLoading ? '...' : '—'
+  const hashRate  = data ? `${(data.hash_rate / 1e18).toFixed(2)} EH/s` : fmt(!data, '—')
+  const difficulty = data ? formatCompact(data.difficulty)                : fmt(!data, '—')
+  const txToday    = data ? formatCompact(data.n_tx)                      : fmt(!data, '—')
+  const minerRev   = data ? `$${formatCompact(data.miners_revenue_usd)}`  : fmt(!data, '—')
 
   return (
     <div className="mb-8">
@@ -48,12 +40,16 @@ const BitcoinStats = () => {
         <Cpu size={16} className="text-cyan" />
         Bitcoin Network
       </h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<Zap size={18} />} label="Hash Rate" value={hashRate} sub="Network security" />
-        <StatCard icon={<Cpu size={18} />} label="Difficulty" value={difficulty} sub="Mining difficulty" />
-        <StatCard icon={<ArrowRightLeft size={18} />} label="Transactions" value={txToday} sub="Today" />
-        <StatCard icon={<DollarSign size={18} />} label="Miner Revenue" value={minerRevenue} sub="24H earnings" />
-      </div>
+      {error ? (
+        <ErrorCard error={error as Error} onRetry={() => refetch()} compact />
+      ) : (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard icon={<Zap size={18} />}             label="Hash Rate"    value={hashRate}   sub="Network security" />
+          <StatCard icon={<Cpu size={18} />}             label="Difficulty"   value={difficulty} sub="Mining difficulty" />
+          <StatCard icon={<ArrowRightLeft size={18} />}  label="Transactions" value={txToday}    sub="Today" />
+          <StatCard icon={<DollarSign size={18} />}      label="Miner Revenue" value={minerRev}  sub="24H earnings" />
+        </div>
+      )}
     </div>
   )
 }

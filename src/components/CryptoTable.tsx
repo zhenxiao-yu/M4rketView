@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { Star, StarOff, TrendingUp, TrendingDown, GitCompare, Wifi } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { toast } from 'react-hot-toast'
+import * as Tooltip from '@radix-ui/react-tooltip'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { useLivePrices } from '@/hooks/useLivePrices'
 import { useMarketStore } from '@/store/marketStore'
 import { useWatchlistStore } from '@/store/watchlistStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatCurrency, formatPercent } from '@/lib/utils'
+import ErrorCard from '@/components/ui/ErrorCard'
 import Pagination from './Pagination'
 import type { CoinMarket } from '@/types/coingecko'
 
@@ -122,11 +124,11 @@ const CryptoTable = () => {
     <>
       <div className="flex flex-col mt-9 border border-gray-100 rounded-lg overflow-hidden">
         {error ? (
-          <div className="min-h-[50vh] flex items-center justify-center">
-            <p className="text-red text-lg">{error.message || 'Failed to load data'}</p>
-          </div>
+          <ErrorCard error={error as Error} minHeight="min-h-[50vh]" />
         ) : (
-          <table className="w-full table-auto">
+          <Tooltip.Provider delayDuration={300}>
+          <div className="overflow-x-auto">
+          <table className="w-full table-auto min-w-[640px]">
             <thead className="capitalize text-sm text-gray-100 font-medium border-b border-gray-100 bg-gray-200/30">
               <tr>
                 <th className="py-3 px-2 text-left">Asset</th>
@@ -134,7 +136,17 @@ const CryptoTable = () => {
                 <th className="py-3 px-2">
                   Price
                   {connected && (
-                    <Wifi size={11} className="inline ml-1 text-green animate-pulse" aria-label="Live prices" />
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <Wifi size={11} className="inline ml-1 text-green animate-pulse cursor-help" />
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content className="bg-gray-200 border border-gray-100/20 text-xs px-2.5 py-1.5 rounded-lg shadow-lg z-50" sideOffset={5}>
+                          Real-time via Binance WebSocket
+                          <Tooltip.Arrow className="fill-gray-200" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
                   )}
                 </th>
                 <th className="py-3 px-2 hidden md:table-cell">Volume</th>
@@ -199,6 +211,8 @@ const CryptoTable = () => {
               )}
             </tbody>
           </table>
+          </div>
+          </Tooltip.Provider>
         )}
       </div>
 

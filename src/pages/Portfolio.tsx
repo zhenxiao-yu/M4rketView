@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { PlusCircle, Trash2, TrendingUp, TrendingDown } from 'lucide-react'
+import ErrorCard from '@/components/ui/ErrorCard'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { usePortfolioStore } from '@/store/portfolioStore'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
@@ -101,7 +102,7 @@ const AddCoinForm = () => {
 const Portfolio = () => {
   const { entries, removeEntry } = usePortfolioStore()
   const { currency } = useMarketStore()
-  const { data: prices, isLoading } = usePortfolioData()
+  const { data: prices, isLoading, error, refetch } = usePortfolioData()
 
   const priceMap = new Map(prices?.map((c) => [c.id, c.current_price]) ?? [])
 
@@ -159,9 +160,11 @@ const Portfolio = () => {
 
       <AddCoinForm />
 
+      {error && <ErrorCard error={error as Error} onRetry={() => refetch()} compact />}
+
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Table */}
-        <div className="flex-1 border border-gray-100 rounded-xl overflow-hidden">
+        <div className="flex-1 border border-gray-100 rounded-xl overflow-x-auto">
           <table className="w-full table-auto">
             <thead className="text-xs text-gray-100 border-b border-gray-100 bg-gray-200/30">
               <tr>

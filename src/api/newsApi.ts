@@ -1,4 +1,5 @@
 import type { NewsItem, NewsSource } from '@/types/news'
+import { RateLimitError } from '@/lib/errors'
 
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json'
 
@@ -15,6 +16,7 @@ function stripHtml(html: string): string {
 export async function fetchNewsFeed(source: NewsSource): Promise<NewsItem[]> {
   const url = `${RSS2JSON}?rss_url=${encodeURIComponent(FEEDS[source])}&count=20`
   const res = await fetch(url)
+  if (res.status === 429) throw new RateLimitError('RSS2JSON')
   if (!res.ok) throw new Error(`News fetch failed for ${source}`)
   const json = await res.json()
   if (json.status !== 'ok') throw new Error(`RSS2JSON error for ${source}`)

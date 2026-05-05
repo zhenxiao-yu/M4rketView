@@ -6,6 +6,6 @@ export function useCoinDetail(id: string | undefined) {
     queryKey: ['coin', id],
     queryFn: () => fetchCoinDetail(id!),
     enabled: !!id,
-    staleTime: 30 * 1000,
+    staleTime: 3 * 60 * 1000,
   })
 }

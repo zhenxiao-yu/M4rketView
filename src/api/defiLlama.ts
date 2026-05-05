@@ -1,31 +1,26 @@
 import type { DeFiProtocol, DeFiChain, DeFiTvlPoint } from '@/types/defiLlama'
+import { RateLimitError } from '@/lib/errors'
 
 const BASE = 'https://api.llama.fi'
 
+async function llamaFetch<T>(url: string): Promise<T> {
+  const res = await fetch(url)
+  if (res.status === 429) throw new RateLimitError('DeFiLlama')
+  if (!res.ok) throw new Error(`DeFiLlama fetch failed: ${res.statusText}`)
+  return res.json() as Promise<T>
+}
+
 export async function fetchDeFiProtocols(): Promise<DeFiProtocol[]> {
-  const res = await fetch(`${BASE}/protocols`)
-  if (!res.ok) throw new Error('DeFiLlama protocols fetch failed')
-  const data = await res.json()
-  return (data as DeFiProtocol[])
-    .filter((p) => p.tvl > 0)
-    .sort((a, b) => b.tvl - a.tvl)
-    .slice(0, 25)
+  const data = await llamaFetch<DeFiProtocol[]>(`${BASE}/protocols`)
+  return data.filter((p) => p.tvl > 0).sort((a, b) => b.tvl - a.tvl).slice(0, 25)
 }
 
 export async function fetchDeFiChains(): Promise<DeFiChain[]> {
-  const res = await fetch(`${BASE}/chains`)
-  if (!res.ok) throw new Error('DeFiLlama chains fetch failed')
-  const data = await res.json()
-  return (data as DeFiChain[])
-    .sort((a, b) => b.tvl - a.tvl)
-    .slice(0, 10)
+  const data = await llamaFetch<DeFiChain[]>(`${BASE}/chains`)
+  return data.sort((a, b) => b.tvl - a.tvl).slice(0, 10)
 }
 
 export async function fetchGlobalTvlHistory(): Promise<DeFiTvlPoint[]> {
-  const res = await fetch(`${BASE}/v2/historicalChainTvl`)
-  if (!res.ok) throw new Error('DeFiLlama TVL history fetch failed')
-  const data = await res.json()
-  const points = data as DeFiTvlPoint[]
-  // return last 90 days
+  const points = await llamaFetch<DeFiTvlPoint[]>(`${BASE}/v2/historicalChainTvl`)
   return points.slice(-90)
 }

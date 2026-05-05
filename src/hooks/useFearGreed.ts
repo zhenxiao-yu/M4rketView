@@ -5,6 +5,6 @@ export function useFearGreed() {
   return useQuery({
     queryKey: ['feargreed'],
     queryFn: fetchFearGreed,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 60 * 60 * 1000,   // updates once per day
   })
 }

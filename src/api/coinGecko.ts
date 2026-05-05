@@ -8,12 +8,14 @@ import type {
   FearGreedData,
   MarketParams,
 } from '@/types/coingecko'
+import { RateLimitError } from '@/lib/errors'
 
 const COINGECKO_BASE = 'https://api.coingecko.com/api/v3'
 const FEAR_GREED_BASE = 'https://api.alternative.me'
 
-async function fetchJSON<T>(url: string): Promise<T> {
+async function fetchJSON<T>(url: string, source = 'CoinGecko'): Promise<T> {
   const res = await fetch(url)
+  if (res.status === 429) throw new RateLimitError(source)
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }))
     throw new Error((err as { error: string }).error ?? res.statusText)

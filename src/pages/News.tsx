@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ExternalLink, Newspaper, Search } from 'lucide-react'
 import { useNewsFeeds } from '@/hooks/useNewsFeeds'
+import ErrorCard from '@/components/ui/ErrorCard'
 import type { NewsItem, NewsSource } from '@/types/news'
 
 const SOURCE_LABELS: Record<NewsSource | 'all', string> = {
@@ -91,7 +92,7 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
 }
 
 const News = () => {
-  const { items, isLoading } = useNewsFeeds()
+  const { items, isLoading, isError } = useNewsFeeds()
   const [sourceFilter, setSourceFilter] = useState<NewsSource | 'all'>('all')
   const [search, setSearch] = useState('')
 
@@ -143,6 +144,8 @@ const News = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
+      ) : isError ? (
+        <ErrorCard error={new Error('Failed to load news feeds. RSS2JSON may be rate-limited.')} minHeight="min-h-[30vh]" />
       ) : filtered.length === 0 ? (
         <p className="text-gray-100 text-sm text-center py-16">No articles found.</p>
       ) : (

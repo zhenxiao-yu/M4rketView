@@ -7,6 +7,6 @@ export function useMarketChart(id: string | undefined, currency: string, days: C
     queryKey: ['chart', id, currency, days],
     queryFn: () => fetchMarketChart(id!, currency, days),
     enabled: !!id,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
   })
 }

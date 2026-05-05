@@ -5,6 +5,7 @@ import { Toaster, toast } from 'react-hot-toast'
 import Logo from '@/components/Logo'
 import Navigation from '@/components/Navigation'
 import SearchCommand from '@/components/SearchCommand'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { useTheme } from '@/hooks/useTheme'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { useAlertStore } from '@/store/alertStore'
@@ -61,17 +62,19 @@ const Home = () => {
       <Logo />
       <Navigation />
       <div className="w-full max-w-7xl px-4">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        <ErrorBoundary>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
+        </ErrorBoundary>
       </div>
     </main>
   )

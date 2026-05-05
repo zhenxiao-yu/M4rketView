@@ -5,6 +5,6 @@ export function useGlobalData() {
   return useQuery({
     queryKey: ['global'],
     queryFn: fetchGlobalData,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   })
 }

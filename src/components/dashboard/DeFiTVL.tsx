@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Link2 } from 'lucide-react'
+import ErrorCard from '@/components/ui/ErrorCard'
 import {
   AreaChart,
   Area,
@@ -11,7 +12,7 @@ import { useDeFiProtocols, useDeFiChains, useGlobalTvlHistory } from '@/hooks/us
 import { formatCompact, formatPercent } from '@/lib/utils'
 
 const DeFiTVL = () => {
-  const { data: protocols, isLoading: protoLoading } = useDeFiProtocols()
+  const { data: protocols, isLoading: protoLoading, error: protoError, refetch } = useDeFiProtocols()
   const { data: chains, isLoading: chainsLoading } = useDeFiChains()
   const { data: history } = useGlobalTvlHistory()
 
@@ -26,6 +27,17 @@ const DeFiTVL = () => {
   }))
 
   const loading = protoLoading || chainsLoading
+
+  if (protoError) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-base font-semibold mb-4 flex items-center gap-2">
+          <Link2 size={16} className="text-cyan" /> DeFi TVL
+        </h2>
+        <ErrorCard error={protoError as Error} onRetry={() => refetch()} compact />
+      </div>
+    )
+  }
 
   return (
     <div className="mb-8">

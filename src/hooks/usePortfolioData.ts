@@ -19,7 +19,6 @@ export function usePortfolioData() {
         ids,
       }),
     enabled: entries.length > 0,
-    staleTime: 30 * 1000,
-    refetchInterval: 30 * 1000,
+    staleTime: 3 * 60 * 1000,   // 3 min — removed 30s refetchInterval
   })
 }

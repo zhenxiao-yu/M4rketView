@@ -3,11 +3,20 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 
 import './index.css'
 import { queryClient } from '@/lib/queryClient'
 import Home from '@/pages/Home'
 import PageSkeleton from '@/components/PageSkeleton'
+
+// Persist query cache to localStorage — instant loads on revisit, survives API outages
+persistQueryClient({
+  queryClient,
+  persister: createSyncStoragePersister({ storage: window.localStorage }),
+  maxAge: 24 * 60 * 60 * 1000,   // 24 hours
+})
 
 const Dashboard  = lazy(() => import('@/pages/Dashboard'))
 const Crypto     = lazy(() => import('@/pages/Crypto'))
@@ -31,8 +40,8 @@ const router = createBrowserRouter([
       { path: 'portfolio',    element: <Suspense fallback={<PageSkeleton />}><Portfolio /></Suspense> },
       { path: 'compare',      element: <Suspense fallback={<PageSkeleton />}><Compare /></Suspense> },
       { path: 'coin/:coinId', element: <Suspense fallback={<PageSkeleton />}><CoinDetail /></Suspense> },
-      { path: 'news',        element: <Suspense fallback={<PageSkeleton />}><News /></Suspense> },
-      { path: 'heatmap',     element: <Suspense fallback={<PageSkeleton />}><Heatmap /></Suspense> },
+      { path: 'news',         element: <Suspense fallback={<PageSkeleton />}><News /></Suspense> },
+      { path: 'heatmap',      element: <Suspense fallback={<PageSkeleton />}><Heatmap /></Suspense> },
     ],
   },
 ])

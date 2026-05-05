@@ -9,8 +9,8 @@ export function useNewsFeeds() {
     queries: SOURCES.map((source) => ({
       queryKey: ['news', source],
       queryFn: () => fetchNewsFeed(source),
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
+      staleTime: 15 * 60 * 1000,
+      gcTime: 30 * 60 * 1000,
     })),
   })
 
