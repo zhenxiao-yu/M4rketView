@@ -11,6 +11,23 @@ import {
 import { useDeFiProtocols, useDeFiChains, useGlobalTvlHistory } from '@/hooks/useDeFiTVL'
 import { formatCompact, formatPercent } from '@/lib/utils'
 
+const DeFiSkeleton = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 animate-pulse">
+    {[0, 1].map((i) => (
+      <div key={i} className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 flex flex-col gap-3">
+        <div className="h-4 bg-gray-100/20 rounded w-32" />
+        {Array.from({ length: 5 }).map((_, j) => (
+          <div key={j} className="flex items-center gap-2">
+            <div className="w-16 h-3 bg-gray-100/20 rounded" />
+            <div className="flex-1 h-2 bg-gray-100/20 rounded-full" />
+            <div className="w-12 h-3 bg-gray-100/20 rounded" />
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+)
+
 const DeFiTVL = () => {
   const { data: protocols, isLoading: protoLoading, error: protoError, refetch } = useDeFiProtocols()
   const { data: chains, isLoading: chainsLoading } = useDeFiChains()
@@ -44,12 +61,14 @@ const DeFiTVL = () => {
       <h2 className="text-base font-semibold mb-4 flex items-center gap-2">
         <Link2 size={16} className="text-cyan" />
         DeFi TVL
-        <span className="text-2xl font-bold ml-2">
-          {loading ? '...' : `$${formatCompact(totalTvl)}`}
-        </span>
+        {!loading && (
+          <span className="text-2xl font-bold ml-2">${formatCompact(totalTvl)}</span>
+        )}
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      {loading ? <DeFiSkeleton /> : null}
+
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 ${loading ? 'hidden' : ''}`}>
         {/* Top chains */}
         <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
           <h3 className="text-sm font-semibold text-gray-100 mb-3">Top Chains by TVL</h3>
@@ -85,6 +104,7 @@ const DeFiTVL = () => {
                       src={protocol.logo}
                       alt={protocol.name}
                       className="w-5 h-5 rounded-full object-contain"
+                      loading="lazy"
                       onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                     />
                   )}

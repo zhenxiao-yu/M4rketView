@@ -13,24 +13,25 @@ const Wrapper = ({ initialPath = '/' }: { initialPath?: string }) => (
 describe('Navigation', () => {
   it('renders all nav links', () => {
     render(<Wrapper />)
-    expect(screen.getByText('Dashboard')).toBeInTheDocument()
-    expect(screen.getByText('Markets')).toBeInTheDocument()
-    expect(screen.getByText('Trending')).toBeInTheDocument()
-    expect(screen.getByText('Saved')).toBeInTheDocument()
-    expect(screen.getByText('Portfolio')).toBeInTheDocument()
-    expect(screen.getByText('Compare')).toBeInTheDocument()
+    // Both desktop and mobile menus are in the DOM — use getAllByText
+    expect(screen.getAllByText('Dashboard').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Markets').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Trending').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Saved').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Portfolio').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Compare').length).toBeGreaterThanOrEqual(1)
   })
 
   it('Dashboard link points to /', () => {
     render(<Wrapper />)
-    const dashLink = screen.getByText('Dashboard').closest('a')
-    expect(dashLink).toHaveAttribute('href', '/')
+    const dashLinks = screen.getAllByText('Dashboard').map((el) => el.closest('a')).filter(Boolean)
+    expect(dashLinks[0]).toHaveAttribute('href', '/')
   })
 
   it('Markets link points to /markets', () => {
     render(<Wrapper />)
-    const marketsLink = screen.getByText('Markets').closest('a')
-    expect(marketsLink).toHaveAttribute('href', '/markets')
+    const marketsLinks = screen.getAllByText('Markets').map((el) => el.closest('a')).filter(Boolean)
+    expect(marketsLinks[0]).toHaveAttribute('href', '/markets')
   })
 
   it('does not show alert badge when no active alerts', () => {
@@ -55,17 +56,19 @@ describe('Navigation', () => {
       ],
     })
     render(<Wrapper />)
-    expect(screen.getByText('1')).toBeInTheDocument()
+    // Badge appears in both desktop and mobile navs
+    expect(screen.getAllByText('1').length).toBeGreaterThanOrEqual(1)
     useAlertStore.setState({ alerts: [] })
   })
 
   it('renders theme toggle button', () => {
     render(<Wrapper />)
-    expect(screen.getByLabelText('Toggle theme')).toBeInTheDocument()
+    // Two toggle buttons (desktop + mobile) — check at least one exists
+    expect(screen.getAllByLabelText('Toggle theme').length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders search button', () => {
     render(<Wrapper />)
-    expect(screen.getByLabelText('Search (Ctrl+K)')).toBeInTheDocument()
+    expect(screen.getAllByLabelText('Search (Ctrl+K)').length).toBeGreaterThanOrEqual(1)
   })
 })

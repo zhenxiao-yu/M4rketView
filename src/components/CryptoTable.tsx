@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Star, StarOff, TrendingUp, TrendingDown, GitCompare, Wifi } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -39,7 +39,7 @@ const PctBadge = ({ value }: { value: number | undefined }) => {
   )
 }
 
-const PriceCell = ({ coinId, basePrice, currency, livePrice }: {
+const PriceCell = memo(({ coinId, basePrice, currency, livePrice }: {
   coinId: string
   basePrice: number
   currency: string
@@ -69,9 +69,9 @@ const PriceCell = ({ coinId, basePrice, currency, livePrice }: {
       {formatCurrency(price, currency)}
     </motion.span>
   )
-}
+})
 
-const SaveBtn = ({ coin }: { coin: CoinMarket }) => {
+const SaveBtn = memo(({ coin }: { coin: CoinMarket }) => {
   const { toggleCoin, isWatched } = useWatchlistStore()
   const saved = isWatched(coin.id)
 
@@ -93,9 +93,9 @@ const SaveBtn = ({ coin }: { coin: CoinMarket }) => {
       {saved ? <Star size={16} className="fill-cyan text-cyan" /> : <StarOff size={16} />}
     </button>
   )
-}
+})
 
-const CompareBtn = ({ coin }: { coin: CoinMarket }) => {
+const CompareBtn = memo(({ coin }: { coin: CoinMarket }) => {
   const { compareCoins, addToCompare, removeFromCompare } = useUIStore()
   const inCompare = compareCoins.includes(coin.id)
   const disabled = compareCoins.length >= 3 && !inCompare
@@ -113,7 +113,7 @@ const CompareBtn = ({ coin }: { coin: CoinMarket }) => {
       <GitCompare size={14} />
     </button>
   )
-}
+})
 
 const CryptoTable = () => {
   const { currency } = useMarketStore()
@@ -169,7 +169,7 @@ const CryptoTable = () => {
                       <div className="flex items-center gap-1.5">
                         <SaveBtn coin={coin} />
                         <CompareBtn coin={coin} />
-                        <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" />
+                        <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" loading="lazy" />
                         <Link
                           to={`/coin/${coin.id}`}
                           className="uppercase font-semibold hover:text-cyan transition-colors"

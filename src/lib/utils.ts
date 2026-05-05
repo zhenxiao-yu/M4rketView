@@ -22,6 +22,6 @@ export function formatCompact(value: number): string {
 }
 
 export function formatPercent(value: number | null | undefined, decimals = 2): string {
-  if (value == null) return 'N/A'
+  if (value == null || typeof value !== 'number' || !isFinite(value)) return 'N/A'
   return `${value >= 0 ? '+' : ''}${value.toFixed(decimals)}%`
 }

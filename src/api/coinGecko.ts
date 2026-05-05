@@ -13,14 +13,27 @@ import { RateLimitError } from '@/lib/errors'
 const COINGECKO_BASE = 'https://api.coingecko.com/api/v3'
 const FEAR_GREED_BASE = 'https://api.alternative.me'
 
-async function fetchJSON<T>(url: string, source = 'CoinGecko'): Promise<T> {
-  const res = await fetch(url)
-  if (res.status === 429) throw new RateLimitError(source)
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }))
-    throw new Error((err as { error: string }).error ?? res.statusText)
+async function fetchJSON<T>(url: string, source = 'CoinGecko', timeoutMs = 15_000): Promise<T> {
+  // AbortController is skipped in test mode because MSW interceptors don't support it
+  const useTimeout = import.meta.env.MODE !== 'test'
+  const controller = useTimeout ? new AbortController() : null
+  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null
+  try {
+    const res = await fetch(url, controller ? { signal: controller.signal } : undefined)
+    if (res.status === 429) throw new RateLimitError(source)
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }))
+      throw new Error((err as { error: string }).error ?? res.statusText)
+    }
+    return res.json() as Promise<T>
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error(`${source} request timed out after ${timeoutMs / 1000}s`)
+    }
+    throw err
+  } finally {
+    if (timer) clearTimeout(timer)
   }
-  return res.json() as Promise<T>
 }
 
 export async function fetchCryptoMarkets(params: MarketParams): Promise<CoinMarket[]> {

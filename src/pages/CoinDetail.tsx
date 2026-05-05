@@ -117,7 +117,7 @@ const AlertModal = ({
                 min="0"
                 value={value}
                 onChange={(e) => { setValue(e.target.value); setError('') }}
-                placeholder={`e.g. ${(currentPrice * 1.1).toFixed(2)}`}
+                placeholder={currentPrice != null ? `e.g. ${(currentPrice * 1.1).toFixed(2)}` : 'Enter price'}
                 className="w-full bg-gray-300/50 border border-gray-100/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan transition-colors"
                 autoFocus
               />
@@ -261,13 +261,13 @@ const CoinDetail = () => {
             <MetricRow label="Circulating Supply" value={formatCompact(data.market_data.circulating_supply)} />
             <MetricRow label="Max Supply" value={data.market_data.max_supply ? formatCompact(data.market_data.max_supply) : '∞'} />
             <MetricRow label="CoinGecko Rank" value={`#${data.coingecko_rank}`} />
-            <MetricRow label="CoinGecko Score" value={data.coingecko_score.toFixed(1)} />
+            <MetricRow label="CoinGecko Score" value={data.coingecko_score?.toFixed(1) ?? '—'} />
             <MetricRow
               label="Sentiment"
               value={
                 <span className="flex gap-2">
-                  <span className="text-green">{data.sentiment_votes_up_percentage.toFixed(1)}% ▲</span>
-                  <span className="text-red">{data.sentiment_votes_down_percentage.toFixed(1)}% ▼</span>
+                  <span className="text-green">{data.sentiment_votes_up_percentage?.toFixed(1) ?? '—'}% ▲</span>
+                  <span className="text-red">{data.sentiment_votes_down_percentage?.toFixed(1) ?? '—'}% ▼</span>
                 </span>
               }
             />

@@ -29,11 +29,15 @@ const streams = Object.keys(SYMBOL_MAP)
 
 const WS_URL = `wss://stream.binance.com:9443/stream?streams=${streams}`
 
+const BASE_DELAY = 1_000
+const MAX_DELAY = 30_000
+
 export function useLivePrices(): { prices: Record<string, number>; connected: boolean } {
   const [prices, setPrices] = useState<Record<string, number>>({})
   const [connected, setConnected] = useState(false)
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const attemptRef = useRef(0)
 
   useEffect(() => {
     let destroyed = false
@@ -44,7 +48,9 @@ export function useLivePrices(): { prices: Record<string, number>; connected: bo
       wsRef.current = ws
 
       ws.onopen = () => {
-        if (!destroyed) setConnected(true)
+        if (destroyed) return
+        setConnected(true)
+        attemptRef.current = 0
       }
 
       ws.onmessage = (e: MessageEvent) => {
@@ -66,7 +72,10 @@ export function useLivePrices(): { prices: Record<string, number>; connected: bo
       ws.onclose = () => {
         if (destroyed) return
         setConnected(false)
-        reconnectTimer.current = setTimeout(connect, 3000)
+        const jitter = Math.random() * 500
+        const delay = Math.min(BASE_DELAY * 2 ** attemptRef.current + jitter, MAX_DELAY)
+        attemptRef.current++
+        reconnectTimer.current = setTimeout(connect, delay)
       }
 
       ws.onerror = () => {

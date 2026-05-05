@@ -112,12 +112,12 @@ const NormalizedChart = ({ coinIds }: { coinIds: string[] }) => {
         <CartesianGrid stroke="#5B8FB9" strokeOpacity={0.15} />
         <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#5B8FB9' }} tickLine={false} />
         <YAxis
-          tickFormatter={(v: number) => `${v.toFixed(0)}%`}
+          tickFormatter={(v: number) => isFinite(v) ? `${v.toFixed(0)}%` : ''}
           tick={{ fontSize: 10, fill: '#5B8FB9' }}
           tickLine={false}
           axisLine={false}
         />
-        <Tooltip formatter={(v: number) => [`${v.toFixed(2)}%`]} />
+        <Tooltip formatter={(v: number) => [isFinite(v) ? `${v.toFixed(2)}%` : 'N/A']} />
         <Legend />
         {coinIds.map((id, i) => (
           <Line
