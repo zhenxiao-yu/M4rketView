@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode, type FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   ArrowLeft, Github, Twitter, Globe, ExternalLink,
@@ -34,7 +34,7 @@ const HighLowBar = ({
   )
 }
 
-const MetricRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
+const MetricRow = ({ label, value }: { label: string; value: ReactNode }) => (
   <div className="flex justify-between items-center py-2 border-b border-gray-100/20">
     <span className="text-sm text-gray-100 capitalize">{label}</span>
     <span className="text-sm font-semibold">{value}</span>
@@ -57,21 +57,18 @@ interface AlertModalProps {
   open: boolean
   onClose: () => void
   coinName: string
-  coinId: string
-  coinImage: string
   currentPrice: number
   currency: string
   onSubmit: (target: number, direction: 'above' | 'below') => void
 }
 
 const AlertModal = ({
-  open, onClose, coinName, coinId: _coinId, coinImage: _coinImage,
-  currentPrice, currency, onSubmit,
+  open, onClose, coinName, currentPrice, currency, onSubmit,
 }: AlertModalProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const target = parseFloat(value)
     if (isNaN(target) || target <= 0) {
@@ -326,8 +323,6 @@ const CoinDetail = () => {
         open={alertOpen}
         onClose={() => setAlertOpen(false)}
         coinName={data.name}
-        coinId={data.id}
-        coinImage={data.image.thumb}
         currentPrice={price}
         currency={currency}
         onSubmit={handleAlertSubmit}

@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Cpu, Zap, ArrowRightLeft, DollarSign } from 'lucide-react'
 import { useBitcoinStats } from '@/hooks/useBitcoinStats'
@@ -7,7 +8,7 @@ import ErrorCard from '@/components/ui/ErrorCard'
 const StatCard = ({
   icon, label, value, sub, delay = 0,
 }: {
-  icon: React.ReactNode
+  icon: ReactNode
   label: string
   value: string
   sub?: string

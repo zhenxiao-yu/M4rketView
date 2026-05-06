@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type FormEvent, type ChangeEvent } from 'react'
 import { RefreshCw, ArrowRight, ChevronDown } from 'lucide-react'
 import { useMarketStore } from '@/store/marketStore'
 import Search from './Search'
@@ -18,7 +18,7 @@ const Filters = () => {
   const { setCurrency, setSortBy, reset } = useMarketStore()
   const currencyRef = useRef<HTMLInputElement>(null)
 
-  const handleCurrencySubmit = (e: React.FormEvent) => {
+  const handleCurrencySubmit = (e: FormEvent) => {
     e.preventDefault()
     const val = currencyRef.current?.value.trim()
     if (val) {
@@ -27,7 +27,7 @@ const Filters = () => {
     }
   }
 
-  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSort = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value)
   }
 

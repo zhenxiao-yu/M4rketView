@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Star, StarOff, TrendingUp, TrendingDown, GitCompare, Wifi } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -39,12 +39,12 @@ const PctBadge = ({ value }: { value: number | undefined }) => {
   )
 }
 
-const PriceCell = memo(({ coinId, basePrice, currency, livePrice }: {
+const PriceCell = memo(function PriceCell({ coinId, basePrice, currency, livePrice }: {
   coinId: string
   basePrice: number
   currency: string
   livePrice?: number
-}) => {
+}) {
   const price = livePrice ?? basePrice
   const [flash, setFlash] = useState<'up' | 'down' | null>(null)
   const prevRef = useRef(price)
@@ -71,11 +71,11 @@ const PriceCell = memo(({ coinId, basePrice, currency, livePrice }: {
   )
 })
 
-const SaveBtn = memo(({ coin }: { coin: CoinMarket }) => {
+const SaveBtn = memo(function SaveBtn({ coin }: { coin: CoinMarket }) {
   const { toggleCoin, isWatched } = useWatchlistStore()
   const saved = isWatched(coin.id)
 
-  const handleToggle = (e: React.MouseEvent) => {
+  const handleToggle = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const willAdd = !saved
     toggleCoin(coin.id)
@@ -95,7 +95,7 @@ const SaveBtn = memo(({ coin }: { coin: CoinMarket }) => {
   )
 })
 
-const CompareBtn = memo(({ coin }: { coin: CoinMarket }) => {
+const CompareBtn = memo(function CompareBtn({ coin }: { coin: CoinMarket }) {
   const { compareCoins, addToCompare, removeFromCompare } = useUIStore()
   const inCompare = compareCoins.includes(coin.id)
   const disabled = compareCoins.length >= 3 && !inCompare
@@ -105,7 +105,7 @@ const CompareBtn = memo(({ coin }: { coin: CoinMarket }) => {
       className={`text-gray-100 transition-all hover:scale-110 ${inCompare ? 'text-cyan' : ''} ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:text-cyan'}`}
       onClick={(e) => {
         e.preventDefault()
-        inCompare ? removeFromCompare(coin.id) : addToCompare(coin.id)
+        if (inCompare) removeFromCompare(coin.id); else addToCompare(coin.id)
       }}
       disabled={disabled}
       title={inCompare ? 'Remove from compare' : 'Add to compare'}

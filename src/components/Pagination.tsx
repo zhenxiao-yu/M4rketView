@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type FormEvent } from 'react'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { useMarketStore } from '@/store/marketStore'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
@@ -9,7 +9,7 @@ const PerPage = () => {
   const { setPerPage } = useMarketStore()
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const val = parseInt(inputRef.current?.value ?? '10')
     if (val > 0 && val <= 250) {

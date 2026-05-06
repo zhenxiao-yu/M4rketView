@@ -72,7 +72,7 @@ const SearchCommand = () => {
             )}
             {debouncedQuery.length >= 2 && (!results || results.length === 0) && (
               <Command.Empty>
-                <p className="text-center py-8 text-sm text-gray-100/60">No results for "{debouncedQuery}"</p>
+                <p className="text-center py-8 text-sm text-gray-100/60">No results for &quot;{debouncedQuery}&quot;</p>
               </Command.Empty>
             )}
             {results?.slice(0, 8).map((coin) => (

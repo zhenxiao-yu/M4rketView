@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { TrendingUp, TrendingDown, Activity, DollarSign } from 'lucide-react'
@@ -32,7 +33,7 @@ const MetricCard = ({
   title: string
   value: string
   sub?: string
-  icon: React.ReactNode
+  icon: ReactNode
   trend?: number
   delay?: number
 }) => (
