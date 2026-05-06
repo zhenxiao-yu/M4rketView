@@ -1,5 +1,3 @@
-export type NewsSource = 'coindesk' | 'cointelegraph' | 'decrypt'
-
 export interface NewsItem {
   guid: string
   title: string
@@ -7,7 +5,5 @@ export interface NewsItem {
   pubDate: string
   thumbnail: string
   description: string
-  author: string
-  categories: string[]
-  source: NewsSource
+  source: string
 }

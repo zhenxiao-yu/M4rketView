@@ -1,0 +1,263 @@
+import { Link } from 'react-router-dom'
+import * as Dialog from '@radix-ui/react-dialog'
+import {
+  Github, ExternalLink, X, Tag, Clock, GitCommit,
+  LayoutDashboard, TrendingUp, Bookmark, BarChart3,
+  GitCompare, Newspaper, Grid2X2,
+} from 'lucide-react'
+import { APP_VERSION, GIT_SHA, formatBuildTime } from '@/lib/buildInfo'
+
+const QUICK_LINKS = [
+  { to: '/',          label: 'Dashboard',  icon: <LayoutDashboard size={13} /> },
+  { to: '/markets',   label: 'Markets',    icon: <TrendingUp size={13} /> },
+  { to: '/trending',  label: 'Trending',   icon: <TrendingUp size={13} /> },
+  { to: '/saved',     label: 'Watchlist',  icon: <Bookmark size={13} /> },
+  { to: '/portfolio', label: 'Portfolio',  icon: <BarChart3 size={13} /> },
+  { to: '/compare',   label: 'Compare',    icon: <GitCompare size={13} /> },
+  { to: '/news',      label: 'News',       icon: <Newspaper size={13} /> },
+  { to: '/heatmap',   label: 'Heatmap',    icon: <Grid2X2 size={13} /> },
+]
+
+const DATA_SOURCES = [
+  { label: 'CoinGecko',       href: 'https://www.coingecko.com',           desc: 'Market data & coin details' },
+  { label: 'Binance WS',      href: 'https://developers.binance.com',      desc: 'Real-time price stream' },
+  { label: 'DeFiLlama',       href: 'https://defillama.com',               desc: 'DeFi TVL & protocols' },
+  { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer', desc: 'Bitcoin on-chain stats' },
+  { label: 'Alternative.me',  href: 'https://alternative.me/crypto',       desc: 'Fear & Greed Index' },
+  { label: 'CryptoCompare',   href: 'https://cryptocompare.com',           desc: 'Crypto news feed' },
+]
+
+interface Release {
+  version: string
+  date: string
+  tag: 'major' | 'minor' | 'patch'
+  summary: string
+  changes: string[]
+}
+
+const CHANGELOG: Release[] = [
+  {
+    version: '1.2.0',
+    date: '2025-05-05',
+    tag: 'minor',
+    summary: 'News API overhaul, WebSocket stability, build provenance.',
+    changes: [
+      'Replaced RSS2JSON (returning 422) with CryptoCompare News API — no API key, 50+ articles per load, dynamic source filtering.',
+      'Fixed WebSocket "closed before connection established" warning — null all handlers before ws.close() to prevent ghost reconnect cycles.',
+      'Added build-time injection: __APP_VERSION__, __BUILD_TIME__, __GIT_SHA__ via vite.config.ts.',
+      'Added Footer with quick links, data-source credits, changelog, and MIT license.',
+      'Created .env.example documenting build constants and confirming no API keys required.',
+    ],
+  },
+  {
+    version: '1.1.0',
+    date: '2025-04-28',
+    tag: 'minor',
+    summary: 'Production hardening, CI/CD, performance, and resilience pass.',
+    changes: [
+      'GitHub Actions CI: lint → typecheck → test → build on every push and PR.',
+      'Vercel: SPA rewrite rules, 1-year immutable cache for /assets/*, security headers (X-Frame-Options, CSP, Referrer-Policy).',
+      'AbortController with 15s timeout on all fetch calls; skipped in test mode to avoid MSW conflict.',
+      'WebSocket exponential backoff: 1s → 30s + jitter, resets on successful connect.',
+      'TanStack Query devtools gated behind import.meta.env.DEV — zero prod bundle cost.',
+      'ESLint v9 flat config: no-undef off for TS files, named memo functions for display-name rule.',
+      'Navigation: mobile hamburger menu with AnimatePresence height animation, 2-col grid drawer.',
+      'DeFiTVL and BitcoinStats: skeleton loaders, staggered entrance animations, lazy images.',
+      'README rewritten with feature table, API table, architecture diagram, and deployment guide.',
+    ],
+  },
+  {
+    version: '1.0.0',
+    date: '2025-04-14',
+    tag: 'major',
+    summary: 'Initial production release — all core features shipped.',
+    changes: [
+      'Live Prices: Binance WebSocket stream for 20 coins with price flash animations.',
+      'Market Overview: CoinGecko top 250 with sort, filter, search, pagination.',
+      'Market Heatmap: Recharts Treemap — instant green/red market snapshot.',
+      'Crypto News: RSS feeds aggregated via RSS2JSON (CoinDesk, CoinTelegraph, Decrypt).',
+      'DeFi TVL: DeFiLlama top chains + protocols + 90-day area chart.',
+      'Bitcoin Network: hash rate, difficulty, tx volume, miner revenue.',
+      'Fear & Greed Index: Alternative.me sentiment gauge.',
+      'Portfolio Tracker: local P&L tracking with pie chart allocation.',
+      'Watchlist: star coins, persistent across sessions via Zustand persist.',
+      'Price Alerts: toast notifications when target price is crossed.',
+      'Compare: normalized 30-day performance chart for up to 3 coins.',
+      'Ctrl+K command palette search powered by cmdk.',
+      '24h localStorage query cache — instant loads on revisit.',
+      'Code-split lazy pages, React.memo on high-frequency render components.',
+    ],
+  },
+]
+
+const TAG_STYLES: Record<Release['tag'], string> = {
+  major: 'bg-cyan/20 text-cyan border border-cyan/30',
+  minor: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+  patch: 'bg-gray-100/20 text-gray-100 border border-gray-100/20',
+}
+
+function ChangelogDialog() {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <button className="inline-flex items-center gap-1.5 text-xs text-cyan hover:text-cyan/80 transition-colors font-mono group">
+          <Tag size={11} />
+          v{APP_VERSION}
+          <span className="text-gray-100 group-hover:text-cyan/60 transition-colors">— what&apos;s new?</span>
+        </button>
+      </Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/20">
+            <Dialog.Title className="font-bold text-base flex items-center gap-2">
+              <Tag size={15} className="text-cyan" />
+              Changelog
+            </Dialog.Title>
+            <Dialog.Close asChild>
+              <button className="text-gray-100 hover:text-cyan transition-colors p-1 rounded-lg hover:bg-gray-100/10">
+                <X size={16} />
+              </button>
+            </Dialog.Close>
+          </div>
+
+          <div className="overflow-y-auto px-6 py-4 flex flex-col gap-6 scrollbar-thin scrollbar-thumb-gray-100/20">
+            {CHANGELOG.map((release) => (
+              <div key={release.version} className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-mono font-bold text-sm text-white">v{release.version}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium uppercase tracking-wide ${TAG_STYLES[release.tag]}`}>
+                    {release.tag}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-gray-100 ml-auto">
+                    <Clock size={11} />
+                    {release.date}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-100">{release.summary}</p>
+                <ul className="flex flex-col gap-1.5">
+                  {release.changes.map((c, i) => (
+                    <li key={i} className="flex items-start gap-2 text-xs text-gray-100/80 leading-relaxed">
+                      <span className="text-cyan mt-0.5 shrink-0">›</span>
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+                <div className="border-b border-gray-100/10" />
+              </div>
+            ))}
+          </div>
+
+          <div className="px-6 py-3 border-t border-gray-100/20 flex items-center gap-3 text-xs text-gray-100/50">
+            <GitCommit size={11} />
+            <span className="font-mono">
+              {GIT_SHA === 'local' ? 'local build' : GIT_SHA.slice(0, 7)}
+            </span>
+            <span className="ml-auto">Built {formatBuildTime()}</span>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  )
+}
+
+const Footer = () => (
+  <footer className="w-full max-w-7xl px-4 mt-16 mb-8">
+    <div className="border border-gray-100/20 rounded-2xl bg-gray-200/20 backdrop-blur-sm overflow-hidden">
+      {/* Main grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+        {/* Brand */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-base font-bold text-cyan tracking-wide font-nunito">M4rketView</span>
+          </div>
+          <p className="text-xs text-gray-100 leading-relaxed max-w-[220px]">
+            A production-grade crypto dashboard built entirely on free, no-key public APIs.
+            Always live, always free.
+          </p>
+          <ChangelogDialog />
+          <div className="flex items-center gap-3 mt-1">
+            <a
+              href="https://github.com/zhenxiao-yu/M4rketView"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+            >
+              <Github size={13} />
+              Source
+            </a>
+            <a
+              href="https://m4rket-view.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+            >
+              <ExternalLink size={13} />
+              Live site
+            </a>
+          </div>
+        </div>
+
+        {/* Quick links */}
+        <div className="flex flex-col gap-3">
+          <h3 className="text-xs font-semibold text-white uppercase tracking-wider">Pages</h3>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+            {QUICK_LINKS.map(({ to, label, icon }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+              >
+                <span className="text-gray-100/60">{icon}</span>
+                {label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Data sources */}
+        <div className="flex flex-col gap-3">
+          <h3 className="text-xs font-semibold text-white uppercase tracking-wider">Data Sources</h3>
+          <div className="flex flex-col gap-2">
+            {DATA_SOURCES.map(({ label, href, desc }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col gap-0.5"
+              >
+                <span className="text-xs text-gray-100 group-hover:text-cyan transition-colors flex items-center gap-1">
+                  {label}
+                  <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </span>
+                <span className="text-xs text-gray-100/50">{desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-gray-100/10 px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p className="text-xs text-gray-100/50">
+          © {new Date().getFullYear()} Mark Yu · Released under the{' '}
+          <a
+            href="https://github.com/zhenxiao-yu/M4rketView/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan/70 hover:text-cyan transition-colors"
+          >
+            MIT License
+          </a>
+        </p>
+        <p className="text-xs text-gray-100/30 font-mono">
+          No API keys · No tracking · No cost
+        </p>
+      </div>
+    </div>
+  </footer>
+)
+
+export default Footer

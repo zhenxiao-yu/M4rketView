@@ -1,20 +1,21 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ExternalLink, Newspaper, Search } from 'lucide-react'
 import { useNewsFeeds } from '@/hooks/useNewsFeeds'
 import ErrorCard from '@/components/ui/ErrorCard'
-import type { NewsItem, NewsSource } from '@/types/news'
+import type { NewsItem } from '@/types/news'
 
-const SOURCE_LABELS: Record<NewsSource | 'all', string> = {
-  all: 'All',
-  coindesk: 'CoinDesk',
-  cointelegraph: 'CoinTelegraph',
-  decrypt: 'Decrypt',
-}
+const SOURCE_PALETTE = [
+  'bg-blue-500/20 text-blue-300',
+  'bg-purple-500/20 text-purple-300',
+  'bg-orange-500/20 text-orange-300',
+  'bg-emerald-500/20 text-emerald-300',
+  'bg-pink-500/20 text-pink-300',
+  'bg-yellow-500/20 text-yellow-300',
+]
 
-const SOURCE_COLORS: Record<NewsSource, string> = {
-  coindesk: 'bg-blue-500/20 text-blue-300',
-  cointelegraph: 'bg-purple-500/20 text-purple-300',
-  decrypt: 'bg-orange-500/20 text-orange-300',
+function sourceColor(source: string, sources: string[]): string {
+  const idx = sources.indexOf(source)
+  return SOURCE_PALETTE[idx % SOURCE_PALETTE.length] ?? SOURCE_PALETTE[0]
 }
 
 function timeAgo(dateStr: string): string {
@@ -39,7 +40,7 @@ const SkeletonCard = () => (
   </div>
 )
 
-const NewsCard = ({ item }: { item: NewsItem }) => {
+const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
   const hasThumbnail = item.thumbnail && item.thumbnail.startsWith('http')
   return (
     <a
@@ -53,10 +54,11 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
           src={item.thumbnail}
           alt=""
           className="w-full h-36 object-cover"
+          loading="lazy"
           onError={(e) => {
             const parent = (e.target as HTMLImageElement).parentElement
             if (parent) {
-              (e.target as HTMLImageElement).remove()
+              ;(e.target as HTMLImageElement).remove()
               const div = document.createElement('div')
               div.className = 'w-full h-36 bg-gradient-to-br from-cyan/20 to-purple-500/20'
               parent.insertBefore(div, parent.firstChild)
@@ -69,8 +71,8 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
 
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div className="flex items-center justify-between">
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SOURCE_COLORS[item.source]}`}>
-            {SOURCE_LABELS[item.source]}
+          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${sourceColor(item.source, sources)}`}>
+            {item.source}
           </span>
           <span className="text-xs text-gray-100">{timeAgo(item.pubDate)}</span>
         </div>
@@ -93,16 +95,19 @@ const NewsCard = ({ item }: { item: NewsItem }) => {
 
 const News = () => {
   const { items, isLoading, isError } = useNewsFeeds()
-  const [sourceFilter, setSourceFilter] = useState<NewsSource | 'all'>('all')
+  const [sourceFilter, setSourceFilter] = useState<string>('all')
   const [search, setSearch] = useState('')
+
+  const sources = useMemo(
+    () => Array.from(new Set(items.map((i) => i.source))).sort(),
+    [items],
+  )
 
   const filtered = items.filter((item) => {
     if (sourceFilter !== 'all' && item.source !== sourceFilter) return false
     if (search && !item.title.toLowerCase().includes(search.toLowerCase())) return false
     return true
   })
-
-  const sources: (NewsSource | 'all')[] = ['all', 'coindesk', 'cointelegraph', 'decrypt']
 
   return (
     <section className="w-full mt-8 mb-24">
@@ -113,6 +118,16 @@ const News = () => {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => setSourceFilter('all')}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              sourceFilter === 'all'
+                ? 'bg-cyan text-gray-300'
+                : 'bg-gray-200/40 text-gray-100 hover:text-cyan border border-gray-100/20'
+            }`}
+          >
+            All
+          </button>
           {sources.map((s) => (
             <button
               key={s}
@@ -123,7 +138,7 @@ const News = () => {
                   : 'bg-gray-200/40 text-gray-100 hover:text-cyan border border-gray-100/20'
               }`}
             >
-              {SOURCE_LABELS[s]}
+              {s}
             </button>
           ))}
         </div>
@@ -145,12 +160,12 @@ const News = () => {
           {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       ) : isError ? (
-        <ErrorCard error={new Error('Failed to load news feeds. RSS2JSON may be rate-limited.')} minHeight="min-h-[30vh]" />
+        <ErrorCard error={new Error('Failed to load news. Please try again later.')} minHeight="min-h-[30vh]" />
       ) : filtered.length === 0 ? (
         <p className="text-gray-100 text-sm text-center py-16">No articles found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((item) => <NewsCard key={item.guid} item={item} />)}
+          {filtered.map((item) => <NewsCard key={item.guid} item={item} sources={sources} />)}
         </div>
       )}
     </section>

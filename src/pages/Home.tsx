@@ -4,6 +4,7 @@ import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { Toaster, toast } from 'react-hot-toast'
 import Logo from '@/components/Logo'
 import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
 import SearchCommand from '@/components/SearchCommand'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { useTheme } from '@/hooks/useTheme'
@@ -67,7 +68,7 @@ const Home = () => {
       <SearchCommand />
       <Logo />
       <Navigation />
-      <div className="w-full max-w-7xl px-4">
+      <div className="w-full max-w-7xl px-4 flex-1">
         <ErrorBoundary>
           <AnimatePresence mode="wait">
             <motion.div
@@ -82,6 +83,7 @@ const Home = () => {
           </AnimatePresence>
         </ErrorBoundary>
       </div>
+      <Footer />
     </main>
   )
 }

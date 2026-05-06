@@ -1,35 +1,31 @@
-import type { NewsItem, NewsSource } from '@/types/news'
+import type { NewsItem } from '@/types/news'
 import { RateLimitError } from '@/lib/errors'
 
-const RSS2JSON = 'https://api.rss2json.com/v1/api.json'
+const ENDPOINT = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN&sortOrder=latest'
 
-const FEEDS: Record<NewsSource, string> = {
-  coindesk:      'https://www.coindesk.com/arc/outboundfeeds/rss/',
-  cointelegraph: 'https://cointelegraph.com/rss',
-  decrypt:       'https://decrypt.co/feed',
+interface CCArticle {
+  id: string
+  published_on: number
+  imageurl: string
+  title: string
+  url: string
+  source: string
+  body: string
+  source_info: { name: string }
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim()
-}
-
-export async function fetchNewsFeed(source: NewsSource): Promise<NewsItem[]> {
-  const url = `${RSS2JSON}?rss_url=${encodeURIComponent(FEEDS[source])}&count=20`
-  const res = await fetch(url)
-  if (res.status === 429) throw new RateLimitError('RSS2JSON')
-  if (!res.ok) throw new Error(`News fetch failed for ${source}`)
-  const json = await res.json()
-  if (json.status !== 'ok') throw new Error(`RSS2JSON error for ${source}`)
-
-  return (json.items ?? []).map((item: Record<string, unknown>) => ({
-    guid:        String(item.guid ?? item.link ?? ''),
-    title:       String(item.title ?? '').trim(),
-    link:        String(item.link ?? ''),
-    pubDate:     String(item.pubDate ?? ''),
-    thumbnail:   String(item.thumbnail ?? ''),
-    description: stripHtml(String(item.description ?? '')).substring(0, 200),
-    author:      String(item.author ?? ''),
-    categories:  Array.isArray(item.categories) ? (item.categories as string[]) : [],
-    source,
+export async function fetchNews(): Promise<NewsItem[]> {
+  const res = await fetch(ENDPOINT)
+  if (res.status === 429) throw new RateLimitError('CryptoCompare')
+  if (!res.ok) throw new Error('News fetch failed')
+  const json = await res.json() as { Type: number; Data: CCArticle[] }
+  return (json.Data ?? []).map((a) => ({
+    guid: a.id,
+    title: a.title,
+    link: a.url,
+    pubDate: new Date(a.published_on * 1000).toISOString(),
+    thumbnail: a.imageurl ?? '',
+    description: a.body.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim().substring(0, 220),
+    source: a.source_info?.name ?? a.source,
   }))
 }
