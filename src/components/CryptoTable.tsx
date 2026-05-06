@@ -17,6 +17,28 @@ import Disclaimer from '@/components/ui/Disclaimer'
 import Pagination from './Pagination'
 import type { CoinMarket } from '@/types/coingecko'
 
+const CardSkeleton = () => (
+  <>
+    {Array.from({ length: 5 }).map((_, i) => (
+      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20 animate-pulse">
+        <div className="flex flex-col gap-1.5 shrink-0">
+          <div className="w-4 h-4 bg-gray-200 rounded" />
+          <div className="w-4 h-4 bg-gray-200 rounded" />
+        </div>
+        <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0" />
+        <div className="flex-1 space-y-2">
+          <div className="h-3.5 bg-gray-200 rounded w-24" />
+          <div className="h-2.5 bg-gray-200 rounded w-12" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-3.5 bg-gray-200 rounded w-20 ml-auto" />
+          <div className="h-2.5 bg-gray-200 rounded w-12 ml-auto" />
+        </div>
+      </div>
+    ))}
+  </>
+)
+
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 10 }).map((_, i) => (
@@ -118,6 +140,34 @@ const CompareBtn = memo(function CompareBtn({ coin }: { coin: CoinMarket }) {
   )
 })
 
+const MobileCard = memo(function MobileCard({ coin, currency, livePrice }: {
+  coin: CoinMarket
+  currency: string
+  livePrice?: number
+}) {
+  return (
+    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20 hover:border-cyan/40 transition-colors">
+      <div className="flex flex-col items-center gap-1.5 shrink-0">
+        <SaveBtn coin={coin} />
+        <CompareBtn coin={coin} />
+      </div>
+      <Link to={`/coin/${coin.id}`} className="flex items-center gap-3 flex-1 min-w-0 group">
+        <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full shrink-0" loading="lazy" />
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-sm truncate group-hover:text-cyan transition-colors">{coin.name}</p>
+          <p className="text-xs text-gray-100 uppercase mt-0.5">{coin.symbol}</p>
+        </div>
+        <div className="text-right shrink-0">
+          <div className="text-sm font-mono font-semibold">
+            <PriceCell coinId={coin.id} basePrice={coin.current_price} currency={currency} livePrice={livePrice} />
+          </div>
+          <PctBadge value={coin.price_change_percentage_24h_in_currency} />
+        </div>
+      </Link>
+    </div>
+  )
+})
+
 const CryptoTable = () => {
   const { currency } = useMarketStore()
   const { data, isLoading, isError, error, dataUpdatedAt } = useCryptoMarkets()
@@ -130,97 +180,111 @@ const CryptoTable = () => {
         {error ? (
           <ErrorCard error={error as Error} minHeight="min-h-[50vh]" />
         ) : (
-          <Tooltip.Provider delayDuration={300}>
-          <div className="overflow-x-auto">
-          <table className="w-full table-auto min-w-[640px]">
-            <thead className="capitalize text-sm text-gray-100 font-medium border-b border-gray-100 bg-gray-200/30">
-              <tr>
-                <th className="py-3 px-2 text-left">Asset</th>
-                <th className="py-3 px-2">Name</th>
-                <th className="py-3 px-2">
-                  Price
-                  {connected && (
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <Wifi size={11} className="inline ml-1 text-green animate-pulse cursor-help" />
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content className="bg-gray-200 border border-gray-100/20 text-xs px-2.5 py-1.5 rounded-lg shadow-lg z-50" sideOffset={5}>
-                          Real-time via Binance WebSocket
-                          <Tooltip.Arrow className="fill-gray-200" />
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  )}
-                </th>
-                <th className="py-3 px-2 hidden md:table-cell">Volume</th>
-                <th className="py-3 px-2 hidden md:table-cell">MktCap Δ</th>
-                <th className="py-3 px-2 hidden lg:table-cell">1H</th>
-                <th className="py-3 px-2 hidden lg:table-cell">24H</th>
-                <th className="py-3 px-2 hidden lg:table-cell">7D</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            {/* Mobile card list — shown below md breakpoint */}
+            <div className="md:hidden flex flex-col gap-2 p-3">
               {isLoading ? (
-                <TableSkeleton />
+                <CardSkeleton />
               ) : (
                 data?.map((coin) => (
-                  <tr
-                    key={coin.id}
-                    className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0 transition-colors"
-                  >
-                    <td className="py-3 px-2">
-                      <div className="flex items-center gap-1.5">
-                        <SaveBtn coin={coin} />
-                        <CompareBtn coin={coin} />
-                        <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" loading="lazy" />
-                        <Link
-                          to={`/coin/${coin.id}`}
-                          className="uppercase font-semibold hover:text-cyan transition-colors"
-                        >
-                          {coin.symbol}
-                        </Link>
-                      </div>
-                    </td>
-                    <td className="py-3 px-2">
-                      <Link to={`/coin/${coin.id}`} className="hover:text-cyan transition-colors">
-                        {coin.name}
-                      </Link>
-                    </td>
-                    <td className="py-3 px-2">
-                      <PriceCell
-                        coinId={coin.id}
-                        basePrice={coin.current_price}
-                        currency={currency}
-                        livePrice={prices[coin.id]}
-                      />
-                    </td>
-                    <td className="py-3 px-2 hidden md:table-cell text-gray-100">
-                      {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(coin.total_volume)}
-                    </td>
-                    <td className={`py-3 px-2 hidden md:table-cell ${coin.market_cap_change_percentage_24h >= 0 ? 'text-green' : 'text-red'}`}>
-                      {formatPercent(coin.market_cap_change_percentage_24h)}
-                    </td>
-                    <td className="py-3 px-2 hidden lg:table-cell">
-                      <PctBadge value={coin.price_change_percentage_1h_in_currency} />
-                    </td>
-                    <td className="py-3 px-2 hidden lg:table-cell">
-                      <PctBadge value={coin.price_change_percentage_24h_in_currency} />
-                    </td>
-                    <td className="py-3 px-2 hidden lg:table-cell">
-                      <PctBadge value={coin.price_change_percentage_7d_in_currency} />
-                    </td>
-                  </tr>
+                  <MobileCard key={coin.id} coin={coin} currency={currency} livePrice={prices[coin.id]} />
                 ))
               )}
-            </tbody>
-          </table>
-          </div>
-          </Tooltip.Provider>
+            </div>
+
+            {/* Desktop table — shown at md+ */}
+            <Tooltip.Provider delayDuration={300}>
+            <div className="hidden md:block overflow-x-auto">
+            <table className="w-full table-auto min-w-[640px]">
+              <thead className="capitalize text-sm text-gray-100 font-medium border-b border-gray-100 bg-gray-200/30">
+                <tr>
+                  <th className="py-3 px-2 text-left">Asset</th>
+                  <th className="py-3 px-2">Name</th>
+                  <th className="py-3 px-2">
+                    Price
+                    {connected && (
+                      <Tooltip.Root>
+                        <Tooltip.Trigger asChild>
+                          <Wifi size={11} className="inline ml-1 text-green animate-pulse cursor-help" />
+                        </Tooltip.Trigger>
+                        <Tooltip.Portal>
+                          <Tooltip.Content className="bg-gray-200 border border-gray-100/20 text-xs px-2.5 py-1.5 rounded-lg shadow-lg z-50" sideOffset={5}>
+                            Real-time via Binance WebSocket
+                            <Tooltip.Arrow className="fill-gray-200" />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    )}
+                  </th>
+                  <th className="py-3 px-2 hidden md:table-cell">Volume</th>
+                  <th className="py-3 px-2 hidden md:table-cell">MktCap Δ</th>
+                  <th className="py-3 px-2 hidden lg:table-cell">1H</th>
+                  <th className="py-3 px-2 hidden lg:table-cell">24H</th>
+                  <th className="py-3 px-2 hidden lg:table-cell">7D</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <TableSkeleton />
+                ) : (
+                  data?.map((coin) => (
+                    <tr
+                      key={coin.id}
+                      className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0 transition-colors"
+                    >
+                      <td className="py-3 px-2">
+                        <div className="flex items-center gap-1.5">
+                          <SaveBtn coin={coin} />
+                          <CompareBtn coin={coin} />
+                          <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" loading="lazy" />
+                          <Link
+                            to={`/coin/${coin.id}`}
+                            className="uppercase font-semibold hover:text-cyan transition-colors"
+                          >
+                            {coin.symbol}
+                          </Link>
+                        </div>
+                      </td>
+                      <td className="py-3 px-2">
+                        <Link to={`/coin/${coin.id}`} className="hover:text-cyan transition-colors">
+                          {coin.name}
+                        </Link>
+                      </td>
+                      <td className="py-3 px-2">
+                        <PriceCell
+                          coinId={coin.id}
+                          basePrice={coin.current_price}
+                          currency={currency}
+                          livePrice={prices[coin.id]}
+                        />
+                      </td>
+                      <td className="py-3 px-2 hidden md:table-cell text-gray-100">
+                        {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(coin.total_volume)}
+                      </td>
+                      <td className={`py-3 px-2 hidden md:table-cell ${coin.market_cap_change_percentage_24h >= 0 ? 'text-green' : 'text-red'}`}>
+                        {formatPercent(coin.market_cap_change_percentage_24h)}
+                      </td>
+                      <td className="py-3 px-2 hidden lg:table-cell">
+                        <PctBadge value={coin.price_change_percentage_1h_in_currency} />
+                      </td>
+                      <td className="py-3 px-2 hidden lg:table-cell">
+                        <PctBadge value={coin.price_change_percentage_24h_in_currency} />
+                      </td>
+                      <td className="py-3 px-2 hidden lg:table-cell">
+                        <PctBadge value={coin.price_change_percentage_7d_in_currency} />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+            </div>
+            </Tooltip.Provider>
+          </>
         )}
       </div>
 
-      <div className="flex items-center justify-between mt-4 h-8">
+      <div className="flex flex-wrap items-center justify-between mt-4 gap-y-2">
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-100">
             Data by{' '}

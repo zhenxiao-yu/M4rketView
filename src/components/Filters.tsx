@@ -32,9 +32,9 @@ const Filters = () => {
   }
 
   return (
-    <div className="w-full h-12 border-2 border-gray-100 rounded-lg flex items-center justify-between relative">
+    <div className="w-full border-2 border-gray-100 rounded-lg flex flex-wrap items-center gap-x-2 gap-y-2 px-3 py-2 relative">
       <Search />
-      <div className="flex items-center mr-4 gap-4">
+      <div className="flex items-center gap-4 ml-auto">
         <form className="flex items-center font-nunito gap-2" onSubmit={handleCurrencySubmit}>
           <label htmlFor="currency" className="font-bold text-sm whitespace-nowrap">
             currency:

@@ -21,7 +21,7 @@ const Search = () => {
   }
 
   return (
-    <div className="relative ml-4 w-72">
+    <div className="relative flex-1 min-w-[180px] sm:flex-none sm:w-72">
       <div className="relative flex items-center">
         <SearchIcon size={14} className="absolute left-2 text-gray-100 pointer-events-none" />
         <input

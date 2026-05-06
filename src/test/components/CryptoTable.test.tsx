@@ -42,32 +42,55 @@ describe('CryptoTable', () => {
     const client = makeClient()
     render(<Wrapper client={client} />)
     await waitFor(() => {
-      expect(screen.getByText('Bitcoin')).toBeInTheDocument()
+      expect(screen.getAllByText('Bitcoin').length).toBeGreaterThan(0)
     })
-    expect(screen.getByText('btc')).toBeInTheDocument()
+    expect(screen.getAllByText('btc').length).toBeGreaterThan(0)
   })
 
   it('shows price for loaded coin', async () => {
     const client = makeClient()
     render(<Wrapper client={client} />)
     await waitFor(() => {
-      expect(screen.getByText('Bitcoin')).toBeInTheDocument()
+      expect(screen.getAllByText('Bitcoin').length).toBeGreaterThan(0)
     })
-    expect(screen.getByText(/45[,.]?000/)).toBeInTheDocument()
+    expect(screen.getAllByText(/45[,.]?000/).length).toBeGreaterThan(0)
   })
 
   it('save button toggles watchlist', async () => {
     const client = makeClient()
     render(<Wrapper client={client} />)
     await waitFor(() => {
-      expect(screen.getByText('Bitcoin')).toBeInTheDocument()
+      expect(screen.getAllByText('Bitcoin').length).toBeGreaterThan(0)
     })
 
-    const saveBtn = screen.getByLabelText('Add to watchlist')
+    // Both table and mobile card render save buttons — click the first one
+    const saveBtn = screen.getAllByLabelText('Add to watchlist')[0]
     fireEvent.click(saveBtn)
     expect(useWatchlistStore.getState().isWatched('bitcoin')).toBe(true)
 
-    fireEvent.click(screen.getByLabelText('Remove from watchlist'))
+    fireEvent.click(screen.getAllByLabelText('Remove from watchlist')[0])
     expect(useWatchlistStore.getState().isWatched('bitcoin')).toBe(false)
+  })
+
+  it('mobile cards and table both render coin data', async () => {
+    const client = makeClient()
+    render(<Wrapper client={client} />)
+    await waitFor(() => {
+      expect(screen.getAllByText('Bitcoin').length).toBeGreaterThan(0)
+    })
+    // One from desktop table, one from mobile card
+    expect(screen.getAllByText('Bitcoin').length).toBeGreaterThanOrEqual(2)
+    // Each render surface has its own save/compare buttons
+    expect(screen.getAllByLabelText('Add to watchlist').length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('mobile card links to coin detail page', async () => {
+    const client = makeClient()
+    render(<Wrapper client={client} />)
+    await waitFor(() => {
+      expect(screen.getAllByText('Bitcoin').length).toBeGreaterThan(0)
+    })
+    const detailLinks = screen.getAllByRole('link', { name: /bitcoin/i })
+    expect(detailLinks.some((l) => l.getAttribute('href') === '/coin/bitcoin')).toBe(true)
   })
 })
