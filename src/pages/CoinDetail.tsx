@@ -11,6 +11,7 @@ import { useWatchlistStore } from '@/store/watchlistStore'
 import { useAlertStore } from '@/store/alertStore'
 import { formatCurrency, formatCompact, formatPercent } from '@/lib/utils'
 import PriceChart from '@/components/PriceChart'
+import Disclaimer from '@/components/ui/Disclaimer'
 
 const HighLowBar = ({
   current, high, low, currency,
@@ -327,6 +328,7 @@ const CoinDetail = () => {
         currency={currency}
         onSubmit={handleAlertSubmit}
       />
+      <Disclaimer className="mt-6" />
     </main>
   )
 }

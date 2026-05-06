@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import type { BitcoinStats } from '@/types/coingecko'
-import { RateLimitError } from '@/lib/errors'
+import { apiFetch } from '@/lib/fetch'
 
-async function fetchBitcoinStats(): Promise<BitcoinStats> {
-  const res = await fetch('https://api.blockchain.info/stats')
-  if (res.status === 429) throw new RateLimitError('blockchain.info')
-  if (!res.ok) throw new Error('blockchain.info stats fetch failed')
-  return res.json() as Promise<BitcoinStats>
+function fetchBitcoinStats(): Promise<BitcoinStats> {
+  return apiFetch<BitcoinStats>('https://api.blockchain.info/stats', 'blockchain.info')
 }
 
 export function useBitcoinStats() {

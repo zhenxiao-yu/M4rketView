@@ -1,7 +1,8 @@
 import type { NewsItem } from '@/types/news'
-import { RateLimitError } from '@/lib/errors'
+import { apiFetch } from '@/lib/fetch'
 
 const ENDPOINT = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN&sortOrder=latest'
+const SRC = 'CryptoCompare'
 
 interface CCArticle {
   id: string
@@ -15,10 +16,7 @@ interface CCArticle {
 }
 
 export async function fetchNews(): Promise<NewsItem[]> {
-  const res = await fetch(ENDPOINT)
-  if (res.status === 429) throw new RateLimitError('CryptoCompare')
-  if (!res.ok) throw new Error('News fetch failed')
-  const json = await res.json() as { Type: number; Data: CCArticle[] }
+  const json = await apiFetch<{ Type: number; Data: CCArticle[] }>(ENDPOINT, SRC)
   return (json.Data ?? []).map((a) => ({
     guid: a.id,
     title: a.title,

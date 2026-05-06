@@ -10,7 +10,10 @@ import { useMarketStore } from '@/store/marketStore'
 import { useWatchlistStore } from '@/store/watchlistStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatCurrency, formatPercent } from '@/lib/utils'
+import { deriveDataStatus } from '@/lib/dataStatus'
 import ErrorCard from '@/components/ui/ErrorCard'
+import DataStatusBadge from '@/components/ui/DataStatusBadge'
+import Disclaimer from '@/components/ui/Disclaimer'
 import Pagination from './Pagination'
 import type { CoinMarket } from '@/types/coingecko'
 
@@ -117,8 +120,9 @@ const CompareBtn = memo(function CompareBtn({ coin }: { coin: CoinMarket }) {
 
 const CryptoTable = () => {
   const { currency } = useMarketStore()
-  const { data, isLoading, error } = useCryptoMarkets()
+  const { data, isLoading, isError, error, dataUpdatedAt } = useCryptoMarkets()
   const { prices, connected } = useLivePrices()
+  const dataStatus = deriveDataStatus({ isLoading, isError, error, dataUpdatedAt })
 
   return (
     <>
@@ -217,14 +221,18 @@ const CryptoTable = () => {
       </div>
 
       <div className="flex items-center justify-between mt-4 h-8">
-        <span className="text-sm text-gray-100">
-          Data by{' '}
-          <a href="https://www.coingecko.com" className="text-cyan hover:underline" target="_blank" rel="noreferrer">
-            CoinGecko
-          </a>
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-100">
+            Data by{' '}
+            <a href="https://www.coingecko.com" className="text-cyan hover:underline" target="_blank" rel="noreferrer">
+              CoinGecko
+            </a>
+          </span>
+          <DataStatusBadge status={dataStatus} dataUpdatedAt={dataUpdatedAt} source="CoinGecko" />
+        </div>
         <Pagination />
       </div>
+      <Disclaimer className="mt-3" />
     </>
   )
 }
