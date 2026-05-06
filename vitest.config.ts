@@ -8,6 +8,11 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
+  define: {
+    __APP_VERSION__: JSON.stringify('test'),
+    __BUILD_TIME__:  JSON.stringify(new Date().toISOString()),
+    __GIT_SHA__:     JSON.stringify('test'),
+  },
   test: {
     globals: true,
     environment: 'jsdom',

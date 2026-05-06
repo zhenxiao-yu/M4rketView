@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Live app
+    url: https://m4rket-view.vercel.app
+    about: Check if the issue exists in the deployed version first
+  - name: Discussions
+    url: https://github.com/zhenxiao-yu/M4rketView/discussions
+    about: Questions and general discussion

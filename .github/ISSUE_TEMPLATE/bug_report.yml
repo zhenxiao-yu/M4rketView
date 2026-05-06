@@ -1,0 +1,64 @@
+name: Bug Report
+description: Something is broken or behaving unexpectedly
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill this out as completely as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: When I navigate to the Markets page, the table shows "Something went wrong" instead of data.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps to trigger the bug.
+      placeholder: |
+        1. Open https://m4rket-view.vercel.app
+        2. Click "Markets"
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: The markets table should load with coin data.
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Browser console errors
+      description: Open DevTools → Console and paste any errors here.
+      render: text
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Check the footer for the version badge (e.g. v1.2.0).
+      placeholder: v1.2.0
