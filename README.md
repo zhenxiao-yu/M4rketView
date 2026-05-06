@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml)
 [![Release](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/release.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/releases/latest)
-[![Version](https://img.shields.io/badge/version-1.2.0-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
+[![Version](https://img.shields.io/badge/version-1.2.1-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
 [![Live](https://img.shields.io/badge/live-m4rket--view.vercel.app-301E67?style=flat&logo=vercel)](https://m4rket-view.vercel.app)
 

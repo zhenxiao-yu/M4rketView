@@ -37,10 +37,26 @@ interface Release {
 
 const CHANGELOG: Release[] = [
   {
+    version: '1.2.1',
+    date: '2025-05-05',
+    tag: 'patch',
+    summary: 'CI hardening, release automation, community files, project settings.',
+    changes: [
+      'Split CI into 4 parallel jobs (lint, typecheck, test, build) — faster feedback, clearer failure attribution.',
+      'New release.yml workflow — push a v* tag to auto-create a GitHub Release with dist zip and generated notes.',
+      'vitest.config.ts now injects __APP_VERSION__, __BUILD_TIME__, __GIT_SHA__ — buildInfo works in test environment.',
+      'CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md — community guidelines and vulnerability disclosure.',
+      'GitHub issue templates (bug report, feature request) and PR template with CI + free-API checklist.',
+      'README: CI/Release/version/license/Vercel badges, stale RSS2JSON reference replaced, Build Provenance section.',
+      '.gitattributes (LF enforcement), .editorconfig (2-space/LF/final-newline), expanded .gitignore.',
+      'CLAUDE.md — full project context for AI-assisted development.',
+    ],
+  },
+  {
     version: '1.2.0',
     date: '2025-05-05',
     tag: 'minor',
-    summary: 'News API overhaul, WebSocket stability, build provenance.',
+    summary: 'News API overhaul, WebSocket stability, build provenance, footer.',
     changes: [
       'Replaced RSS2JSON (returning 422) with CryptoCompare News API — no API key, 50+ articles per load, dynamic source filtering.',
       'Fixed WebSocket "closed before connection established" warning — null all handlers before ws.close() to prevent ghost reconnect cycles.',
