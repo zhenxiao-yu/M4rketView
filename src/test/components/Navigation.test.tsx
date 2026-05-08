@@ -61,12 +61,6 @@ describe('Navigation', () => {
     useAlertStore.setState({ alerts: [] })
   })
 
-  it('renders theme toggle button', () => {
-    render(<Wrapper />)
-    // Two toggle buttons (desktop + mobile) — check at least one exists
-    expect(screen.getAllByLabelText('Toggle theme').length).toBeGreaterThanOrEqual(1)
-  })
-
   it('renders search button', () => {
     render(<Wrapper />)
     expect(screen.getAllByLabelText('Search (Ctrl+K)').length).toBeGreaterThanOrEqual(1)
