@@ -4,39 +4,39 @@ import { Cpu, Zap, ArrowRightLeft, DollarSign } from 'lucide-react'
 import { useBitcoinStats } from '@/hooks/useBitcoinStats'
 import { formatCompact } from '@/lib/utils'
 import ErrorCard from '@/components/ui/ErrorCard'
+import { Card } from '@/components/ui/Card'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { staggerContainer, staggerChild } from '@/lib/motion'
 
 const StatCard = ({
-  icon, label, value, sub, delay = 0,
+  icon, label, value, sub,
 }: {
   icon: ReactNode
   label: string
   value: string
   sub?: string
-  delay?: number
 }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0, transition: { duration: 0.35, delay } }}
-    className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 flex flex-col gap-2"
-  >
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-100">{label}</span>
-      <span className="text-cyan">{icon}</span>
-    </div>
-    <span className="text-2xl font-bold">{value}</span>
-    {sub && <span className="text-xs text-gray-100">{sub}</span>}
+  <motion.div variants={staggerChild}>
+    <Card className="flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-gray-100">{label}</span>
+        <span className="text-cyan">{icon}</span>
+      </div>
+      <span className="text-2xl font-bold">{value}</span>
+      {sub && <span className="text-xs text-gray-100">{sub}</span>}
+    </Card>
   </motion.div>
 )
 
-const SkeletonCard = () => (
-  <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 animate-pulse flex flex-col gap-3">
+const StatSkeleton = () => (
+  <Card className="flex flex-col gap-3">
     <div className="flex justify-between">
-      <div className="h-3 bg-gray-100/20 rounded w-20" />
-      <div className="h-4 w-4 bg-gray-100/20 rounded" />
+      <Skeleton className="h-3 w-20" />
+      <Skeleton className="h-4 w-4 rounded" />
     </div>
-    <div className="h-7 bg-gray-100/20 rounded w-28" />
-    <div className="h-3 bg-gray-100/20 rounded w-16" />
-  </div>
+    <Skeleton className="h-7 w-28" />
+    <Skeleton className="h-3 w-16" />
+  </Card>
 )
 
 const BitcoinStats = () => {
@@ -57,15 +57,20 @@ const BitcoinStats = () => {
         <ErrorCard error={error as Error} onRetry={() => refetch()} compact />
       ) : isLoading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+          {Array.from({ length: 4 }).map((_, i) => <StatSkeleton key={i} />)}
         </div>
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard delay={0}    icon={<Zap size={18} />}            label="Hash Rate"     value={hashRate}   sub="Network security" />
-          <StatCard delay={0.07} icon={<Cpu size={18} />}            label="Difficulty"    value={difficulty} sub="Mining difficulty" />
-          <StatCard delay={0.14} icon={<ArrowRightLeft size={18} />} label="Transactions"  value={txToday}    sub="Today" />
-          <StatCard delay={0.21} icon={<DollarSign size={18} />}     label="Miner Revenue" value={minerRev}   sub="24H earnings" />
-        </div>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          <StatCard icon={<Zap size={18} />}            label="Hash Rate"     value={hashRate}   sub="Network security" />
+          <StatCard icon={<Cpu size={18} />}            label="Difficulty"    value={difficulty} sub="Mining difficulty" />
+          <StatCard icon={<ArrowRightLeft size={18} />} label="Transactions"  value={txToday}    sub="Today" />
+          <StatCard icon={<DollarSign size={18} />}     label="Miner Revenue" value={minerRev}   sub="24H earnings" />
+        </motion.div>
       )}
     </div>
   )

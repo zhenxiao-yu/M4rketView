@@ -14,25 +14,27 @@ import { deriveDataStatus } from '@/lib/dataStatus'
 import ErrorCard from '@/components/ui/ErrorCard'
 import DataStatusBadge from '@/components/ui/DataStatusBadge'
 import Disclaimer from '@/components/ui/Disclaimer'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { staggerContainer, staggerChild } from '@/lib/motion'
 import Pagination from './Pagination'
 import type { CoinMarket } from '@/types/coingecko'
 
 const CardSkeleton = () => (
   <>
     {Array.from({ length: 5 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20 animate-pulse">
+      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20">
         <div className="flex flex-col gap-1.5 shrink-0">
-          <div className="w-4 h-4 bg-gray-200 rounded" />
-          <div className="w-4 h-4 bg-gray-200 rounded" />
+          <Skeleton className="w-4 h-4" />
+          <Skeleton className="w-4 h-4" />
         </div>
-        <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0" />
+        <Skeleton className="w-8 h-8 rounded-full shrink-0" />
         <div className="flex-1 space-y-2">
-          <div className="h-3.5 bg-gray-200 rounded w-24" />
-          <div className="h-2.5 bg-gray-200 rounded w-12" />
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-2.5 w-12" />
         </div>
         <div className="space-y-2">
-          <div className="h-3.5 bg-gray-200 rounded w-20 ml-auto" />
-          <div className="h-2.5 bg-gray-200 rounded w-12 ml-auto" />
+          <Skeleton className="h-3.5 w-20 ml-auto" />
+          <Skeleton className="h-2.5 w-12 ml-auto" />
         </div>
       </div>
     ))}
@@ -42,10 +44,10 @@ const CardSkeleton = () => (
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 10 }).map((_, i) => (
-      <tr key={i} className="border-b border-gray-100 animate-pulse">
+      <tr key={i} className="border-b border-gray-100">
         {Array.from({ length: 8 }).map((__, j) => (
           <td key={j} className="py-4 px-2">
-            <div className="h-4 bg-gray-200 rounded w-full" />
+            <Skeleton className="h-4 w-full" />
           </td>
         ))}
       </tr>
@@ -186,9 +188,13 @@ const CryptoTable = () => {
               {isLoading ? (
                 <CardSkeleton />
               ) : (
-                data?.map((coin) => (
-                  <MobileCard key={coin.id} coin={coin} currency={currency} livePrice={prices[coin.id]} />
-                ))
+                <motion.div variants={staggerContainer} initial="initial" animate="animate" className="flex flex-col gap-2">
+                  {data?.map((coin) => (
+                    <motion.div key={coin.id} variants={staggerChild}>
+                      <MobileCard coin={coin} currency={currency} livePrice={prices[coin.id]} />
+                    </motion.div>
+                  ))}
+                </motion.div>
               )}
             </div>
 

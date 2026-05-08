@@ -1,5 +1,6 @@
 import { useState, type ReactNode, type FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, Github, Twitter, Globe, ExternalLink,
   MessageCircle, Facebook, Bell, Star, StarOff, X,
@@ -12,6 +13,12 @@ import { useAlertStore } from '@/store/alertStore'
 import { formatCurrency, formatCompact, formatPercent } from '@/lib/utils'
 import PriceChart from '@/components/PriceChart'
 import Disclaimer from '@/components/ui/Disclaimer'
+import { Card } from '@/components/ui/Card'
+import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { dialogContent } from '@/lib/motion'
 
 const HighLowBar = ({
   current, high, low, currency,
@@ -43,13 +50,11 @@ const MetricRow = ({ label, value }: { label: string; value: ReactNode }) => (
 )
 
 const CoinDetailSkeleton = () => (
-  <div className="w-full animate-pulse space-y-4 p-6">
-    <div className="h-8 bg-gray-200 rounded w-48" />
-    <div className="h-12 bg-gray-200 rounded w-64" />
+  <div className="w-full space-y-4 p-6">
+    <Skeleton className="h-8 w-48" />
+    <Skeleton className="h-12 w-64" />
     <div className="grid grid-cols-2 gap-4">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="h-16 bg-gray-200 rounded" />
-      ))}
+      {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-16" />)}
     </div>
   </div>
 )
@@ -84,69 +89,81 @@ const AlertModal = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-in fade-in" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-gray-200 border border-gray-100/30 rounded-2xl p-6 shadow-2xl">
-          <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-base font-bold flex items-center gap-2">
-              <Bell size={16} className="text-cyan" />
-              Set Price Alert — {coinName}
-            </Dialog.Title>
-            <Dialog.Close asChild>
-              <button className="text-gray-100 hover:text-cyan transition-colors" aria-label="Close">
-                <X size={18} />
-              </button>
-            </Dialog.Close>
-          </div>
-
-          <p className="text-sm text-gray-100 mb-4">
-            Current price:{' '}
-            <span className="text-cyan font-semibold">{formatCurrency(currentPrice, currency)}</span>
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs text-gray-100 mb-1.5 uppercase tracking-wide font-semibold">
-                Target price ({currency.toUpperCase()})
-              </label>
-              <input
-                type="number"
-                inputMode="decimal"
-                step="any"
-                min="0"
-                value={value}
-                onChange={(e) => { setValue(e.target.value); setError('') }}
-                placeholder={currentPrice != null ? `e.g. ${(currentPrice * 1.1).toFixed(2)}` : 'Enter price'}
-                className="w-full bg-gray-300/50 border border-gray-100/30 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan transition-colors"
-                autoFocus
+      <AnimatePresence>
+        {open && (
+          <Dialog.Portal forceMount>
+            <Dialog.Overlay asChild forceMount>
+              <motion.div
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
               />
-              {error && <p className="text-red text-xs mt-1">{error}</p>}
-              {value && !isNaN(parseFloat(value)) && parseFloat(value) > 0 && (
-                <p className="text-xs text-gray-100 mt-1">
-                  Alert when price goes{' '}
-                  <span className={parseFloat(value) > currentPrice ? 'text-green font-semibold' : 'text-red font-semibold'}>
-                    {parseFloat(value) > currentPrice ? 'above ▲' : 'below ▼'}
-                  </span>{' '}
-                  {formatCurrency(parseFloat(value), currency)}
-                </p>
-              )}
-            </div>
-            <div className="flex gap-2 justify-end">
-              <Dialog.Close asChild>
-                <button type="button" className="px-4 py-2 text-sm rounded-lg bg-gray-300/50 text-gray-100 hover:text-white transition-colors">
-                  Cancel
-                </button>
-              </Dialog.Close>
-              <button
-                type="submit"
-                className="px-4 py-2 text-sm rounded-lg bg-cyan text-gray-300 font-semibold hover:opacity-90 transition-opacity"
+            </Dialog.Overlay>
+            <Dialog.Content asChild forceMount>
+              <motion.div
+                variants={dialogContent}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] max-w-sm bg-gray-200 border border-gray-100/30 rounded-2xl p-6 shadow-2xl"
               >
-                Set Alert
-              </button>
-            </div>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
+                <div className="flex items-center justify-between mb-4">
+                  <Dialog.Title className="text-base font-bold flex items-center gap-2">
+                    <Bell size={16} className="text-cyan" />
+                    Set Price Alert — {coinName}
+                  </Dialog.Title>
+                  <Dialog.Close asChild>
+                    <Button variant="ghost" size="icon-sm" aria-label="Close">
+                      <X size={18} />
+                    </Button>
+                  </Dialog.Close>
+                </div>
+
+                <p className="text-sm text-gray-100 mb-4">
+                  Current price:{' '}
+                  <span className="text-cyan font-semibold">{formatCurrency(currentPrice, currency)}</span>
+                </p>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs text-gray-100 mb-1.5 uppercase tracking-wide font-semibold">
+                      Target price ({currency.toUpperCase()})
+                    </label>
+                    <Input
+                      type="number"
+                      inputMode="decimal"
+                      step="any"
+                      min="0"
+                      value={value}
+                      onChange={(e) => { setValue(e.target.value); setError('') }}
+                      placeholder={currentPrice != null ? `e.g. ${(currentPrice * 1.1).toFixed(2)}` : 'Enter price'}
+                      autoFocus
+                    />
+                    {error && <p className="text-red text-xs mt-1">{error}</p>}
+                    {value && !isNaN(parseFloat(value)) && parseFloat(value) > 0 && (
+                      <p className="text-xs text-gray-100 mt-1">
+                        Alert when price goes{' '}
+                        <span className={parseFloat(value) > currentPrice ? 'text-green font-semibold' : 'text-red font-semibold'}>
+                          {parseFloat(value) > currentPrice ? 'above ▲' : 'below ▼'}
+                        </span>{' '}
+                        {formatCurrency(parseFloat(value), currency)}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-2 justify-end">
+                    <Dialog.Close asChild>
+                      <Button type="button" variant="ghost">Cancel</Button>
+                    </Dialog.Close>
+                    <Button type="submit">Set Alert</Button>
+                  </div>
+                </form>
+              </motion.div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        )}
+      </AnimatePresence>
     </Dialog.Root>
   )
 }
@@ -169,9 +186,9 @@ const CoinDetail = () => {
   if (error || !data) return (
     <main className="w-full max-w-5xl mx-auto px-4 py-8 flex flex-col items-center gap-4">
       <p className="text-red text-lg">{error?.message || 'Coin not found'}</p>
-      <button onClick={() => navigate(-1)} className="text-cyan hover:underline flex items-center gap-1">
+      <Button variant="link" onClick={() => navigate(-1)}>
         <ArrowLeft size={16} /> Go back
-      </button>
+      </Button>
     </main>
   )
 
@@ -198,65 +215,56 @@ const CoinDetail = () => {
 
   return (
     <main className="w-full max-w-5xl mx-auto px-4 py-8 font-nunito">
-      <button
-        onClick={() => navigate(-1)}
-        aria-label="Go back"
-        className="inline-flex items-center gap-1.5 mb-6 min-h-[40px] px-3 py-1.5 sm:px-2 sm:py-1 rounded-lg border border-gray-100/30 bg-gray-200/40 text-gray-100 hover:text-cyan hover:border-cyan/40 transition-colors text-sm sm:border-transparent sm:bg-transparent"
-      >
+      <Button variant="secondary" size="default" onClick={() => navigate(-1)} className="mb-6" aria-label="Go back">
         <ArrowLeft size={16} /> Back
-      </button>
+      </Button>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* LEFT PANEL */}
         <div className="lg:w-[42%] flex flex-col gap-4">
           {/* Header */}
-          <div className="flex flex-wrap items-center gap-3 bg-gray-200/30 rounded-xl p-4 border border-gray-100/20">
+          <Card tone="muted" padding="md" className="flex flex-wrap items-center gap-3">
             <img src={data.image.large} alt={data.name} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-lg sm:text-xl font-bold truncate max-w-full">{data.name}</h1>
-                <span className="text-xs bg-cyan/20 text-cyan px-2 py-0.5 rounded uppercase font-semibold">
-                  {data.symbol}
-                </span>
-                <span className="text-xs bg-gray-200 text-gray-100 px-2 py-0.5 rounded">
-                  #{data.market_cap_rank}
-                </span>
+                <Badge tone="default" uppercase>{data.symbol}</Badge>
+                <Badge tone="muted">#{data.market_cap_rank}</Badge>
               </div>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <span className="text-lg sm:text-xl font-bold">{formatCurrency(price, currency)}</span>
-                <span className={`text-sm font-semibold px-1.5 py-0.5 rounded ${isUp ? 'bg-green/20 text-green' : 'bg-red/20 text-red'}`}>
-                  {formatPercent(pct24h)}
-                </span>
+                <Badge tone={isUp ? 'success' : 'destructive'}>{formatPercent(pct24h)}</Badge>
               </div>
             </div>
 
             <div className="flex gap-2 ml-auto">
-              <button
+              <Button
+                variant={saved ? 'primary' : 'outline'}
+                size="icon"
                 onClick={() => toggleCoin(data.id)}
-                className={`min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border transition-all ${saved ? 'border-cyan text-cyan bg-cyan/10' : 'border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan'}`}
+                className={saved ? 'bg-cyan/10 border border-cyan text-cyan hover:bg-cyan/20' : ''}
                 aria-label={saved ? 'Remove from watchlist' : 'Add to watchlist'}
-                title={saved ? 'Remove from watchlist' : 'Add to watchlist'}
               >
                 {saved ? <Star size={18} fill="currentColor" /> : <StarOff size={18} />}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={() => setAlertOpen(true)}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan transition-all"
                 aria-label="Set price alert"
-                title="Set price alert"
               >
                 <Bell size={18} />
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
 
           {/* Price range */}
-          <div className="bg-gray-200/30 rounded-xl p-4 border border-gray-100/20">
+          <Card tone="muted" padding="md">
             <HighLowBar current={price} high={high24h} low={low24h} currency={currency} />
-          </div>
+          </Card>
 
           {/* Metrics */}
-          <div className="bg-gray-200/30 rounded-xl p-4 border border-gray-100/20">
+          <Card tone="muted" padding="md">
             <MetricRow label="Market Cap" value={formatCompact(marketCap)} />
             <MetricRow label="Fully Diluted Valuation" value={fdv ? formatCompact(fdv) : '—'} />
             <MetricRow label="24H Volume" value={formatCompact(volume)} />
@@ -273,10 +281,10 @@ const CoinDetail = () => {
                 </span>
               }
             />
-          </div>
+          </Card>
 
           {/* Links */}
-          <div className="bg-gray-200/30 rounded-xl p-4 border border-gray-100/20 flex flex-col gap-2">
+          <Card tone="muted" padding="md" className="flex flex-col gap-2">
             {data.links.homepage[0] && (
               <a href={data.links.homepage[0]} target="_blank" rel="noreferrer"
                 className="flex items-center gap-2 text-sm text-gray-100 hover:text-cyan transition-colors">
@@ -315,13 +323,13 @@ const CoinDetail = () => {
                 </a>
               )}
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* RIGHT PANEL — Chart */}
-        <div className="lg:w-[58%] bg-gray-200/30 rounded-xl p-3 sm:p-4 border border-gray-100/20 min-h-[280px] sm:min-h-[360px] lg:min-h-[400px]">
+        <Card tone="muted" padding="md" className="lg:w-[58%] p-3 sm:p-4 min-h-[280px] sm:min-h-[360px] lg:min-h-[400px]">
           <PriceChart coinId={data.id} />
-        </div>
+        </Card>
       </div>
 
       <AlertModal

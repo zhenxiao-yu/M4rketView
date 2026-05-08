@@ -1,136 +1,162 @@
-import { useRef, type FormEvent } from 'react'
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { useEffect } from 'react'
+import { ChevronLeft, ChevronRight, ChevronsLeft, Check, ChevronDown } from 'lucide-react'
+import * as Select from '@radix-ui/react-select'
 import { useMarketStore } from '@/store/marketStore'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
+import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
 
 const MAX_PAGES = 500
+const PAGE_WINDOW = 1
+const PER_PAGE_OPTIONS = [10, 25, 50, 100, 250]
 
-const PerPage = () => {
-  const { setPerPage } = useMarketStore()
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    const val = parseInt(inputRef.current?.value ?? '10')
-    if (val > 0 && val <= 250) {
-      setPerPage(val)
-    }
+function buildPageList(current: number, isLastPage: boolean): (number | 'ellipsis')[] {
+  const last = isLastPage ? current : Math.min(current + 5, MAX_PAGES)
+  const out: (number | 'ellipsis')[] = []
+  const push = (n: number | 'ellipsis') => {
+    if (out[out.length - 1] !== n) out.push(n)
   }
+  push(1)
+  if (current - PAGE_WINDOW > 2) push('ellipsis')
+  for (let p = Math.max(2, current - PAGE_WINDOW); p <= Math.min(last - 1, current + PAGE_WINDOW); p++) {
+    push(p)
+  }
+  if (current + PAGE_WINDOW < last - 1) push('ellipsis')
+  if (last > 1) push(last)
+  return out
+}
 
+const PerPageSelect = () => {
+  const { perPage, setPerPage, setPage } = useMarketStore()
   return (
-    <form className="relative hidden md:flex items-center font-nunito mr-8" onSubmit={handleSubmit}>
-      <label htmlFor="perpage" className="mr-2 font-bold text-sm">
-        per page:
-      </label>
-      <input
-        type="number"
-        id="perpage"
-        name="perpage"
-        min={1}
-        max={250}
-        ref={inputRef}
-        placeholder="10"
-        className="w-14 rounded bg-gray-200 placeholder:text-gray-100 px-2 py-0.5 outline-none border border-transparent focus:border-cyan text-sm"
-      />
-      <button type="submit" className="ml-1.5 text-gray-100 hover:text-cyan transition-colors">
-        <ArrowRight size={16} />
-      </button>
-    </form>
+    <Select.Root
+      value={String(perPage)}
+      onValueChange={(v) => { setPerPage(Number(v)); setPage(1) }}
+    >
+      <Select.Trigger
+        aria-label="Items per page"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-100/20 bg-gray-200/40 px-3 py-1.5 text-xs font-medium text-gray-100 hover:border-cyan/50 hover:text-cyan transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60"
+      >
+        <Select.Value /> <span className="text-gray-100/60">/ page</span>
+        <Select.Icon><ChevronDown size={12} /></Select.Icon>
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Content
+          position="popper"
+          sideOffset={6}
+          className="z-50 min-w-[7rem] rounded-lg border border-gray-100/20 bg-gray-200 shadow-xl overflow-hidden"
+        >
+          <Select.Viewport className="p-1">
+            {PER_PAGE_OPTIONS.map((n) => (
+              <Select.Item
+                key={n}
+                value={String(n)}
+                className="flex cursor-pointer items-center justify-between rounded px-2.5 py-1.5 text-xs text-gray-100 outline-none data-[highlighted]:bg-gray-300/60 data-[highlighted]:text-cyan"
+              >
+                <Select.ItemText>{n}</Select.ItemText>
+                <Select.ItemIndicator><Check size={12} /></Select.ItemIndicator>
+              </Select.Item>
+            ))}
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   )
 }
 
 const Pagination = () => {
   const { page, setPage, perPage } = useMarketStore()
   const { data } = useCryptoMarkets()
-
   const isLastPage = (data?.length ?? 0) < perPage
-  const totalNumber = isLastPage ? page : Math.min(page + 10, MAX_PAGES)
 
-  const next = () => { if (!isLastPage) setPage(page + 1) }
-  const prev = () => { if (page > 1) setPage(page - 1) }
-  const multiStepNext = () => { if (!isLastPage) setPage(Math.min(page + 3, totalNumber)) }
-  const multiStepPrev = () => setPage(Math.max(page - 3, 1))
+  const goPrev  = () => { if (page > 1) setPage(page - 1) }
+  const goNext  = () => { if (!isLastPage) setPage(page + 1) }
+  const goFirst = () => { if (page !== 1) setPage(1) }
+
+  // Keyboard nav: ArrowLeft / ArrowRight when not focused inside an input
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      if (e.target instanceof HTMLElement && e.target.isContentEditable) return
+      if (e.altKey || e.ctrlKey || e.metaKey) return
+      if (e.key === 'ArrowLeft')  { goPrev(); }
+      if (e.key === 'ArrowRight') { goNext(); }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isLastPage])
 
   if (!data || data.length === 0) return null
 
+  const pages = buildPageList(page, isLastPage)
+
   return (
-    <div className="flex items-center">
-      <PerPage />
-      <ul className="flex items-center gap-1 text-sm">
-        <li>
-          <button
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:text-cyan disabled:opacity-30 transition-colors"
-            onClick={prev}
-            disabled={page === 1}
-          >
-            <ChevronLeft size={16} />
-          </button>
-        </li>
+    <nav
+      aria-label="Pagination"
+      className="flex flex-wrap items-center gap-2"
+    >
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={goFirst}
+        disabled={page === 1}
+        aria-label="First page"
+        className="hidden sm:inline-flex"
+      >
+        <ChevronsLeft size={16} />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={goPrev}
+        disabled={page === 1}
+        aria-label="Previous page"
+      >
+        <ChevronLeft size={16} />
+      </Button>
 
-        {page > 3 && (
-          <li>
-            <button
-              onClick={multiStepPrev}
-              className="w-8 h-8 flex items-center justify-center hover:text-cyan rounded-full"
-            >
-              ...
-            </button>
-          </li>
+      <ul className="flex items-center gap-1" role="list">
+        {pages.map((p, i) =>
+          p === 'ellipsis' ? (
+            <li key={`e-${i}`} className="px-1 text-gray-100/60 text-xs select-none" aria-hidden>
+              …
+            </li>
+          ) : (
+            <li key={p}>
+              <button
+                onClick={() => setPage(p)}
+                aria-current={p === page ? 'page' : undefined}
+                aria-label={`Page ${p}`}
+                className={cn(
+                  'min-w-[32px] h-8 px-2 rounded-lg text-xs font-semibold transition-colors',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60',
+                  p === page
+                    ? 'bg-cyan text-gray-300'
+                    : 'bg-gray-200/40 text-gray-100 hover:text-cyan hover:bg-gray-200/60',
+                )}
+              >
+                {p}
+              </button>
+            </li>
+          ),
         )}
-
-        {page > 1 && (
-          <li>
-            <button
-              onClick={prev}
-              className="w-8 h-8 flex items-center justify-center bg-gray-200 hover:text-cyan rounded-full mx-0.5"
-            >
-              {page - 1}
-            </button>
-          </li>
-        )}
-
-        <li>
-          <button
-            disabled
-            className="w-8 h-8 flex items-center justify-center bg-cyan text-gray-300 rounded-full mx-0.5 font-semibold"
-          >
-            {page}
-          </button>
-        </li>
-
-        {!isLastPage && (
-          <li>
-            <button
-              onClick={next}
-              className="w-8 h-8 flex items-center justify-center bg-gray-200 hover:text-cyan rounded-full mx-0.5"
-            >
-              {page + 1}
-            </button>
-          </li>
-        )}
-
-        {!isLastPage && page < totalNumber - 3 && (
-          <li>
-            <button
-              onClick={multiStepNext}
-              className="w-8 h-8 flex items-center justify-center hover:text-cyan rounded-full"
-            >
-              ...
-            </button>
-          </li>
-        )}
-
-        <li>
-          <button
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:text-cyan disabled:opacity-30 transition-colors"
-            onClick={next}
-            disabled={isLastPage}
-          >
-            <ChevronRight size={16} />
-          </button>
-        </li>
       </ul>
-    </div>
+
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={goNext}
+        disabled={isLastPage}
+        aria-label="Next page"
+      >
+        <ChevronRight size={16} />
+      </Button>
+
+      <div className="ml-auto sm:ml-2">
+        <PerPageSelect />
+      </div>
+    </nav>
   )
 }
 

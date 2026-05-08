@@ -10,20 +10,22 @@ import {
 } from 'recharts'
 import { useDeFiProtocols, useDeFiChains, useGlobalTvlHistory } from '@/hooks/useDeFiTVL'
 import { formatCompact, formatPercent } from '@/lib/utils'
+import { Card } from '@/components/ui/Card'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 const DeFiSkeleton = () => (
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 animate-pulse">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
     {[0, 1].map((i) => (
-      <div key={i} className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 flex flex-col gap-3">
-        <div className="h-4 bg-gray-100/20 rounded w-32" />
+      <Card key={i} className="flex flex-col gap-3">
+        <Skeleton className="h-4 w-32" />
         {Array.from({ length: 5 }).map((_, j) => (
           <div key={j} className="flex items-center gap-2">
-            <div className="w-16 h-3 bg-gray-100/20 rounded" />
-            <div className="flex-1 h-2 bg-gray-100/20 rounded-full" />
-            <div className="w-12 h-3 bg-gray-100/20 rounded" />
+            <Skeleton className="w-16 h-3" />
+            <Skeleton className="flex-1 h-2 rounded-full" />
+            <Skeleton className="w-12 h-3" />
           </div>
         ))}
-      </div>
+      </Card>
     ))}
   </div>
 )
@@ -70,7 +72,7 @@ const DeFiTVL = () => {
 
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 ${loading ? 'hidden' : ''}`}>
         {/* Top chains */}
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
+        <Card>
           <h3 className="text-sm font-semibold text-gray-100 mb-3">Top Chains by TVL</h3>
           <div className="flex flex-col gap-2">
             {topChains.map((chain) => (
@@ -88,10 +90,10 @@ const DeFiTVL = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Card>
 
         {/* Top protocols */}
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
+        <Card>
           <h3 className="text-sm font-semibold text-gray-100 mb-3">Top Protocols</h3>
           <div className="flex flex-col gap-1.5">
             {topProtocols.map((protocol) => {
@@ -123,12 +125,12 @@ const DeFiTVL = () => {
               )
             })}
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* 90-day TVL chart */}
       {chartData.length > 0 && (
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
+        <Card>
           <h3 className="text-sm font-semibold text-gray-100 mb-3">90-Day Global TVL</h3>
           <ResponsiveContainer width="100%" height={160}>
             <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
@@ -167,7 +169,7 @@ const DeFiTVL = () => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
       )}
     </div>
   )

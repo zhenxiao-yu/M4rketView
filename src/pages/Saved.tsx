@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { Star, StarOff, RefreshCw, Download, TrendingUp, TrendingDown } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useWatchlistStore } from '@/store/watchlistStore'
@@ -7,6 +8,8 @@ import { formatCurrency, formatPercent } from '@/lib/utils'
 import { exportWatchlistCSV } from '@/lib/export'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCryptoMarkets } from '@/api/coinGecko'
+import { Button } from '@/components/ui/Button'
+import { staggerContainer, staggerChild } from '@/lib/motion'
 import type { CoinMarket } from '@/types/coingecko'
 
 const PctCell = ({ value }: { value: number }) => {
@@ -69,16 +72,17 @@ const Saved = () => {
         <h2 className="text-lg font-semibold">Watchlist ({coinIds.length})</h2>
         <div className="flex gap-2">
           {savedData && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => { exportWatchlistCSV(savedData, currency); toast.success('Exported to CSV') }}
-              className="flex items-center gap-1.5 text-sm text-gray-100 hover:text-cyan transition-colors"
             >
               <Download size={16} /> Export CSV
-            </button>
+            </Button>
           )}
-          <button onClick={() => refetch()} className="text-cyan hover:scale-110 transition-transform">
+          <Button variant="ghost" size="icon-sm" onClick={() => refetch()} aria-label="Refresh watchlist" className="text-cyan">
             <RefreshCw size={18} />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -100,9 +104,9 @@ const Saved = () => {
                 <th className="py-3 px-3 hidden lg:table-cell">7D</th>
               </tr>
             </thead>
-            <tbody>
+            <motion.tbody variants={staggerContainer} initial="initial" animate="animate">
               {savedData.map((coin) => (
-                <tr key={coin.id} className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0 transition-colors">
+                <motion.tr variants={staggerChild} key={coin.id} className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0 transition-colors">
                   <td className="py-3 px-3">
                     <div className="flex items-center gap-1.5">
                       <SaveBtn coin={coin} />
@@ -122,9 +126,9 @@ const Saved = () => {
                   <td className="py-3 px-3"><PctCell value={coin.price_change_percentage_24h_in_currency} /></td>
                   <td className="py-3 px-3 hidden lg:table-cell"><PctCell value={coin.price_change_percentage_1h_in_currency} /></td>
                   <td className="py-3 px-3 hidden lg:table-cell"><PctCell value={coin.price_change_percentage_7d_in_currency} /></td>
-                </tr>
+                </motion.tr>
               ))}
-            </tbody>
+            </motion.tbody>
           </table>
         ) : (
           <div className="min-h-[40vh] flex items-center justify-center">
