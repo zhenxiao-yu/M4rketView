@@ -9,6 +9,9 @@ import type {
   MarketParams,
 } from '@/types/coingecko'
 import { RateLimitError } from '@/lib/errors'
+import { withFallback } from '@/lib/fetchWithFallback'
+import { fetchCryptoMarketsViaPaprika } from '@/api/coinPaprika'
+import { fetchMarketChartViaBinance } from '@/api/binanceRest'
 
 const COINGECKO_BASE = 'https://api.coingecko.com/api/v3'
 const FEAR_GREED_BASE = 'https://api.alternative.me'
@@ -40,8 +43,12 @@ export async function fetchCryptoMarkets(params: MarketParams): Promise<CoinMark
   const { currency, sortBy, page, perPage, ids = '', category = '' } = params
   const idsParam = ids ? `&ids=${ids}` : ''
   const categoryParam = category ? `&category=${category}` : ''
-  return fetchJSON<CoinMarket[]>(
-    `${COINGECKO_BASE}/coins/markets?vs_currency=${currency}&order=${sortBy}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h,24h,7d${idsParam}${categoryParam}`
+  return withFallback(
+    () =>
+      fetchJSON<CoinMarket[]>(
+        `${COINGECKO_BASE}/coins/markets?vs_currency=${currency}&order=${sortBy}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h,24h,7d${idsParam}${categoryParam}`,
+      ),
+    [() => fetchCryptoMarketsViaPaprika(params)],
   )
 }
 
@@ -69,8 +76,12 @@ export async function fetchMarketChart(
   days: number
 ): Promise<MarketChartData> {
   const interval = days === 1 ? '' : days <= 7 ? '&interval=hourly' : '&interval=daily'
-  return fetchJSON<MarketChartData>(
-    `${COINGECKO_BASE}/coins/${id}/market_chart?vs_currency=${currency}&days=${days}${interval}`
+  return withFallback(
+    () =>
+      fetchJSON<MarketChartData>(
+        `${COINGECKO_BASE}/coins/${id}/market_chart?vs_currency=${currency}&days=${days}${interval}`,
+      ),
+    [() => fetchMarketChartViaBinance(id, currency, days)],
   )
 }
 

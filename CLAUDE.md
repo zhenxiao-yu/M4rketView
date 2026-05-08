@@ -12,7 +12,7 @@ npm run dev        # dev server → http://localhost:3000
 npm run build      # production build → dist/
 npm run typecheck  # tsc --noEmit (must be 0 errors)
 npm run lint       # eslint . (must be 0 errors)
-npm test -- --run  # vitest single run (33 tests, must all pass)
+npm test -- --run  # vitest single run (71 tests, must all pass)
 npm run coverage   # v8 coverage report
 ```
 
@@ -45,14 +45,22 @@ src/
 
 ## APIs (all free, no key)
 
-| API | Used for |
-|---|---|
-| CoinGecko | Market data, coin details, trending, search |
-| Binance WebSocket | Real-time prices (public stream) |
-| DeFiLlama | DeFi TVL, protocols, chain history |
-| Alternative.me | Fear & Greed Index |
-| blockchain.info | Bitcoin on-chain stats |
-| CryptoCompare | Crypto news feed |
+| API | Role | Used for |
+|---|---|---|
+| CoinGecko | primary | Market data, coin details, trending, search |
+| CoinPaprika | fallback | Markets list (`fetchCryptoMarkets`) when CoinGecko 429s |
+| Binance REST | fallback | Market chart (`fetchMarketChart`) for the ~20 coins in `lib/binanceSymbols.ts` |
+| Binance WebSocket | primary | Real-time prices (public stream) |
+| DeFiLlama | primary | DeFi TVL, protocols, chain history |
+| blockchain.info | primary | Bitcoin on-chain stats |
+| Blockchair | fallback | Bitcoin stats when blockchain.info fails |
+| Alternative.me | primary | Fear & Greed Index |
+| CryptoCompare | primary | Crypto news feed |
+
+**Failover layer** — `lib/fetchWithFallback.ts` wraps primary calls with a fallback chain.
+A fallback fires on `RateLimitError` (429), network errors, timeouts, or 5xx status. If
+every source fails the *primary* error is rethrown so users see the canonical source name.
+All fallback APIs must remain free and keyless — never add a fallback that requires a key.
 
 ## Coding Conventions
 

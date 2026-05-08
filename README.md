@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml)
 [![Release](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/release.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/releases/latest)
-[![Version](https://img.shields.io/badge/version-1.2.1-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
+[![Version](https://img.shields.io/badge/version-1.3.0-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
 [![Live](https://img.shields.io/badge/live-m4rket--view.vercel.app-301E67?style=flat&logo=vercel)](https://m4rket-view.vercel.app)
 
@@ -25,6 +25,7 @@ A production-grade cryptocurrency market dashboard with live prices, news aggreg
 | **Watchlist** | Star coins; persistent across sessions |
 | **Price Alerts** | Toast notifications when target price is crossed |
 | **Compare** | Normalized 30-day performance chart for up to 3 coins |
+| **Mobile-first UI** | Thumb-friendly bottom navigation, responsive market cards, mobile-safe forms, and `prefers-reduced-motion` support |
 | **Changelog** | In-app version history — click the version badge in the footer |
 
 ## Tech Stack
@@ -41,14 +42,22 @@ A production-grade cryptocurrency market dashboard with live prices, news aggreg
 
 ## APIs Used (all free, no API key)
 
-| API | Data |
-|---|---|
-| [CoinGecko](https://www.coingecko.com/api/documentation) | Market data, coin details, trending, search |
-| [Binance WebSocket](https://developers.binance.com/docs/derivatives/coin-margined-futures/websocket-market-streams) | Real-time prices (public stream) |
-| [DeFiLlama](https://defillama.com/docs/api) | DeFi protocols, chains, TVL history |
-| [Alternative.me](https://alternative.me/crypto/fear-and-greed-index/) | Fear & Greed Index |
-| [blockchain.info](https://www.blockchain.com/explorer/api/blockchain_api) | Bitcoin on-chain stats |
-| [CryptoCompare](https://min-api.cryptocompare.com/documentation) | Crypto news feed |
+| API | Role | Data |
+|---|---|---|
+| [CoinGecko](https://www.coingecko.com/api/documentation) | primary | Market data, coin details, trending, search |
+| [CoinPaprika](https://api.coinpaprika.com/) | fallback | Markets list when CoinGecko 429s |
+| [Binance REST](https://developers.binance.com/docs/binance-spot-api-docs/rest-api) | fallback | Coin price chart when CoinGecko 429s (top 20 coins) |
+| [Binance WebSocket](https://developers.binance.com/docs/derivatives/coin-margined-futures/websocket-market-streams) | primary | Real-time prices (public stream) |
+| [DeFiLlama](https://defillama.com/docs/api) | primary | DeFi protocols, chains, TVL history |
+| [blockchain.info](https://www.blockchain.com/explorer/api/blockchain_api) | primary | Bitcoin on-chain stats |
+| [Blockchair](https://blockchair.com/api/docs) | fallback | Bitcoin stats when blockchain.info fails |
+| [Alternative.me](https://alternative.me/crypto/fear-and-greed-index/) | primary | Fear & Greed Index |
+| [CryptoCompare](https://min-api.cryptocompare.com/documentation) | primary | Crypto news feed |
+
+**Failover behavior** — primary endpoints try first; on `429`, network error, timeout, or 5xx
+the fallback fires automatically. All fallbacks are keyless and CORS-clean. If both primary
+and fallback fail, the original error is surfaced and TanStack Query serves the most recent
+cached payload (24h localStorage TTL).
 
 ## Getting Started
 
@@ -69,7 +78,7 @@ npm run build      # Production build → dist/
 npm run preview    # Preview production build locally
 npm run typecheck  # TypeScript check
 npm run lint       # ESLint
-npm test -- --run  # Vitest (single run, 33 tests)
+npm test -- --run  # Vitest (single run, 71 tests)
 npm run coverage   # Coverage report
 ```
 
@@ -81,7 +90,7 @@ Every push to `main` and every pull request runs four parallel jobs:
 |---|---|
 | Lint | `eslint .` |
 | Type check | `tsc --noEmit` |
-| Tests | `vitest --run` (33 tests) |
+| Tests | `vitest --run` (71 tests) |
 | Build | `vite build` → artifact uploaded |
 
 **Releases** — push a `v*` tag to trigger the release workflow: runs the full CI gate, builds, zips `dist/`, and creates a GitHub Release with auto-generated notes.

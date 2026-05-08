@@ -111,12 +111,13 @@ const AlertModal = ({
               </label>
               <input
                 type="number"
+                inputMode="decimal"
                 step="any"
                 min="0"
                 value={value}
                 onChange={(e) => { setValue(e.target.value); setError('') }}
                 placeholder={currentPrice != null ? `e.g. ${(currentPrice * 1.1).toFixed(2)}` : 'Enter price'}
-                className="w-full bg-gray-300/50 border border-gray-100/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan transition-colors"
+                className="w-full bg-gray-300/50 border border-gray-100/30 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan transition-colors"
                 autoFocus
               />
               {error && <p className="text-red text-xs mt-1">{error}</p>}
@@ -199,7 +200,8 @@ const CoinDetail = () => {
     <main className="w-full max-w-5xl mx-auto px-4 py-8 font-nunito">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-gray-100 hover:text-cyan transition-colors mb-6 text-sm"
+        aria-label="Go back"
+        className="inline-flex items-center gap-1.5 mb-6 min-h-[40px] px-3 py-1.5 sm:px-2 sm:py-1 rounded-lg border border-gray-100/30 bg-gray-200/40 text-gray-100 hover:text-cyan hover:border-cyan/40 transition-colors text-sm sm:border-transparent sm:bg-transparent"
       >
         <ArrowLeft size={16} /> Back
       </button>
@@ -208,11 +210,11 @@ const CoinDetail = () => {
         {/* LEFT PANEL */}
         <div className="lg:w-[42%] flex flex-col gap-4">
           {/* Header */}
-          <div className="flex items-center gap-3 bg-gray-200/30 rounded-xl p-4 border border-gray-100/20">
-            <img src={data.image.large} alt={data.name} className="w-14 h-14 rounded-full" />
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold">{data.name}</h1>
+          <div className="flex flex-wrap items-center gap-3 bg-gray-200/30 rounded-xl p-4 border border-gray-100/20">
+            <img src={data.image.large} alt={data.name} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-lg sm:text-xl font-bold truncate max-w-full">{data.name}</h1>
                 <span className="text-xs bg-cyan/20 text-cyan px-2 py-0.5 rounded uppercase font-semibold">
                   {data.symbol}
                 </span>
@@ -220,28 +222,30 @@ const CoinDetail = () => {
                   #{data.market_cap_rank}
                 </span>
               </div>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xl font-bold">{formatCurrency(price, currency)}</span>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                <span className="text-lg sm:text-xl font-bold">{formatCurrency(price, currency)}</span>
                 <span className={`text-sm font-semibold px-1.5 py-0.5 rounded ${isUp ? 'bg-green/20 text-green' : 'bg-red/20 text-red'}`}>
                   {formatPercent(pct24h)}
                 </span>
               </div>
             </div>
 
-            <div className="ml-auto flex gap-2">
+            <div className="flex gap-2 ml-auto">
               <button
                 onClick={() => toggleCoin(data.id)}
-                className={`p-2 rounded-lg border transition-all ${saved ? 'border-cyan text-cyan bg-cyan/10' : 'border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan'}`}
+                className={`min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border transition-all ${saved ? 'border-cyan text-cyan bg-cyan/10' : 'border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan'}`}
+                aria-label={saved ? 'Remove from watchlist' : 'Add to watchlist'}
                 title={saved ? 'Remove from watchlist' : 'Add to watchlist'}
               >
-                {saved ? <Star size={16} fill="currentColor" /> : <StarOff size={16} />}
+                {saved ? <Star size={18} fill="currentColor" /> : <StarOff size={18} />}
               </button>
               <button
                 onClick={() => setAlertOpen(true)}
-                className="p-2 rounded-lg border border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan transition-all"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan transition-all"
+                aria-label="Set price alert"
                 title="Set price alert"
               >
-                <Bell size={16} />
+                <Bell size={18} />
               </button>
             </div>
           </div>
@@ -315,7 +319,7 @@ const CoinDetail = () => {
         </div>
 
         {/* RIGHT PANEL — Chart */}
-        <div className="lg:w-[58%] bg-gray-200/30 rounded-xl p-4 border border-gray-100/20 min-h-[400px]">
+        <div className="lg:w-[58%] bg-gray-200/30 rounded-xl p-3 sm:p-4 border border-gray-100/20 min-h-[280px] sm:min-h-[360px] lg:min-h-[400px]">
           <PriceChart coinId={data.id} />
         </div>
       </div>

@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import type { BitcoinStats } from '@/types/coingecko'
 import { apiFetch } from '@/lib/fetch'
+import { withFallback } from '@/lib/fetchWithFallback'
+import { fetchBitcoinStatsViaBlockchair } from '@/api/blockchair'
 
 function fetchBitcoinStats(): Promise<BitcoinStats> {
-  return apiFetch<BitcoinStats>('https://api.blockchain.info/stats', 'blockchain.info')
+  return withFallback(
+    () => apiFetch<BitcoinStats>('https://api.blockchain.info/stats', 'blockchain.info'),
+    [() => fetchBitcoinStatsViaBlockchair()],
+  )
 }
 
 export function useBitcoinStats() {
