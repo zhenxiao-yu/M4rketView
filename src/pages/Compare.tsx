@@ -16,7 +16,7 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 min-w-[200px] bg-gray-200/40 rounded-xl p-4 border border-gray-100/20 animate-pulse">
+      <div className="bg-gray-200/40 rounded-xl p-4 border border-gray-100/20 animate-pulse">
         <div className="h-16 bg-gray-200 rounded mb-3" />
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-4 bg-gray-200 rounded" />)}
@@ -30,7 +30,7 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
   const pct24h = data.market_data.price_change_percentage_24h
 
   return (
-    <div className="flex-1 min-w-[200px] bg-gray-200/40 rounded-xl p-4 border-2" style={{ borderColor: color }}>
+    <div className="bg-gray-200/40 rounded-xl p-4 border-2" style={{ borderColor: color }}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <img src={data.image.small} alt={data.name} className="w-8 h-8 rounded-full" />
@@ -161,7 +161,7 @@ const Compare = () => {
         <GitCompare size={20} className="text-cyan" /> Coin Comparison
       </h1>
 
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {compareCoins.map((id, i) => (
           <CoinCard key={id} coinId={id} color={COIN_COLORS[i]} />
         ))}

@@ -44,17 +44,17 @@ const AddCoinForm = () => {
       <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
         <PlusCircle size={16} className="text-cyan" /> Add Coin
       </h3>
-      <div className="flex flex-wrap gap-3">
-        <div className="relative flex-1 min-w-[160px]">
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] sm:items-center gap-2 sm:gap-3">
+        <div className="relative">
           <input
             type="text"
             placeholder="Search coin..."
             value={selected ? `${selected.name} (${selected.symbol.toUpperCase()})` : searchText}
             onChange={(e) => { setSearchText(e.target.value); setSelected(null) }}
-            className="w-full rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2 outline-none border border-transparent focus:border-cyan text-sm"
+            className="w-full rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
           />
           {!selected && searchText.length >= 2 && searchData && (
-            <ul className="absolute top-10 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100 rounded-lg z-10">
+            <ul className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100 rounded-lg z-10">
               {searchData.slice(0, 8).map((coin) => (
                 <li
                   key={coin.id}
@@ -70,24 +70,28 @@ const AddCoinForm = () => {
         </div>
         <input
           type="number"
+          inputMode="decimal"
+          step="any"
           placeholder="Quantity"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           min={0}
-          className="w-28 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2 outline-none border border-transparent focus:border-cyan text-sm"
+          className="w-full sm:w-28 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
         />
         <input
           type="number"
+          inputMode="decimal"
+          step="any"
           placeholder="Avg buy price ($)"
           value={avgPrice}
           onChange={(e) => setAvgPrice(e.target.value)}
           min={0}
-          className="w-40 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2 outline-none border border-transparent focus:border-cyan text-sm"
+          className="w-full sm:w-40 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
         />
         <button
           onClick={handleAdd}
           disabled={!selected || !quantity || !avgPrice}
-          className="px-4 py-2 bg-cyan text-gray-300 rounded-lg text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-cyan/80 transition-colors"
+          className="min-h-[44px] px-4 py-2.5 bg-cyan text-gray-300 rounded-lg text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-cyan/80 transition-colors"
         >
           Add
         </button>
@@ -163,52 +167,115 @@ const Portfolio = () => {
       {error && <ErrorCard error={error as Error} onRetry={() => refetch()} compact />}
 
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Table */}
-        <div className="flex-1 border border-gray-100 rounded-xl overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="text-xs text-gray-100 border-b border-gray-100 bg-gray-200/30">
-              <tr>
-                <th className="py-3 px-3 text-left">Coin</th>
-                <th className="py-3 px-3">Qty</th>
-                <th className="py-3 px-3">Avg Price</th>
-                <th className="py-3 px-3">Current</th>
-                <th className="py-3 px-3">Value</th>
-                <th className="py-3 px-3">P&L</th>
-                <th className="py-3 px-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {enriched.map((e) => (
-                <tr key={e.coinId} className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0">
-                  <td className="py-3 px-3">
-                    <div className="flex items-center gap-2">
-                      <img src={e.coinImage} alt={e.coinName} className="w-5 h-5 rounded-full" />
-                      <span className="font-medium">{e.coinSymbol.toUpperCase()}</span>
+        <div className="flex-1 min-w-0">
+          {/* Mobile cards — below md */}
+          <div className="md:hidden flex flex-col gap-2">
+            {enriched.map((e) => {
+              const pnlPos = e.pnl != null && e.pnl >= 0
+              return (
+                <div
+                  key={e.coinId}
+                  className="rounded-xl bg-gray-200/40 border border-gray-100/20 p-3"
+                >
+                  <div className="flex items-center gap-3">
+                    <img src={e.coinImage} alt={e.coinName} className="w-8 h-8 rounded-full shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold truncate">{e.coinName}</p>
+                      <p className="text-xs text-gray-100 uppercase">{e.coinSymbol}</p>
                     </div>
-                  </td>
-                  <td className="py-3 px-3">{e.quantity}</td>
-                  <td className="py-3 px-3">{formatCurrency(e.avgBuyPrice, currency)}</td>
-                  <td className="py-3 px-3">
-                    {isLoading ? '...' : e.currentPrice != null ? formatCurrency(e.currentPrice, currency) : '—'}
-                  </td>
-                  <td className="py-3 px-3">{e.currentValue != null ? formatCurrency(e.currentValue, currency) : '—'}</td>
-                  <td className={`py-3 px-3 ${e.pnl != null && e.pnl >= 0 ? 'text-green' : 'text-red'}`}>
-                    {e.pnl != null ? (
-                      <span className="flex items-center justify-center gap-0.5">
-                        {e.pnl >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                        {formatPercent(e.pnlPct ?? 0)}
-                      </span>
-                    ) : '—'}
-                  </td>
-                  <td className="py-3 px-3">
-                    <button onClick={() => removeEntry(e.coinId)} className="text-gray-100 hover:text-red transition-colors">
-                      <Trash2 size={14} />
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-mono font-semibold">
+                        {e.currentValue != null ? formatCurrency(e.currentValue, currency) : '—'}
+                      </p>
+                      <p className={`text-xs font-semibold ${pnlPos ? 'text-green' : 'text-red'}`}>
+                        {e.pnl != null ? (
+                          <span className="inline-flex items-center gap-0.5">
+                            {pnlPos ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+                            {formatPercent(e.pnlPct ?? 0)}
+                          </span>
+                        ) : '—'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => removeEntry(e.coinId)}
+                      className="ml-1 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-gray-100 hover:text-red hover:bg-red/10 transition-colors"
+                      aria-label={`Remove ${e.coinName} from portfolio`}
+                    >
+                      <Trash2 size={16} />
                     </button>
-                  </td>
+                  </div>
+                  <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                      <p className="text-gray-100/70">Qty</p>
+                      <p className="font-mono">{e.quantity}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-100/70">Avg buy</p>
+                      <p className="font-mono">{formatCurrency(e.avgBuyPrice, currency)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-100/70">Current</p>
+                      <p className="font-mono">
+                        {isLoading ? '...' : e.currentPrice != null ? formatCurrency(e.currentPrice, currency) : '—'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Desktop table — md+ */}
+          <div className="hidden md:block border border-gray-100 rounded-xl overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead className="text-xs text-gray-100 border-b border-gray-100 bg-gray-200/30">
+                <tr>
+                  <th className="py-3 px-3 text-left">Coin</th>
+                  <th className="py-3 px-3">Qty</th>
+                  <th className="py-3 px-3">Avg Price</th>
+                  <th className="py-3 px-3">Current</th>
+                  <th className="py-3 px-3">Value</th>
+                  <th className="py-3 px-3">P&L</th>
+                  <th className="py-3 px-3"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {enriched.map((e) => (
+                  <tr key={e.coinId} className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0">
+                    <td className="py-3 px-3">
+                      <div className="flex items-center gap-2">
+                        <img src={e.coinImage} alt={e.coinName} className="w-5 h-5 rounded-full" />
+                        <span className="font-medium">{e.coinSymbol.toUpperCase()}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">{e.quantity}</td>
+                    <td className="py-3 px-3">{formatCurrency(e.avgBuyPrice, currency)}</td>
+                    <td className="py-3 px-3">
+                      {isLoading ? '...' : e.currentPrice != null ? formatCurrency(e.currentPrice, currency) : '—'}
+                    </td>
+                    <td className="py-3 px-3">{e.currentValue != null ? formatCurrency(e.currentValue, currency) : '—'}</td>
+                    <td className={`py-3 px-3 ${e.pnl != null && e.pnl >= 0 ? 'text-green' : 'text-red'}`}>
+                      {e.pnl != null ? (
+                        <span className="flex items-center justify-center gap-0.5">
+                          {e.pnl >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                          {formatPercent(e.pnlPct ?? 0)}
+                        </span>
+                      ) : '—'}
+                    </td>
+                    <td className="py-3 px-3">
+                      <button
+                        onClick={() => removeEntry(e.coinId)}
+                        className="text-gray-100 hover:text-red transition-colors"
+                        aria-label={`Remove ${e.coinName} from portfolio`}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Pie chart */}

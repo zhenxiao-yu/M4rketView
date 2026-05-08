@@ -125,7 +125,7 @@ const MarketHeatmap = ({ coins }: Props) => {
           <Tooltip content={<HeatmapTooltip />} />
         </Treemap>
       </ResponsiveContainer>
-      <div className="flex items-center gap-4 mt-3 justify-end text-xs text-gray-100">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-gray-100">
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#dc2626] inline-block" /> &lt;-5%</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#f87171] inline-block" /> -5% to 0</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#4ade80] inline-block" /> 0 to +5%</span>

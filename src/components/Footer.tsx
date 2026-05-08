@@ -19,10 +19,12 @@ const QUICK_LINKS = [
 ]
 
 const DATA_SOURCES = [
-  { label: 'CoinGecko',       href: 'https://www.coingecko.com',           desc: 'Market data & coin details' },
-  { label: 'Binance WS',      href: 'https://developers.binance.com',      desc: 'Real-time price stream' },
+  { label: 'CoinGecko',       href: 'https://www.coingecko.com',           desc: 'Markets & coin details (primary)' },
+  { label: 'CoinPaprika',     href: 'https://coinpaprika.com',             desc: 'Markets fallback when CoinGecko 429s' },
+  { label: 'Binance',         href: 'https://developers.binance.com',      desc: 'Live WebSocket prices + chart fallback' },
   { label: 'DeFiLlama',       href: 'https://defillama.com',               desc: 'DeFi TVL & protocols' },
-  { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer', desc: 'Bitcoin on-chain stats' },
+  { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer', desc: 'Bitcoin on-chain stats (primary)' },
+  { label: 'Blockchair',      href: 'https://blockchair.com',              desc: 'Bitcoin stats fallback' },
   { label: 'Alternative.me',  href: 'https://alternative.me/crypto',       desc: 'Fear & Greed Index' },
   { label: 'CryptoCompare',   href: 'https://cryptocompare.com',           desc: 'Crypto news feed' },
 ]
@@ -36,6 +38,28 @@ interface Release {
 }
 
 const CHANGELOG: Release[] = [
+  {
+    version: '1.3.0',
+    date: '2026-05-08',
+    tag: 'minor',
+    summary: 'Mobile-first redesign + multi-source API failover.',
+    changes: [
+      'New BottomNav — sticky thumb-friendly tab bar (Home, Markets, Trending, Saved, Portfolio + More sheet for Compare / News / Heatmap), iOS safe-area aware.',
+      'Markets, Saved, and Portfolio render as mobile cards below the md breakpoint; tables stay desktop-only.',
+      'Compare and Trending switched from flex-wrap with hard-coded widths to responsive CSS grids (1 → 2 → 3 cols).',
+      'Coin Detail header wraps cleanly on phones; back button is a 40 px chip on mobile, borderless icon on desktop; chart panel has graduated min-height (280 / 360 / 400 px).',
+      'Decimal numeric keyboard (inputMode="decimal") on Portfolio quantity / price and on the Coin Detail price-alert input.',
+      'Navigation actions grew to 40×40 px hit areas; filter buttons, watchlist stars, and remove-portfolio buttons all meet the 44 px guideline.',
+      'Global @media (prefers-reduced-motion: reduce) collapses page transitions, price flash, and sheet animations to ~0 ms.',
+      'iOS Safari viewport safety — main shell uses min-h-screen + min-h-[100dvh]; Footer changelog and SearchCommand dialogs use 100dvh-aware max-heights with internal scroll.',
+      'SearchCommand: pt-20 → pt-6 sm:pt-20 so the dialog never pushes off-screen on landscape; result list scrolls inside the modal even with the on-screen keyboard open.',
+      'API failover layer (lib/fetchWithFallback.ts) — fires on 429, network error, timeout, or 5xx; rethrows the primary error if everything fails.',
+      'CoinPaprika fallback for the Markets list when CoinGecko 429s; Binance /klines fallback for the Coin Detail chart (top-20 coins via lib/binanceSymbols.ts); Blockchair fallback for blockchain.info Bitcoin stats.',
+      'docs/mobile-qa.md — manual QA checklist for 320 / 375 / 390 / 430 / 768 px, iOS Safari, Android Chrome, landscape phones.',
+      'body { overflow-x: hidden } to kill any incidental sideways scroll across the whole app.',
+      'Test suite: 33 → 71 (added withFallback unit tests, plus growth from earlier passes).',
+    ],
+  },
   {
     version: '1.2.1',
     date: '2025-05-05',
@@ -125,20 +149,23 @@ function ChangelogDialog() {
 
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/20">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100/20">
             <Dialog.Title className="font-bold text-base flex items-center gap-2">
               <Tag size={15} className="text-cyan" />
               Changelog
             </Dialog.Title>
             <Dialog.Close asChild>
-              <button className="text-gray-100 hover:text-cyan transition-colors p-1 rounded-lg hover:bg-gray-100/10">
-                <X size={16} />
+              <button
+                aria-label="Close changelog"
+                className="min-h-[36px] min-w-[36px] flex items-center justify-center text-gray-100 hover:text-cyan transition-colors rounded-lg hover:bg-gray-100/10"
+              >
+                <X size={18} />
               </button>
             </Dialog.Close>
           </div>
 
-          <div className="overflow-y-auto px-6 py-4 flex flex-col gap-6 scrollbar-thin scrollbar-thumb-gray-100/20">
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 py-4 flex flex-col gap-6 scrollbar-thin scrollbar-thumb-gray-100/20">
             {CHANGELOG.map((release) => (
               <div key={release.version} className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -165,12 +192,12 @@ function ChangelogDialog() {
             ))}
           </div>
 
-          <div className="px-6 py-3 border-t border-gray-100/20 flex items-center gap-3 text-xs text-gray-100/50">
-            <GitCommit size={11} />
-            <span className="font-mono">
+          <div className="px-4 sm:px-6 py-3 border-t border-gray-100/20 flex items-center gap-2 sm:gap-3 text-xs text-gray-100/50">
+            <GitCommit size={11} className="shrink-0" />
+            <span className="font-mono truncate">
               {GIT_SHA === 'local' ? 'local build' : GIT_SHA.slice(0, 7)}
             </span>
-            <span className="ml-auto">Built {formatBuildTime()}</span>
+            <span className="ml-auto truncate">Built {formatBuildTime()}</span>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

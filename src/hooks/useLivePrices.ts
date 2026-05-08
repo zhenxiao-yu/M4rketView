@@ -1,29 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { BINANCE_TO_COINGECKO } from '@/lib/binanceSymbols'
 
-const SYMBOL_MAP: Record<string, string> = {
-  BTCUSDT: 'bitcoin',
-  ETHUSDT: 'ethereum',
-  BNBUSDT: 'binancecoin',
-  SOLUSDT: 'solana',
-  XRPUSDT: 'ripple',
-  ADAUSDT: 'cardano',
-  DOGEUSDT: 'dogecoin',
-  AVAXUSDT: 'avalanche-2',
-  DOTUSDT: 'polkadot',
-  MATICUSDT: 'matic-network',
-  LINKUSDT: 'chainlink',
-  UNIUSDT: 'uniswap',
-  ATOMUSDT: 'cosmos',
-  LTCUSDT: 'litecoin',
-  ETCUSDT: 'ethereum-classic',
-  XLMUSDT: 'stellar',
-  ALGOUSDT: 'algorand',
-  VETUSDT: 'vechain',
-  TRXUSDT: 'tron',
-  NEARUSDT: 'near',
-}
-
-const streams = Object.keys(SYMBOL_MAP)
+const streams = Object.keys(BINANCE_TO_COINGECKO)
   .map((s) => `${s.toLowerCase()}@miniTicker`)
   .join('/')
 
@@ -57,7 +35,7 @@ export function useLivePrices(): { prices: Record<string, number>; connected: bo
         if (destroyed) return
         try {
           const msg = JSON.parse(e.data as string) as { data: { s: string; c: string } }
-          const coinId = SYMBOL_MAP[msg.data.s]
+          const coinId = BINANCE_TO_COINGECKO[msg.data.s]
           if (coinId) {
             const price = parseFloat(msg.data.c)
             if (!isNaN(price)) {

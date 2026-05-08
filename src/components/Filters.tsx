@@ -32,11 +32,11 @@ const Filters = () => {
   }
 
   return (
-    <div className="w-full border-2 border-gray-100 rounded-lg flex flex-wrap items-center gap-x-2 gap-y-2 px-3 py-2 relative">
+    <div className="w-full border-2 border-gray-100 rounded-lg px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-2 relative">
       <Search />
-      <div className="flex items-center gap-4 ml-auto">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 w-full sm:w-auto sm:ml-auto">
         <form className="flex items-center font-nunito gap-2" onSubmit={handleCurrencySubmit}>
-          <label htmlFor="currency" className="font-bold text-sm whitespace-nowrap">
+          <label htmlFor="currency" className="font-bold text-xs sm:text-sm whitespace-nowrap">
             currency:
           </label>
           <input
@@ -45,19 +45,26 @@ const Filters = () => {
             name="currency"
             ref={currencyRef}
             placeholder="usd"
-            className="w-14 rounded bg-gray-200 placeholder:text-gray-100 px-2 py-0.5 outline-none border border-transparent focus:border-cyan text-sm"
+            inputMode="text"
+            autoCapitalize="none"
+            spellCheck={false}
+            className="w-16 rounded bg-gray-200 placeholder:text-gray-100 px-2 py-1 outline-none border border-transparent focus:border-cyan text-sm"
           />
-          <button type="submit" className="text-gray-100 hover:text-cyan transition-colors">
+          <button
+            type="submit"
+            aria-label="Set currency"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded text-gray-100 hover:text-cyan transition-colors"
+          >
             <ArrowRight size={16} />
           </button>
         </form>
 
         <label className="flex items-center gap-2 relative">
-          <span className="font-bold text-sm whitespace-nowrap">sort by:</span>
+          <span className="font-bold text-xs sm:text-sm whitespace-nowrap">sort by:</span>
           <div className="relative">
             <select
               name="sortby"
-              className="rounded bg-gray-200 text-sm pl-2 pr-7 py-0.5 focus:outline-none appearance-none cursor-pointer"
+              className="rounded bg-gray-200 text-sm pl-2 pr-7 py-1 focus:outline-none appearance-none cursor-pointer"
               onChange={handleSort}
             >
               {SORT_OPTIONS.map((opt) => (
@@ -74,8 +81,9 @@ const Filters = () => {
         </label>
 
         <button
-          className="hover:scale-110 transition-all text-cyan hover:text-white"
+          className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded hover:scale-110 transition-all text-cyan hover:text-white"
           onClick={reset}
+          aria-label="Reset filters"
           title="Reset filters"
         >
           <RefreshCw size={18} />
