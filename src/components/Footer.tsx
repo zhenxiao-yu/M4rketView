@@ -26,7 +26,9 @@ const DATA_SOURCES = [
   { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer', desc: 'Bitcoin on-chain stats (primary)' },
   { label: 'Blockchair',      href: 'https://blockchair.com',              desc: 'Bitcoin stats fallback' },
   { label: 'Alternative.me',  href: 'https://alternative.me/crypto',       desc: 'Fear & Greed Index' },
-  { label: 'CryptoCompare',   href: 'https://cryptocompare.com',           desc: 'Crypto news feed' },
+  { label: 'CoinDesk RSS',    href: 'https://www.coindesk.com',            desc: 'Crypto news (via AllOrigins CORS proxy)' },
+  { label: 'CoinTelegraph',   href: 'https://cointelegraph.com',           desc: 'Crypto news (via AllOrigins CORS proxy)' },
+  { label: 'Decrypt',         href: 'https://decrypt.co',                  desc: 'Crypto news (via AllOrigins CORS proxy)' },
 ]
 
 interface Release {

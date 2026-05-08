@@ -1,9 +1,8 @@
 import { useLocation, NavLink } from 'react-router-dom'
 import {
-  Sun, Moon, BarChart3, GitCompare, Bell, LayoutDashboard,
+  BarChart3, GitCompare, Bell, LayoutDashboard,
   TrendingUp, Bookmark, Search, Newspaper, Grid2X2,
 } from 'lucide-react'
-import { useTheme } from '@/hooks/useTheme'
 import { useUIStore } from '@/store/uiStore'
 import { useAlertStore } from '@/store/alertStore'
 
@@ -26,7 +25,6 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
   }`
 
 const Navigation = () => {
-  const { theme, toggleTheme } = useTheme()
   const { compareCoins, setSearchOpen } = useUIStore()
   const { activeCount } = useAlertStore()
   const alertCount = activeCount()
@@ -59,13 +57,6 @@ const Navigation = () => {
           </span>
         )}
       </div>
-      <button
-        onClick={toggleTheme}
-        className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-gray-200/50 text-gray-100 hover:text-cyan transition-colors"
-        aria-label="Toggle theme"
-      >
-        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-      </button>
     </div>
   )
 
