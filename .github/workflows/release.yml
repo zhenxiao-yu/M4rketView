@@ -3,15 +3,14 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
 
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+permissions:
+  contents: write
 
 jobs:
-  ci:
-    name: CI gate
+  validate:
+    name: Validate release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,59 +18,26 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - run: npm install
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test -- --run
       - run: npm run build
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist-${{ github.ref_name }}
-          path: dist/
-          retention-days: 30
-
   release:
-    name: GitHub Release
+    name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: ci
-    permissions:
-      contents: write
+    needs: validate
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-${{ github.ref_name }}
-          path: dist/
-
-      - name: Zip dist
-        run: zip -r dist-${{ github.ref_name }}.zip dist/
-
-      - name: Create GitHub Release
+      - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           name: M4rketView ${{ github.ref_name }}
+          generate_release_notes: true
           body: |
             ## M4rketView ${{ github.ref_name }}
 
-            Production crypto market dashboard — live at [m4rket-view.vercel.app](https://m4rket-view.vercel.app)
+            Crypto market dashboard with live prices, DeFi analytics, portfolio tracking, and free public API integrations.
 
-            See [CHANGELOG](https://github.com/zhenxiao-yu/M4rketView/blob/main/src/components/Footer.tsx#L57) in the footer for detailed changes, or click **v${{ github.ref_name }} — what's new?** in the app footer.
-
-            ### Install & run locally
-
-            ```bash
-            git clone https://github.com/zhenxiao-yu/M4rketView.git
-            cd M4rketView
-            npm install
-            npm run dev
-            ```
-
-            No `.env` file required — all APIs are free and public.
-          files: dist-${{ github.ref_name }}.zip
-          generate_release_notes: true
-          make_latest: true
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for curated release notes.

@@ -1,44 +1,50 @@
-# ── Dependencies ────────────────────────────────────────────────────────────────
+# Dependencies
 node_modules/
 .pnp
 .pnp.js
 
-# ── Build output ─────────────────────────────────────────────────────────────────
+# Build output
 dist/
 build/
 
-# ── TypeScript ───────────────────────────────────────────────────────────────────
-*.tsbuildinfo
-
-# ── Test / coverage ──────────────────────────────────────────────────────────────
+# Test and coverage output
 coverage/
+playwright-report/
+test-results/
 
-# ── Env files (example is committed; actual secrets are not) ─────────────────────
+# Environment and secrets
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!.env.sample
 
-# ── Logs ────────────────────────────────────────────────────────────────────────
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# ── Editor / IDE ─────────────────────────────────────────────────────────────────
-.vscode/settings.json
-.vscode/launch.json
-.vscode/*.code-workspace
+# TypeScript
+*.tsbuildinfo
+
+# Editor and OS
+.vscode/
 .idea/
 *.swp
 *.swo
-
-# ── OS ──────────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# ── Vercel ───────────────────────────────────────────────────────────────────────
-.vercel
+# Hosting and local agent state
+.vercel/
+.codex/
+.claude/
+.cursor/
+.windsurf/
+.continue/
 .aider*
+transcripts/
+chat-exports/
+session-logs/
+scratch/
