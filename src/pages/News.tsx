@@ -1,7 +1,12 @@
 import { useMemo, useState } from 'react'
+import { motion } from 'framer-motion'
 import { ExternalLink, Newspaper, Search } from 'lucide-react'
 import { useNewsFeeds } from '@/hooks/useNewsFeeds'
 import ErrorCard from '@/components/ui/ErrorCard'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { staggerContainer, staggerChild } from '@/lib/motion'
 import type { NewsItem } from '@/types/news'
 
 const SOURCE_PALETTE = [
@@ -28,14 +33,14 @@ function timeAgo(dateStr: string): string {
 }
 
 const SkeletonCard = () => (
-  <div className="bg-gray-200/40 rounded-xl border border-gray-100/20 overflow-hidden animate-pulse">
-    <div className="w-full h-36 bg-gray-100/10" />
+  <div className="bg-gray-200/40 rounded-xl border border-gray-100/20 overflow-hidden">
+    <Skeleton className="w-full h-36 rounded-none" />
     <div className="p-4 flex flex-col gap-2">
-      <div className="h-3 bg-gray-100/10 rounded w-1/3" />
-      <div className="h-4 bg-gray-100/10 rounded w-full" />
-      <div className="h-4 bg-gray-100/10 rounded w-4/5" />
-      <div className="h-3 bg-gray-100/10 rounded w-full" />
-      <div className="h-3 bg-gray-100/10 rounded w-2/3" />
+      <Skeleton className="h-3 w-1/3" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-2/3" />
     </div>
   </div>
 )
@@ -118,39 +123,33 @@ const News = () => {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="flex gap-2 flex-wrap">
-          <button
+          <Button
+            variant={sourceFilter === 'all' ? 'primary' : 'secondary'}
+            size="sm"
             onClick={() => setSourceFilter('all')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              sourceFilter === 'all'
-                ? 'bg-cyan text-gray-300'
-                : 'bg-gray-200/40 text-gray-100 hover:text-cyan border border-gray-100/20'
-            }`}
           >
             All
-          </button>
+          </Button>
           {sources.map((s) => (
-            <button
+            <Button
               key={s}
+              variant={sourceFilter === s ? 'primary' : 'secondary'}
+              size="sm"
               onClick={() => setSourceFilter(s)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                sourceFilter === s
-                  ? 'bg-cyan text-gray-300'
-                  : 'bg-gray-200/40 text-gray-100 hover:text-cyan border border-gray-100/20'
-              }`}
             >
               {s}
-            </button>
+            </Button>
           ))}
         </div>
 
         <div className="relative flex-1 sm:max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-100" />
-          <input
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-100 z-10 pointer-events-none" />
+          <Input
             type="text"
             placeholder="Search articles..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-gray-200/40 border border-gray-100/20 rounded-lg text-sm text-gray-100 placeholder-gray-100/50 focus:outline-none focus:border-cyan/50"
+            className="pl-9 py-1.5 min-h-[36px]"
           />
         </div>
       </div>
@@ -164,9 +163,18 @@ const News = () => {
       ) : filtered.length === 0 ? (
         <p className="text-gray-100 text-sm text-center py-16">No articles found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((item) => <NewsCard key={item.guid} item={item} sources={sources} />)}
-        </div>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          {filtered.map((item) => (
+            <motion.div key={item.guid} variants={staggerChild}>
+              <NewsCard item={item} sources={sources} />
+            </motion.div>
+          ))}
+        </motion.div>
       )}
     </section>
   )

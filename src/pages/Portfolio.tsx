@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { PlusCircle, Trash2, TrendingUp, TrendingDown } from 'lucide-react'
+import { motion } from 'framer-motion'
 import ErrorCard from '@/components/ui/ErrorCard'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { usePortfolioStore } from '@/store/portfolioStore'
@@ -8,6 +9,10 @@ import { useMarketStore } from '@/store/marketStore'
 import { formatCurrency, formatPercent, formatCompact } from '@/lib/utils'
 import { useSearchCoins } from '@/hooks/useSearchCoins'
 import { useDebounce } from '@/hooks/useDebounce'
+import { Card } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { staggerContainer, staggerChild } from '@/lib/motion'
 
 const COLORS = ['#B6EADA', '#5B8FB9', '#301E67', '#1ec471', '#e72179', '#f97316', '#eab308']
 
@@ -40,21 +45,20 @@ const AddCoinForm = () => {
   }
 
   return (
-    <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 mb-6">
+    <Card className="mb-6">
       <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
         <PlusCircle size={16} className="text-cyan" /> Add Coin
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] sm:items-center gap-2 sm:gap-3">
         <div className="relative">
-          <input
+          <Input
             type="text"
             placeholder="Search coin..."
             value={selected ? `${selected.name} (${selected.symbol.toUpperCase()})` : searchText}
             onChange={(e) => { setSearchText(e.target.value); setSelected(null) }}
-            className="w-full rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
           />
           {!selected && searchText.length >= 2 && searchData && (
-            <ul className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100 rounded-lg z-10">
+            <ul className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100/30 rounded-lg z-10 shadow-xl">
               {searchData.slice(0, 8).map((coin) => (
                 <li
                   key={coin.id}
@@ -68,7 +72,7 @@ const AddCoinForm = () => {
             </ul>
           )}
         </div>
-        <input
+        <Input
           type="number"
           inputMode="decimal"
           step="any"
@@ -76,9 +80,9 @@ const AddCoinForm = () => {
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           min={0}
-          className="w-full sm:w-28 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
+          className="sm:w-28"
         />
-        <input
+        <Input
           type="number"
           inputMode="decimal"
           step="any"
@@ -86,20 +90,20 @@ const AddCoinForm = () => {
           value={avgPrice}
           onChange={(e) => setAvgPrice(e.target.value)}
           min={0}
-          className="w-full sm:w-40 rounded bg-gray-200 placeholder:text-gray-100 px-3 py-2.5 outline-none border border-transparent focus:border-cyan text-sm"
+          className="sm:w-40"
         />
-        <button
+        <Button
           onClick={handleAdd}
           disabled={!selected || !quantity || !avgPrice}
-          className="min-h-[44px] px-4 py-2.5 bg-cyan text-gray-300 rounded-lg text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-cyan/80 transition-colors"
+          size="lg"
         >
           Add
-        </button>
+        </Button>
       </div>
       {selected && hasEntry(selected.id) && (
         <p className="text-xs text-yellow-400 mt-2">⚠ This coin is already in your portfolio. Adding will create a duplicate entry.</p>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -144,23 +148,34 @@ const Portfolio = () => {
       <h1 className="text-xl font-bold mb-6">Portfolio</h1>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
-          <p className="text-sm text-gray-100">Total Value</p>
-          <p className="text-2xl font-bold mt-1">{formatCurrency(totalValue, currency)}</p>
-        </div>
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
-          <p className="text-sm text-gray-100">Invested</p>
-          <p className="text-2xl font-bold mt-1">{formatCurrency(totalInvested, currency)}</p>
-        </div>
-        <div className={`bg-gray-200/40 rounded-xl p-5 border border-gray-100/20`}>
-          <p className="text-sm text-gray-100">Total P&L</p>
-          <p className={`text-2xl font-bold mt-1 ${totalPnl >= 0 ? 'text-green' : 'text-red'}`}>
-            {totalPnl >= 0 ? '+' : ''}{formatCurrency(totalPnl, currency)}
-            <span className="text-sm ml-2">{formatPercent(totalPnlPct)}</span>
-          </p>
-        </div>
-      </div>
+      <motion.div
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
+      >
+        <motion.div variants={staggerChild}>
+          <Card>
+            <p className="text-sm text-gray-100">Total Value</p>
+            <p className="text-2xl font-bold mt-1">{formatCurrency(totalValue, currency)}</p>
+          </Card>
+        </motion.div>
+        <motion.div variants={staggerChild}>
+          <Card>
+            <p className="text-sm text-gray-100">Invested</p>
+            <p className="text-2xl font-bold mt-1">{formatCurrency(totalInvested, currency)}</p>
+          </Card>
+        </motion.div>
+        <motion.div variants={staggerChild}>
+          <Card>
+            <p className="text-sm text-gray-100">Total P&L</p>
+            <p className={`text-2xl font-bold mt-1 ${totalPnl >= 0 ? 'text-green' : 'text-red'}`}>
+              {totalPnl >= 0 ? '+' : ''}{formatCurrency(totalPnl, currency)}
+              <span className="text-sm ml-2">{formatPercent(totalPnlPct)}</span>
+            </p>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       <AddCoinForm />
 
@@ -169,14 +184,17 @@ const Portfolio = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 min-w-0">
           {/* Mobile cards — below md */}
-          <div className="md:hidden flex flex-col gap-2">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="md:hidden flex flex-col gap-2"
+          >
             {enriched.map((e) => {
               const pnlPos = e.pnl != null && e.pnl >= 0
               return (
-                <div
-                  key={e.coinId}
-                  className="rounded-xl bg-gray-200/40 border border-gray-100/20 p-3"
-                >
+                <motion.div key={e.coinId} variants={staggerChild}>
+                  <Card padding="sm">
                   <div className="flex items-center gap-3">
                     <img src={e.coinImage} alt={e.coinName} className="w-8 h-8 rounded-full shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -196,13 +214,15 @@ const Portfolio = () => {
                         ) : '—'}
                       </p>
                     </div>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => removeEntry(e.coinId)}
-                      className="ml-1 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-gray-100 hover:text-red hover:bg-red/10 transition-colors"
+                      className="ml-1 hover:text-red hover:bg-red/10"
                       aria-label={`Remove ${e.coinName} from portfolio`}
                     >
                       <Trash2 size={16} />
-                    </button>
+                    </Button>
                   </div>
                   <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
                     <div>
@@ -220,10 +240,11 @@ const Portfolio = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                  </Card>
+                </motion.div>
               )
             })}
-          </div>
+          </motion.div>
 
           {/* Desktop table — md+ */}
           <div className="hidden md:block border border-gray-100 rounded-xl overflow-x-auto">
@@ -280,7 +301,7 @@ const Portfolio = () => {
 
         {/* Pie chart */}
         {pieData.length > 0 && (
-          <div className="lg:w-72 bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
+          <Card className="lg:w-72">
             <h3 className="text-sm font-semibold mb-3">Allocation</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -301,7 +322,7 @@ const Portfolio = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
         )}
       </div>
     </section>

@@ -1,11 +1,16 @@
 import { Link } from 'react-router-dom'
 import * as Dialog from '@radix-ui/react-dialog'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Github, ExternalLink, X, Tag, Clock, GitCommit,
   LayoutDashboard, TrendingUp, Bookmark, BarChart3,
   GitCompare, Newspaper, Grid2X2,
 } from 'lucide-react'
 import { APP_VERSION, GIT_SHA, formatBuildTime } from '@/lib/buildInfo'
+import { Badge, type BadgeProps } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { ScrollArea } from '@/components/ui/ScrollArea'
+import { dialogContent } from '@/lib/motion'
 
 const QUICK_LINKS = [
   { to: '/',          label: 'Dashboard',  icon: <LayoutDashboard size={13} /> },
@@ -132,10 +137,10 @@ const CHANGELOG: Release[] = [
   },
 ]
 
-const TAG_STYLES: Record<Release['tag'], string> = {
-  major: 'bg-cyan/20 text-cyan border border-cyan/30',
-  minor: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
-  patch: 'bg-gray-100/20 text-gray-100 border border-gray-100/20',
+const TAG_TONES: Record<Release['tag'], BadgeProps['tone']> = {
+  major: 'default',
+  minor: 'purple',
+  patch: 'muted',
 }
 
 function ChangelogDialog() {
@@ -149,60 +154,75 @@ function ChangelogDialog() {
         </button>
       </Dialog.Trigger>
 
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100/20">
-            <Dialog.Title className="font-bold text-base flex items-center gap-2">
-              <Tag size={15} className="text-cyan" />
-              Changelog
-            </Dialog.Title>
-            <Dialog.Close asChild>
-              <button
-                aria-label="Close changelog"
-                className="min-h-[36px] min-w-[36px] flex items-center justify-center text-gray-100 hover:text-cyan transition-colors rounded-lg hover:bg-gray-100/10"
-              >
-                <X size={18} />
-              </button>
-            </Dialog.Close>
-          </div>
-
-          <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 py-4 flex flex-col gap-6 scrollbar-thin scrollbar-thumb-gray-100/20">
-            {CHANGELOG.map((release) => (
-              <div key={release.version} className="flex flex-col gap-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono font-bold text-sm text-white">v{release.version}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium uppercase tracking-wide ${TAG_STYLES[release.tag]}`}>
-                    {release.tag}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-gray-100 ml-auto">
-                    <Clock size={11} />
-                    {release.date}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-100">{release.summary}</p>
-                <ul className="flex flex-col gap-1.5">
-                  {release.changes.map((c, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-gray-100/80 leading-relaxed">
-                      <span className="text-cyan mt-0.5 shrink-0">›</span>
-                      {c}
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-b border-gray-100/10" />
+      <AnimatePresence>
+        <Dialog.Portal>
+          <Dialog.Overlay asChild>
+            <motion.div
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            />
+          </Dialog.Overlay>
+          <Dialog.Content asChild>
+            <motion.div
+              variants={dialogContent}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            >
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100/20">
+                <Dialog.Title className="font-bold text-base flex items-center gap-2">
+                  <Tag size={15} className="text-cyan" />
+                  Changelog
+                </Dialog.Title>
+                <Dialog.Close asChild>
+                  <Button variant="ghost" size="icon-sm" aria-label="Close changelog">
+                    <X size={18} />
+                  </Button>
+                </Dialog.Close>
               </div>
-            ))}
-          </div>
 
-          <div className="px-4 sm:px-6 py-3 border-t border-gray-100/20 flex items-center gap-2 sm:gap-3 text-xs text-gray-100/50">
-            <GitCommit size={11} className="shrink-0" />
-            <span className="font-mono truncate">
-              {GIT_SHA === 'local' ? 'local build' : GIT_SHA.slice(0, 7)}
-            </span>
-            <span className="ml-auto truncate">Built {formatBuildTime()}</span>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-4 sm:px-6 py-4 flex flex-col gap-6">
+                  {CHANGELOG.map((release) => (
+                    <div key={release.version} className="flex flex-col gap-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono font-bold text-sm text-white">v{release.version}</span>
+                        <Badge tone={TAG_TONES[release.tag]} uppercase>{release.tag}</Badge>
+                        <span className="flex items-center gap-1 text-xs text-gray-100 ml-auto">
+                          <Clock size={11} />
+                          {release.date}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-100">{release.summary}</p>
+                      <ul className="flex flex-col gap-1.5">
+                        {release.changes.map((c, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs text-gray-100/80 leading-relaxed">
+                            <span className="text-cyan mt-0.5 shrink-0">›</span>
+                            {c}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="border-b border-gray-100/10" />
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+
+              <div className="px-4 sm:px-6 py-3 border-t border-gray-100/20 flex items-center gap-2 sm:gap-3 text-xs text-gray-100/50">
+                <GitCommit size={11} className="shrink-0" />
+                <span className="font-mono truncate">
+                  {GIT_SHA === 'local' ? 'local build' : GIT_SHA.slice(0, 7)}
+                </span>
+                <span className="ml-auto truncate">Built {formatBuildTime()}</span>
+              </div>
+            </motion.div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </AnimatePresence>
     </Dialog.Root>
   )
 }

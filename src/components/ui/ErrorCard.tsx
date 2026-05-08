@@ -1,5 +1,6 @@
 import { AlertCircle, Clock, RefreshCw, Timer, WifiOff } from 'lucide-react'
 import { isRateLimitError, isTimeoutError, isNetworkError } from '@/lib/errors'
+import { Button } from '@/components/ui/Button'
 
 interface Props {
   error?: Error | null
@@ -43,7 +44,7 @@ const ErrorCard = ({ error, onRetry, compact = false, minHeight = 'min-h-[40vh]'
         <Icon size={14} className={iconColor} />
         <span className="text-gray-100 flex-1 truncate">{title}{source ? ` — ${source}` : ''}</span>
         {canRetry && (
-          <button onClick={onRetry} className="text-cyan hover:underline text-xs shrink-0">Retry</button>
+          <Button variant="link" size="sm" onClick={onRetry} className="shrink-0">Retry</Button>
         )}
       </div>
     )
@@ -59,12 +60,9 @@ const ErrorCard = ({ error, onRetry, compact = false, minHeight = 'min-h-[40vh]'
         <p className="text-sm text-gray-100 mt-1">{detail}</p>
       </div>
       {canRetry && (
-        <button
-          onClick={onRetry}
-          className="px-4 py-2 bg-gray-200/40 border border-gray-100/20 rounded-xl text-sm hover:border-cyan/50 transition-colors flex items-center gap-2"
-        >
+        <Button variant="secondary" onClick={onRetry}>
           <RefreshCw size={13} /> Try again
-        </button>
+        </Button>
       )}
     </div>
   )

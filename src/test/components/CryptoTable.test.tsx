@@ -34,7 +34,7 @@ describe('CryptoTable', () => {
   it('renders skeleton rows while loading', () => {
     const client = makeClient()
     const { container } = render(<Wrapper client={client} />)
-    const skeletonCells = container.querySelectorAll('td .bg-gray-200')
+    const skeletonCells = container.querySelectorAll('td [role="status"]')
     expect(skeletonCells.length).toBeGreaterThan(0)
   })
 
