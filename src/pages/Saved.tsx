@@ -9,13 +9,16 @@ import { exportWatchlistCSV } from '@/lib/export'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCryptoMarkets } from '@/api/coinGecko'
 import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { staggerContainer, staggerChild } from '@/lib/motion'
 import type { CoinMarket } from '@/types/coingecko'
 
-const PctCell = ({ value }: { value: number }) => {
+const PctCell = ({ value }: { value: number | undefined }) => {
+  if (value == null) return <span className="text-gray-100">—</span>
   const pos = value >= 0
   return (
-    <span className={`flex items-center justify-center gap-0.5 ${pos ? 'text-green' : 'text-red'}`}>
+    <span className={`inline-flex items-center justify-center gap-0.5 ${pos ? 'text-green' : 'text-red'}`}>
       {pos ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
       {formatPercent(value)}
     </span>
@@ -28,13 +31,46 @@ const SaveBtn = ({ coin }: { coin: CoinMarket }) => {
   return (
     <button
       onClick={() => toggleCoin(coin.id)}
-      className="text-gray-100 hover:text-cyan transition-colors"
-      aria-label="Remove from watchlist"
+      className="text-gray-100 hover:text-cyan transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60 rounded"
+      aria-label={saved ? 'Remove from watchlist' : 'Add to watchlist'}
     >
       {saved ? <Star size={16} className="fill-cyan text-cyan" /> : <StarOff size={16} />}
     </button>
   )
 }
+
+const MobileSkeleton = () => (
+  <div className="flex flex-col gap-2">
+    {Array.from({ length: 4 }).map((_, i) => (
+      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20">
+        <Skeleton className="w-4 h-4 shrink-0" />
+        <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-2.5 w-12" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-3.5 w-20 ml-auto" />
+          <Skeleton className="h-2.5 w-12 ml-auto" />
+        </div>
+      </div>
+    ))}
+  </div>
+)
+
+const TableSkeleton = () => (
+  <>
+    {Array.from({ length: 5 }).map((_, i) => (
+      <tr key={i} className="border-b border-gray-100">
+        {Array.from({ length: 7 }).map((__, j) => (
+          <td key={j} className="py-4 px-3">
+            <Skeleton className="h-4 w-full" />
+          </td>
+        ))}
+      </tr>
+    ))}
+  </>
+)
 
 const Saved = () => {
   const { coinIds } = useWatchlistStore()
@@ -57,27 +93,32 @@ const Saved = () => {
   if (coinIds.length === 0) {
     return (
       <section className="w-full mt-8 mb-24">
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 border border-gray-100 rounded-xl">
+        <Card tone="muted" className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-center px-4">
           <Star size={48} className="text-gray-100" />
-          <p className="text-lg text-gray-100">No saved coins yet.</p>
-          <p className="text-sm text-gray-100">Star coins from the Crypto page to add them here.</p>
-        </div>
+          <p className="text-lg font-semibold">No saved coins yet</p>
+          <p className="text-sm text-gray-100 max-w-xs">
+            Star coins from the Markets page to track them here.
+          </p>
+          <Button asChild variant="secondary" size="sm" className="mt-2">
+            <Link to="/markets">Browse markets</Link>
+          </Button>
+        </Card>
       </section>
     )
   }
 
   return (
-    <section className="w-full mt-8 mb-24 relative">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Watchlist ({coinIds.length})</h2>
-        <div className="flex gap-2">
-          {savedData && (
+    <section className="w-full mt-8 mb-24">
+      <div className="flex items-center justify-between mb-4 gap-2">
+        <h1 className="text-lg font-semibold">Watchlist <span className="text-gray-100 font-normal">({coinIds.length})</span></h1>
+        <div className="flex gap-2 items-center">
+          {savedData && savedData.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => { exportWatchlistCSV(savedData, currency); toast.success('Exported to CSV') }}
             >
-              <Download size={16} /> Export CSV
+              <Download size={16} /> <span className="hidden sm:inline">Export CSV</span>
             </Button>
           )}
           <Button variant="ghost" size="icon-sm" onClick={() => refetch()} aria-label="Refresh watchlist" className="text-cyan">
@@ -86,11 +127,48 @@ const Saved = () => {
         </div>
       </div>
 
-      <div className="border border-gray-100 rounded-xl overflow-hidden">
+      {/* Mobile card list — below md */}
+      <div className="md:hidden">
         {isLoading ? (
-          <div className="min-h-[40vh] flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-cyan rounded-full border-b-transparent animate-spin" />
-          </div>
+          <MobileSkeleton />
+        ) : savedData && savedData.length > 0 ? (
+          <motion.div variants={staggerContainer} initial="initial" animate="animate" className="flex flex-col gap-2">
+            {savedData.map((coin) => (
+              <motion.div key={coin.id} variants={staggerChild}>
+                <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20 hover:border-cyan/40 transition-colors">
+                  <SaveBtn coin={coin} />
+                  <Link to={`/coin/${coin.id}`} className="flex items-center gap-3 flex-1 min-w-0 group">
+                    <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full shrink-0" loading="lazy" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate group-hover:text-cyan transition-colors">{coin.name}</p>
+                      <p className="text-xs text-gray-100 uppercase mt-0.5">{coin.symbol}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className="text-sm font-mono font-semibold">
+                        {formatCurrency(coin.current_price, currency)}
+                      </div>
+                      <PctCell value={coin.price_change_percentage_24h_in_currency} />
+                    </div>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <Card tone="muted" className="min-h-[40vh] flex items-center justify-center">
+            <p className="text-gray-100 text-sm">No data available</p>
+          </Card>
+        )}
+      </div>
+
+      {/* Desktop table — md+ */}
+      <div className="hidden md:block border border-gray-100 rounded-xl overflow-hidden">
+        {isLoading ? (
+          <table className="w-full table-auto">
+            <tbody>
+              <TableSkeleton />
+            </tbody>
+          </table>
         ) : savedData && savedData.length > 0 ? (
           <table className="w-full table-auto">
             <thead className="text-sm text-gray-100 font-medium border-b border-gray-100 bg-gray-200/30">
@@ -110,7 +188,7 @@ const Saved = () => {
                   <td className="py-3 px-3">
                     <div className="flex items-center gap-1.5">
                       <SaveBtn coin={coin} />
-                      <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" />
+                      <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" loading="lazy" />
                       <Link to={`/coin/${coin.id}`} className="uppercase font-semibold hover:text-cyan transition-colors">
                         {coin.symbol}
                       </Link>
@@ -132,7 +210,7 @@ const Saved = () => {
           </table>
         ) : (
           <div className="min-h-[40vh] flex items-center justify-center">
-            <p className="text-gray-100">No data available</p>
+            <p className="text-gray-100 text-sm">No data available</p>
           </div>
         )}
       </div>

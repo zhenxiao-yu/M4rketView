@@ -136,6 +136,7 @@ const CompareBtn = memo(function CompareBtn({ coin }: { coin: CoinMarket }) {
       }}
       disabled={disabled}
       title={inCompare ? 'Remove from compare' : 'Add to compare'}
+      aria-label={inCompare ? 'Remove from compare' : 'Add to compare'}
     >
       <GitCompare size={14} />
     </button>

@@ -58,15 +58,17 @@ const AddCoinForm = () => {
             onChange={(e) => { setSearchText(e.target.value); setSelected(null) }}
           />
           {!selected && searchText.length >= 2 && searchData && (
-            <ul className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100/30 rounded-lg z-10 shadow-xl">
+            <ul role="listbox" aria-label="Coin search results" className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100/30 rounded-lg z-10 shadow-xl">
               {searchData.slice(0, 8).map((coin) => (
-                <li
-                  key={coin.id}
-                  className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100/20 text-sm"
-                  onClick={() => setSelected({ id: coin.id, name: coin.name, symbol: coin.symbol, image: coin.large })}
-                >
-                  <img src={coin.thumb} alt={coin.name} className="w-4 h-4 rounded-full" />
-                  {coin.name} <span className="text-gray-100 uppercase text-xs">{coin.symbol}</span>
+                <li key={coin.id} role="option" aria-selected={false}>
+                  <button
+                    type="button"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-100/20 focus-visible:bg-gray-100/20 focus-visible:outline-none text-sm"
+                    onClick={() => setSelected({ id: coin.id, name: coin.name, symbol: coin.symbol, image: coin.large })}
+                  >
+                    <img src={coin.thumb} alt="" aria-hidden="true" className="w-4 h-4 rounded-full" />
+                    {coin.name} <span className="text-gray-100 uppercase text-xs">{coin.symbol}</span>
+                  </button>
                 </li>
               ))}
             </ul>

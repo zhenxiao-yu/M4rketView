@@ -6,6 +6,7 @@ import ErrorCard from '@/components/ui/ErrorCard'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { Card } from '@/components/ui/Card'
 import { staggerContainer, staggerChild } from '@/lib/motion'
 import type { NewsItem } from '@/types/news'
 
@@ -33,7 +34,7 @@ function timeAgo(dateStr: string): string {
 }
 
 const SkeletonCard = () => (
-  <div className="bg-gray-200/40 rounded-xl border border-gray-100/20 overflow-hidden">
+  <Card padding="none" className="overflow-hidden">
     <Skeleton className="w-full h-36 rounded-none" />
     <div className="p-4 flex flex-col gap-2">
       <Skeleton className="h-3 w-1/3" />
@@ -42,7 +43,7 @@ const SkeletonCard = () => (
       <Skeleton className="h-3 w-full" />
       <Skeleton className="h-3 w-2/3" />
     </div>
-  </div>
+  </Card>
 )
 
 const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
@@ -58,6 +59,7 @@ const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
         <img
           src={item.thumbnail}
           alt=""
+          aria-hidden="true"
           className="w-full h-36 object-cover"
           loading="lazy"
           onError={(e) => {
