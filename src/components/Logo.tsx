@@ -5,16 +5,21 @@ const Logo = () => (
   <Link
     to="/"
     aria-label="M4rketView home"
-    className="flex items-center gap-2.5 mt-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 rounded-lg"
+    className="inline-flex items-center gap-2.5 mt-6 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 rounded-lg"
   >
+    {/* Icon and wordmark share the same 32px box height for a clean baseline. */}
     <img
       src={logo}
       alt=""
       aria-hidden="true"
-      className="w-9 h-9 transition-transform duration-200 group-hover:scale-105"
+      className="h-8 w-8 transition-transform duration-200 group-hover:scale-105"
     />
-    <span className="text-base font-semibold text-foreground tracking-tight">
-      M4rket<span className="text-accent">View</span>
+    <span
+      className="font-display font-bold uppercase tracking-[0.08em] text-[20px] leading-none flex items-center h-8"
+      style={{ fontFeatureSettings: '"ss01"' }}
+    >
+      <span className="text-foreground">M4RKET</span>
+      <span className="text-accent">VIEW</span>
     </span>
   </Link>
 )
