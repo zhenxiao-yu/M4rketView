@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight, ChevronsLeft, Check, ChevronDown } from 'lucide-react'
 import * as Select from '@radix-ui/react-select'
 import { useMarketStore } from '@/store/marketStore'
@@ -73,19 +73,20 @@ const Pagination = () => {
   const goNext  = () => { if (!isLastPage) setPage(page + 1) }
   const goFirst = () => { if (page !== 1) setPage(1) }
 
-  // Keyboard nav: ArrowLeft / ArrowRight when not focused inside an input
+  const navRef = useRef({ goPrev, goNext })
+  navRef.current = { goPrev, goNext }
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
       if (e.target instanceof HTMLElement && e.target.isContentEditable) return
       if (e.altKey || e.ctrlKey || e.metaKey) return
-      if (e.key === 'ArrowLeft')  { goPrev(); }
-      if (e.key === 'ArrowRight') { goNext(); }
+      if (e.key === 'ArrowLeft')  navRef.current.goPrev()
+      if (e.key === 'ArrowRight') navRef.current.goNext()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, isLastPage])
+  }, [])
 
   if (!data || data.length === 0) return null
 
