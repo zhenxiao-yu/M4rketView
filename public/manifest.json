@@ -1,7 +1,10 @@
 {
-  "name": "M4rketView",
+  "name": "M4rketView — Free Crypto Dashboard",
   "short_name": "M4rketView",
-  "description": "A free, no-key crypto dashboard with live prices, news, watchlist, portfolio, compare, and DeFi.",
+  "description": "Free, no-key crypto dashboard with live prices, news, watchlist, portfolio, compare, DeFi TVL, and Bitcoin stats. Built by Mark Yu (m4rkyu).",
+  "categories": ["finance", "productivity", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "favicon.svg",
@@ -16,9 +19,16 @@
       "purpose": "maskable"
     },
     {
-      "src": "favicon.ico",
-      "sizes": "16x16 32x32 48x48",
-      "type": "image/x-icon"
+      "src": "logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "start_url": "/",
