@@ -84,24 +84,24 @@ const PriceChart = ({ coinId }: PriceChartProps) => {
             <AreaChart data={formattedData}>
               <defs>
                 <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#B6EADA" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#B6EADA" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#7C73FF" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#7C73FF" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="#B6EADA"
+                stroke="#7C73FF"
                 strokeWidth={1.5}
                 fill="url(#chartGradient)"
                 dot={false}
               />
-              <CartesianGrid stroke="#5B8FB9" strokeOpacity={0.2} />
+              <CartesianGrid stroke="#3F3F46" strokeOpacity={0.6} />
               <XAxis dataKey="date" hide />
               <YAxis hide domain={['auto', 'auto']} />
               <Tooltip
                 content={<CustomTooltip currency={currency} />}
-                cursor={{ stroke: '#5B8FB9', strokeWidth: 1, strokeDasharray: '4 4' }}
+                cursor={{ stroke: '#A1A1AA', strokeWidth: 1, strokeDasharray: '4 4' }}
               />
             </AreaChart>
           </ResponsiveContainer>

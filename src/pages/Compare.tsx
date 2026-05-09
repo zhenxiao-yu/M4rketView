@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { Spinner } from '@/components/ui/Spinner'
 import { Button } from '@/components/ui/Button'
 
-const COIN_COLORS = ['#B6EADA', '#5B8FB9', '#e72179']
+const COIN_COLORS = ['#7C73FF', '#3FB57E', '#E0A93B']
 
 const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
   const { removeFromCompare } = useUIStore()
@@ -113,11 +113,11 @@ const NormalizedChart = ({ coinIds }: { coinIds: string[] }) => {
   return (
     <ResponsiveContainer width="100%" height={280}>
       <LineChart data={chartData}>
-        <CartesianGrid stroke="#5B8FB9" strokeOpacity={0.15} />
-        <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#5B8FB9' }} tickLine={false} />
+        <CartesianGrid stroke="#3F3F46" strokeOpacity={0.5} />
+        <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#A1A1AA' }} tickLine={false} />
         <YAxis
           tickFormatter={(v: number) => isFinite(v) ? `${v.toFixed(0)}%` : ''}
-          tick={{ fontSize: 10, fill: '#5B8FB9' }}
+          tick={{ fontSize: 10, fill: '#A1A1AA' }}
           tickLine={false}
           axisLine={false}
         />

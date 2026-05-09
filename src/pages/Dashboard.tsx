@@ -55,7 +55,7 @@ const MetricCard = ({
 
 const FearGreedGauge = ({ value, label }: { value: number; label: string }) => {
   const color =
-    value <= 25 ? '#e72179' : value <= 45 ? '#f97316' : value <= 55 ? '#eab308' : value <= 75 ? '#84cc16' : '#1ec471'
+    value <= 25 ? '#E5484D' : value <= 45 ? '#F08C3D' : value <= 55 ? '#E0A93B' : value <= 75 ? '#7BC369' : '#3FB57E'
   return (
     <motion.div variants={staggerChild} className="h-full">
       <Card className="flex flex-col gap-2 h-full">

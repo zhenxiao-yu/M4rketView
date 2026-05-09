@@ -5,10 +5,10 @@ import { formatCurrency, formatPercent } from '@/lib/utils'
 import { Card } from '@/components/ui/Card'
 
 function heatColor(pct: number): string {
-  if (pct < -5) return '#dc2626'
-  if (pct < 0) return '#f87171'
-  if (pct < 5) return '#4ade80'
-  return '#16a34a'
+  if (pct < -5) return '#B91C2A'
+  if (pct < 0) return '#E5484D'
+  if (pct < 5) return '#3FB57E'
+  return '#2A8A5C'
 }
 
 interface HeatmapItem {
@@ -129,10 +129,10 @@ const MarketHeatmap = ({ coins }: Props) => {
         </ResponsiveContainer>
       </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-muted">
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#dc2626] inline-block" /> &lt;-5%</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#f87171] inline-block" /> -5% to 0</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#4ade80] inline-block" /> 0 to +5%</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#16a34a] inline-block" /> &gt;+5%</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#B91C2A] inline-block" /> &lt;-5%</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#E5484D] inline-block" /> -5% to 0</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#3FB57E] inline-block" /> 0 to +5%</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#2A8A5C] inline-block" /> &gt;+5%</span>
       </div>
     </Card>
   )

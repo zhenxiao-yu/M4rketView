@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { staggerContainer, staggerChild } from '@/lib/motion'
 
-const COLORS = ['#B6EADA', '#5B8FB9', '#301E67', '#1ec471', '#e72179', '#f97316', '#eab308']
+const COLORS = ['#7C73FF', '#3FB57E', '#E0A93B', '#5BA3F5', '#E5484D', '#F08C3D', '#9089FF']
 
 const AddCoinForm = () => {
   const [searchText, setSearchText] = useState('')
