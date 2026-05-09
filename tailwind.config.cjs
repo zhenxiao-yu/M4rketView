@@ -5,7 +5,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        nunito: ['Nunito', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        // alias kept so any lingering `font-nunito` class still resolves to the new sans stack
+        nunito: ['Inter', 'system-ui', 'sans-serif'],
       },
       // Semantic palette — Linear/Vercel-style premium dark dashboard.
       // Values verified WCAG AA (text on bg ≥ 4.5:1, large text ≥ 3:1).

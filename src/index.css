@@ -1,4 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap");
+/* Inter — UI text. Variable axis 100..900. Used by Vercel, Linear, GitHub, Stripe.
+   JetBrains Mono — financial / numeric readouts. Tabular figures align column-by-column
+   so price columns don't dance as live prices update. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -39,11 +42,20 @@
     margin: 0;
     background: #0A0A0B;
     color: #EDEDEF;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* cv11 = single-story 'a', ss01 = open digits — Linear/Vercel preferred Inter look */
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     overscroll-behavior-y: none;
+  }
+
+  /* Tabular numerals for monospace + any explicit financial cell — keeps
+     digit columns from shifting as prices change. */
+  .font-mono, code, kbd, pre, samp {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: 'tnum';
   }
 
   /* Kill the 300ms touch delay + double-tap-to-zoom on tappable controls */
