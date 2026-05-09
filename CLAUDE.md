@@ -12,7 +12,7 @@ npm run dev        # dev server → http://localhost:3000
 npm run build      # production build → dist/
 npm run typecheck  # tsc --noEmit (must be 0 errors)
 npm run lint       # eslint . (must be 0 errors)
-npm test -- --run  # vitest single run (71 tests, must all pass)
+npm test -- --run  # vitest single run (75 tests, must all pass)
 npm run coverage   # v8 coverage report
 ```
 

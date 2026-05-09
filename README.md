@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml)
 [![Release](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/release.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/releases/latest)
-[![Version](https://img.shields.io/badge/version-1.3.0-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
+[![Version](https://img.shields.io/badge/version-1.3.1-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
 [![Live](https://img.shields.io/badge/live-m4rket--view.vercel.app-301E67?style=flat&logo=vercel)](https://m4rket-view.vercel.app)
 
@@ -36,7 +36,7 @@ A production-grade cryptocurrency market dashboard with live prices, news aggreg
 - **Framer Motion** — page transitions, staggered card animations, price flash
 - **Recharts** — area charts, line charts, treemap, pie chart
 - **Radix UI** — Dialog, Tooltip, Select, Dropdown, Tabs, Popover (accessible primitives)
-- **Tailwind CSS** — custom dark navy/cyan design system
+- **Tailwind CSS** — custom Linear-style premium dark design system
 - **react-hot-toast** — bottom-right notification toasts
 - **cmdk** — Ctrl+K command palette search
 
