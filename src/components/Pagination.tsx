@@ -35,23 +35,23 @@ const PerPageSelect = () => {
     >
       <Select.Trigger
         aria-label="Items per page"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-100/20 bg-gray-200/40 px-3 py-1.5 text-xs font-medium text-gray-100 hover:border-cyan/50 hover:text-cyan transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border/20 bg-surface/40 px-3 py-1.5 text-xs font-medium text-muted hover:border-accent/50 hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
       >
-        <Select.Value /> <span className="text-gray-100/60">/ page</span>
+        <Select.Value /> <span className="text-muted/60">/ page</span>
         <Select.Icon><ChevronDown size={12} /></Select.Icon>
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
           position="popper"
           sideOffset={6}
-          className="z-50 min-w-[7rem] rounded-lg border border-gray-100/20 bg-gray-200 shadow-xl overflow-hidden"
+          className="z-50 min-w-[7rem] rounded-lg border border-border/20 bg-surface shadow-xl overflow-hidden"
         >
           <Select.Viewport className="p-1">
             {PER_PAGE_OPTIONS.map((n) => (
               <Select.Item
                 key={n}
                 value={String(n)}
-                className="flex cursor-pointer items-center justify-between rounded px-2.5 py-1.5 text-xs text-gray-100 outline-none data-[highlighted]:bg-gray-300/60 data-[highlighted]:text-cyan"
+                className="flex cursor-pointer items-center justify-between rounded px-2.5 py-1.5 text-xs text-muted outline-none data-[highlighted]:bg-background/60 data-[highlighted]:text-accent"
               >
                 <Select.ItemText>{n}</Select.ItemText>
                 <Select.ItemIndicator><Check size={12} /></Select.ItemIndicator>
@@ -119,7 +119,7 @@ const Pagination = () => {
       <ul className="flex items-center gap-1" role="list">
         {pages.map((p, i) =>
           p === 'ellipsis' ? (
-            <li key={`e-${i}`} className="px-1 text-gray-100/60 text-xs select-none" aria-hidden>
+            <li key={`e-${i}`} className="px-1 text-muted/60 text-xs select-none" aria-hidden>
               …
             </li>
           ) : (
@@ -130,10 +130,10 @@ const Pagination = () => {
                 aria-label={`Page ${p}`}
                 className={cn(
                   'min-w-[32px] h-8 px-2 rounded-lg text-xs font-semibold transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60',
                   p === page
-                    ? 'bg-cyan text-gray-300'
-                    : 'bg-gray-200/40 text-gray-100 hover:text-cyan hover:bg-gray-200/60',
+                    ? 'bg-accent text-accent-foreground'
+                    : 'bg-surface/40 text-muted hover:text-accent hover:bg-surface/60',
                 )}
               >
                 {p}

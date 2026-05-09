@@ -6,28 +6,21 @@
 
 @layer base {
   :root {
-    --background: 3 0 28;
-    --foreground: 253 253 251;
-    --card: 48 30 103;
-    --card-foreground: 253 253 251;
-    --border: 91 143 185;
-    --primary: 182 234 218;
-    --primary-foreground: 3 0 28;
-    --destructive: 231 33 121;
-    --muted: 48 30 103;
-    --muted-foreground: 91 143 185;
-    --accent: 30 196 113;
+    /* Semantic CSS variables — match tailwind.config.cjs token hex values.
+       Stored as space-separated RGB triplets so Tailwind can compose with /opacity. */
+    --background: 10 10 11;
+    --foreground: 237 237 239;
+    --surface: 17 17 19;
+    --elevated: 24 24 27;
+    --border: 38 38 42;
+    --muted: 161 161 170;
+    --subtle: 113 113 122;
+    --accent: 124 115 255;
+    --accent-foreground: 10 10 11;
+    --success: 63 181 126;
+    --danger: 229 72 77;
+    --warning: 224 169 59;
     --radius: 0.5rem;
-  }
-
-  .light {
-    --background: 248 250 252;
-    --foreground: 3 0 28;
-    --card: 255 255 255;
-    --card-foreground: 3 0 28;
-    --border: 226 232 240;
-    --muted: 241 245 249;
-    --muted-foreground: 91 143 185;
   }
 
   * { box-sizing: border-box; }
@@ -36,6 +29,8 @@
 
   body {
     margin: 0;
+    background: #0A0A0B;
+    color: #EDEDEF;
     font-family: 'Nunito', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -57,23 +52,23 @@
 @layer components {
   .glass-card {
     @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(10, 10, 11, 0.6);
   }
 
   .glow-text {
-    @apply text-cyan;
-    text-shadow: 0 0 8px rgba(182, 234, 218, 0.6);
+    @apply text-accent;
+    text-shadow: 0 0 8px rgba(124, 115, 255, 0.5);
   }
 
   .btn-primary {
-    @apply px-4 py-2 bg-cyan text-gray-300 rounded-lg font-semibold text-sm hover:opacity-80 transition-opacity;
+    @apply px-4 py-2 bg-accent text-accent-foreground rounded-lg font-semibold text-sm hover:opacity-80 transition-opacity;
   }
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #301E67; }
-::-webkit-scrollbar-thumb { background: #5B8FB9; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #B6EADA; }
+::-webkit-scrollbar-track { background: #111113; }
+::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #7C73FF; }
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button { -webkit-appearance: none; }

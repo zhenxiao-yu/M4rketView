@@ -18,7 +18,7 @@ export function Spinner({ size = 'md', label = 'Loading', className, ...props }:
       <div
         aria-hidden="true"
         className={cn(
-          'rounded-full border-cyan border-b-transparent animate-spin',
+          'rounded-full border-accent border-b-transparent animate-spin',
           sizeClass[size],
         )}
       />

@@ -7,10 +7,10 @@ export const badgeVariants = cva(
   {
     variants: {
       tone: {
-        default:     'bg-cyan/20 text-cyan border-cyan/30',
-        muted:       'bg-gray-100/15 text-gray-100 border-gray-100/20',
-        success:     'bg-green/20 text-green border-green/30',
-        destructive: 'bg-red/20 text-red border-red/30',
+        default:     'bg-accent/20 text-accent border-accent/30',
+        muted:       'bg-muted/15 text-muted border-border/20',
+        success:     'bg-success/20 text-success border-success/30',
+        destructive: 'bg-danger/20 text-danger border-danger/30',
         warning:     'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
         purple:      'bg-purple-500/20 text-purple-300 border-purple-500/30',
       },

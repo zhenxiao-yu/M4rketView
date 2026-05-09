@@ -82,10 +82,10 @@ const HeatmapTooltip = ({ active, payload }: { active?: boolean; payload?: Toolt
   const d = payload[0]?.payload
   if (!d) return null
   return (
-    <div className="bg-gray-300 border border-gray-100/20 rounded-lg p-3 text-xs shadow-lg">
+    <div className="bg-background border border-border/20 rounded-lg p-3 text-xs shadow-lg">
       <p className="font-bold mb-1">{d.fullName}</p>
-      <p className="text-gray-100">{formatCurrency(d.price, 'usd')}</p>
-      <p className={d.pct >= 0 ? 'text-green' : 'text-red'}>{formatPercent(d.pct)} (24h)</p>
+      <p className="text-muted">{formatCurrency(d.price, 'usd')}</p>
+      <p className={d.pct >= 0 ? 'text-success' : 'text-danger'}>{formatPercent(d.pct)} (24h)</p>
     </div>
   )
 }
@@ -128,7 +128,7 @@ const MarketHeatmap = ({ coins }: Props) => {
           </Treemap>
         </ResponsiveContainer>
       </div>
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-gray-100">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-muted">
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#dc2626] inline-block" /> &lt;-5%</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#f87171] inline-block" /> -5% to 0</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#4ade80] inline-block" /> 0 to +5%</span>

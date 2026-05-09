@@ -22,8 +22,8 @@ const CategoryFilter = () => {
           onClick={() => setCategory(cat.value)}
           className={`flex-shrink-0 text-xs px-3 py-1 rounded-full border transition-all font-medium ${
             category === cat.value
-              ? 'bg-cyan text-gray-300 border-cyan'
-              : 'border-gray-100 text-gray-100 hover:border-cyan hover:text-cyan'
+              ? 'bg-accent text-accent-foreground border-accent'
+              : 'border-border text-muted hover:border-accent hover:text-accent'
           }`}
         >
           {cat.label}

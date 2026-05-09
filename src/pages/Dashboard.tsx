@@ -38,13 +38,13 @@ const MetricCard = ({
   <motion.div variants={staggerChild} className="h-full">
     <Card className="flex flex-col gap-2 h-full">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-100 capitalize">{title}</span>
-        <span className="text-cyan">{icon}</span>
+        <span className="text-sm text-muted capitalize">{title}</span>
+        <span className="text-accent">{icon}</span>
       </div>
       <span className="text-2xl font-bold">{value}</span>
-      {sub && <span className="text-xs text-gray-100">{sub}</span>}
+      {sub && <span className="text-xs text-muted">{sub}</span>}
       {trend != null && (
-        <span className={`text-sm font-medium flex items-center gap-1 ${trend >= 0 ? 'text-green' : 'text-red'}`}>
+        <span className={`text-sm font-medium flex items-center gap-1 ${trend >= 0 ? 'text-success' : 'text-danger'}`}>
           {trend >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
           {formatPercent(trend)} (24h)
         </span>
@@ -59,7 +59,7 @@ const FearGreedGauge = ({ value, label }: { value: number; label: string }) => {
   return (
     <motion.div variants={staggerChild} className="h-full">
       <Card className="flex flex-col gap-2 h-full">
-        <span className="text-sm text-gray-100">Fear & Greed Index</span>
+        <span className="text-sm text-muted">Fear & Greed Index</span>
         <div className="flex items-center gap-4">
           <div
             className="w-16 h-16 rounded-full border-4 flex items-center justify-center text-lg font-bold shrink-0"
@@ -69,7 +69,7 @@ const FearGreedGauge = ({ value, label }: { value: number; label: string }) => {
           </div>
           <div>
             <p className="text-base font-semibold" style={{ color }}>{label}</p>
-            <p className="text-xs text-gray-100 mt-1">Market sentiment</p>
+            <p className="text-xs text-muted mt-1">Market sentiment</p>
           </div>
         </div>
       </Card>
@@ -83,11 +83,11 @@ const MoverCard = ({ coin }: { coin: CoinMarket }) => {
   return (
     <Link
       to={`/coin/${coin.id}`}
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100/10 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60"
+      className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/10 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
     >
       <img src={coin.image} alt={coin.name} className="w-6 h-6 rounded-full" loading="lazy" />
-      <span className="text-sm font-medium flex-1 truncate group-hover:text-cyan transition-colors">{coin.name}</span>
-      <span className={`text-xs font-semibold ${isUp ? 'text-green' : 'text-red'}`}>
+      <span className="text-sm font-medium flex-1 truncate group-hover:text-accent transition-colors">{coin.name}</span>
+      <span className={`text-xs font-semibold ${isUp ? 'text-success' : 'text-danger'}`}>
         {formatPercent(pct)}
       </span>
     </Link>
@@ -159,7 +159,7 @@ const Dashboard = () => {
           <>
             <motion.div variants={fadeInUp} initial="initial" animate="animate">
               <Card>
-                <h3 className="text-sm font-semibold text-green mb-3 flex items-center gap-1">
+                <h3 className="text-sm font-semibold text-success mb-3 flex items-center gap-1">
                   <TrendingUp size={14} /> Top Gainers (24H)
                 </h3>
                 {gainers.map((c) => <MoverCard key={c.id} coin={c} />)}
@@ -167,7 +167,7 @@ const Dashboard = () => {
             </motion.div>
             <motion.div variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.05 }}>
               <Card>
-                <h3 className="text-sm font-semibold text-red mb-3 flex items-center gap-1">
+                <h3 className="text-sm font-semibold text-danger mb-3 flex items-center gap-1">
                   <TrendingDown size={14} /> Top Losers (24H)
                 </h3>
                 {losers.map((c) => <MoverCard key={c.id} coin={c} />)}

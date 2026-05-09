@@ -23,7 +23,7 @@ const SECONDARY = [
 
 const itemClass = ({ isActive }: { isActive: boolean }) =>
   `flex flex-col items-center justify-center gap-0.5 flex-1 min-h-[52px] px-1 py-1 text-[10px] font-semibold transition-colors ${
-    isActive ? 'text-cyan' : 'text-gray-100 hover:text-cyan'
+    isActive ? 'text-accent' : 'text-muted hover:text-accent'
   }`
 
 const BottomNav = () => {
@@ -47,7 +47,7 @@ const BottomNav = () => {
             />
             <motion.div
               key="more-sheet"
-              className="md:hidden fixed left-0 right-0 z-50 bg-gray-200 border-t border-cyan/30 rounded-t-2xl"
+              className="md:hidden fixed left-0 right-0 z-50 bg-surface border-t border-accent/30 rounded-t-2xl"
               style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 64px)' }}
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
@@ -63,15 +63,15 @@ const BottomNav = () => {
                     className={({ isActive }) =>
                       `relative flex flex-col items-center gap-1.5 py-3 rounded-xl border ${
                         isActive
-                          ? 'bg-cyan/10 border-cyan text-cyan'
-                          : 'border-gray-100/20 text-gray-100'
+                          ? 'bg-accent/10 border-accent text-accent'
+                          : 'border-border/20 text-muted'
                       }`
                     }
                   >
                     <div className="relative">
                       <Icon size={20} />
                       {label === 'Compare' && compareCoins.length > 0 && (
-                        <span className="absolute -top-1.5 -right-2.5 bg-cyan text-gray-300 rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">
+                        <span className="absolute -top-1.5 -right-2.5 bg-accent text-accent-foreground rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">
                           {compareCoins.length}
                         </span>
                       )}
@@ -86,7 +86,7 @@ const BottomNav = () => {
       </AnimatePresence>
 
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-gray-200/95 backdrop-blur-md border-t border-cyan/20"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-surface/95 backdrop-blur-md border-t border-accent/20"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         aria-label="Primary mobile navigation"
       >
@@ -107,7 +107,7 @@ const BottomNav = () => {
             type="button"
             onClick={() => setMoreOpen((o) => !o)}
             className={`flex flex-col items-center justify-center gap-0.5 flex-1 min-h-[52px] px-1 py-1 text-[10px] font-semibold transition-colors ${
-              moreOpen ? 'text-cyan' : 'text-gray-100 hover:text-cyan'
+              moreOpen ? 'text-accent' : 'text-muted hover:text-accent'
             }`}
             aria-expanded={moreOpen}
             aria-label="More menu"
@@ -115,7 +115,7 @@ const BottomNav = () => {
             <div className="relative">
               <MoreHorizontal size={18} />
               {compareCoins.length > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-cyan text-gray-300 rounded-full text-[9px] w-3.5 h-3.5 flex items-center justify-center font-bold">
+                <span className="absolute -top-1.5 -right-2 bg-accent text-accent-foreground rounded-full text-[9px] w-3.5 h-3.5 flex items-center justify-center font-bold">
                   {compareCoins.length}
                 </span>
               )}

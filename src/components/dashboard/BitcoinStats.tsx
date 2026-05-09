@@ -19,11 +19,11 @@ const StatCard = ({
   <motion.div variants={staggerChild}>
     <Card className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-100">{label}</span>
-        <span className="text-cyan">{icon}</span>
+        <span className="text-sm text-muted">{label}</span>
+        <span className="text-accent">{icon}</span>
       </div>
       <span className="text-2xl font-bold">{value}</span>
-      {sub && <span className="text-xs text-gray-100">{sub}</span>}
+      {sub && <span className="text-xs text-muted">{sub}</span>}
     </Card>
   </motion.div>
 )
@@ -50,7 +50,7 @@ const BitcoinStats = () => {
   return (
     <div className="mb-8">
       <h2 className="text-base font-semibold mb-4 flex items-center gap-2">
-        <Cpu size={16} className="text-cyan" />
+        <Cpu size={16} className="text-accent" />
         Bitcoin Network
       </h2>
       {error ? (

@@ -24,9 +24,9 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label, currency }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-gray-300 border border-gray-100 rounded-lg px-3 py-2 shadow-lg">
-      <p className="text-xs text-gray-100 mb-1">{label}</p>
-      <p className="text-sm font-semibold text-cyan">
+    <div className="bg-background border border-border rounded-lg px-3 py-2 shadow-lg">
+      <p className="text-xs text-muted mb-1">{label}</p>
+      <p className="text-sm font-semibold text-accent">
         {formatCurrency(payload[0].value, currency)}
       </p>
     </div>
@@ -69,7 +69,7 @@ const PriceChart = ({ coinId }: PriceChartProps) => {
 
   const btnClass = (active: boolean) =>
     `text-xs h-7 px-2.5 rounded-lg transition-all font-medium whitespace-nowrap ${
-      active ? 'bg-cyan text-gray-300' : 'bg-gray-200 text-gray-100 hover:text-cyan'
+      active ? 'bg-accent text-accent-foreground' : 'bg-surface text-muted hover:text-accent'
     }`
 
   return (

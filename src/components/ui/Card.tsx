@@ -3,16 +3,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 export const cardVariants = cva(
-  'rounded-xl border border-gray-100/20 transition-colors',
+  'rounded-xl border border-border/20 transition-colors',
   {
     variants: {
       tone: {
-        default:   'bg-gray-200/40',
-        muted:     'bg-gray-200/30',
+        default:   'bg-surface/40',
+        muted:     'bg-surface/30',
         outline:   'bg-transparent',
       },
       interactive: {
-        true:  'hover:border-cyan/40',
+        true:  'hover:border-accent/40',
         false: '',
       },
       padding: {

@@ -147,10 +147,10 @@ function ChangelogDialog() {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="inline-flex items-center gap-1.5 text-xs text-cyan hover:text-cyan/80 transition-colors font-mono group">
+        <button className="inline-flex items-center gap-1.5 text-xs text-accent hover:text-accent/80 transition-colors font-mono group">
           <Tag size={11} />
           v{APP_VERSION}
-          <span className="text-gray-100 group-hover:text-cyan/60 transition-colors">— what&apos;s new?</span>
+          <span className="text-muted group-hover:text-accent/60 transition-colors">— what&apos;s new?</span>
         </button>
       </Dialog.Trigger>
 
@@ -171,11 +171,11 @@ function ChangelogDialog() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-surface border border-accent/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100/20">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border/20">
                 <Dialog.Title className="font-bold text-base flex items-center gap-2">
-                  <Tag size={15} className="text-cyan" />
+                  <Tag size={15} className="text-accent" />
                   Changelog
                 </Dialog.Title>
                 <Dialog.Close asChild>
@@ -192,27 +192,27 @@ function ChangelogDialog() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-mono font-bold text-sm text-white">v{release.version}</span>
                         <Badge tone={TAG_TONES[release.tag]} uppercase>{release.tag}</Badge>
-                        <span className="flex items-center gap-1 text-xs text-gray-100 ml-auto">
+                        <span className="flex items-center gap-1 text-xs text-muted ml-auto">
                           <Clock size={11} />
                           {release.date}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-100">{release.summary}</p>
+                      <p className="text-sm text-muted">{release.summary}</p>
                       <ul className="flex flex-col gap-1.5">
                         {release.changes.map((c, i) => (
-                          <li key={i} className="flex items-start gap-2 text-xs text-gray-100/80 leading-relaxed">
-                            <span className="text-cyan mt-0.5 shrink-0">›</span>
+                          <li key={i} className="flex items-start gap-2 text-xs text-muted/80 leading-relaxed">
+                            <span className="text-accent mt-0.5 shrink-0">›</span>
                             {c}
                           </li>
                         ))}
                       </ul>
-                      <div className="border-b border-gray-100/10" />
+                      <div className="border-b border-border/10" />
                     </div>
                   ))}
                 </div>
               </ScrollArea>
 
-              <div className="px-4 sm:px-6 py-3 border-t border-gray-100/20 flex items-center gap-2 sm:gap-3 text-xs text-gray-100/50">
+              <div className="px-4 sm:px-6 py-3 border-t border-border/20 flex items-center gap-2 sm:gap-3 text-xs text-muted/50">
                 <GitCommit size={11} className="shrink-0" />
                 <span className="font-mono truncate">
                   {GIT_SHA === 'local' ? 'local build' : GIT_SHA.slice(0, 7)}
@@ -229,15 +229,15 @@ function ChangelogDialog() {
 
 const Footer = () => (
   <footer className="w-full max-w-7xl px-4 mt-16 mb-8">
-    <div className="border border-gray-100/20 rounded-2xl bg-gray-200/20 backdrop-blur-sm overflow-hidden">
+    <div className="border border-border/20 rounded-2xl bg-surface/20 backdrop-blur-sm overflow-hidden">
       {/* Main grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
         {/* Brand */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-base font-bold text-cyan tracking-wide font-nunito">M4rketView</span>
+            <span className="text-base font-bold text-accent tracking-wide font-nunito">M4rketView</span>
           </div>
-          <p className="text-xs text-gray-100 leading-relaxed max-w-[220px]">
+          <p className="text-xs text-muted leading-relaxed max-w-[220px]">
             A production-grade crypto dashboard built entirely on free, no-key public APIs.
             Always live, always free.
           </p>
@@ -247,7 +247,7 @@ const Footer = () => (
               href="https://github.com/zhenxiao-yu/M4rketView"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+              className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
             >
               <Github size={13} />
               Source
@@ -256,7 +256,7 @@ const Footer = () => (
               href="https://m4rket-view.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+              className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
             >
               <ExternalLink size={13} />
               Live site
@@ -272,9 +272,9 @@ const Footer = () => (
               <Link
                 key={to}
                 to={to}
-                className="flex items-center gap-1.5 text-xs text-gray-100 hover:text-cyan transition-colors"
+                className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
               >
-                <span className="text-gray-100/60">{icon}</span>
+                <span className="text-muted/60">{icon}</span>
                 {label}
               </Link>
             ))}
@@ -293,11 +293,11 @@ const Footer = () => (
                 rel="noopener noreferrer"
                 className="group flex flex-col gap-0.5"
               >
-                <span className="text-xs text-gray-100 group-hover:text-cyan transition-colors flex items-center gap-1">
+                <span className="text-xs text-muted group-hover:text-accent transition-colors flex items-center gap-1">
                   {label}
                   <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                 </span>
-                <span className="text-xs text-gray-100/50">{desc}</span>
+                <span className="text-xs text-muted/50">{desc}</span>
               </a>
             ))}
           </div>
@@ -305,19 +305,19 @@ const Footer = () => (
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-100/10 px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <p className="text-xs text-gray-100/50">
+      <div className="border-t border-border/10 px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p className="text-xs text-muted/50">
           © {new Date().getFullYear()} Mark Yu · Released under the{' '}
           <a
             href="https://github.com/zhenxiao-yu/M4rketView/blob/main/LICENSE"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan/70 hover:text-cyan transition-colors"
+            className="text-accent/70 hover:text-accent transition-colors"
           >
             MIT License
           </a>
         </p>
-        <p className="text-xs text-gray-100/30 font-mono">
+        <p className="text-xs text-muted/30 font-mono">
           No API keys · No tracking · No cost
         </p>
       </div>

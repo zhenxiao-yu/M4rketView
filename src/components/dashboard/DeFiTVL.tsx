@@ -51,7 +51,7 @@ const DeFiTVL = () => {
     return (
       <div className="mb-8">
         <h2 className="text-base font-semibold mb-4 flex items-center gap-2">
-          <Link2 size={16} className="text-cyan" /> DeFi TVL
+          <Link2 size={16} className="text-accent" /> DeFi TVL
         </h2>
         <ErrorCard error={protoError as Error} onRetry={() => refetch()} compact />
       </div>
@@ -61,7 +61,7 @@ const DeFiTVL = () => {
   return (
     <div className="mb-8">
       <h2 className="text-base font-semibold mb-4 flex items-center gap-2">
-        <Link2 size={16} className="text-cyan" />
+        <Link2 size={16} className="text-accent" />
         DeFi TVL
         {!loading && (
           <span className="text-2xl font-bold ml-2">${formatCompact(totalTvl)}</span>
@@ -73,14 +73,14 @@ const DeFiTVL = () => {
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 ${loading ? 'hidden' : ''}`}>
         {/* Top chains */}
         <Card>
-          <h3 className="text-sm font-semibold text-gray-100 mb-3">Top Chains by TVL</h3>
+          <h3 className="text-sm font-semibold text-muted mb-3">Top Chains by TVL</h3>
           <div className="flex flex-col gap-2">
             {topChains.map((chain) => (
               <div key={chain.name} className="flex items-center gap-2">
-                <span className="text-xs w-20 truncate text-gray-100">{chain.name}</span>
-                <div className="flex-1 bg-gray-100/10 rounded-full h-2">
+                <span className="text-xs w-20 truncate text-muted">{chain.name}</span>
+                <div className="flex-1 bg-muted/10 rounded-full h-2">
                   <div
-                    className="h-2 rounded-full bg-cyan"
+                    className="h-2 rounded-full bg-accent"
                     style={{ width: `${(chain.tvl / maxChainTvl) * 100}%` }}
                   />
                 </div>
@@ -94,7 +94,7 @@ const DeFiTVL = () => {
 
         {/* Top protocols */}
         <Card>
-          <h3 className="text-sm font-semibold text-gray-100 mb-3">Top Protocols</h3>
+          <h3 className="text-sm font-semibold text-muted mb-3">Top Protocols</h3>
           <div className="flex flex-col gap-1.5">
             {topProtocols.map((protocol) => {
               const change = protocol.change_1d
@@ -111,12 +111,12 @@ const DeFiTVL = () => {
                     />
                   )}
                   <span className="text-xs flex-1 truncate">{protocol.name}</span>
-                  <span className="text-xs text-gray-100">{protocol.category}</span>
+                  <span className="text-xs text-muted">{protocol.category}</span>
                   <span className="text-xs font-semibold w-16 text-right">
                     ${formatCompact(protocol.tvl)}
                   </span>
                   {change != null && (
-                    <span className={`text-xs flex items-center gap-0.5 w-14 justify-end ${isUp ? 'text-green' : 'text-red'}`}>
+                    <span className={`text-xs flex items-center gap-0.5 w-14 justify-end ${isUp ? 'text-success' : 'text-danger'}`}>
                       {isUp ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                       {formatPercent(change)}
                     </span>
@@ -131,7 +131,7 @@ const DeFiTVL = () => {
       {/* 90-day TVL chart */}
       {chartData.length > 0 && (
         <Card>
-          <h3 className="text-sm font-semibold text-gray-100 mb-3">90-Day Global TVL</h3>
+          <h3 className="text-sm font-semibold text-muted mb-3">90-Day Global TVL</h3>
           <ResponsiveContainer width="100%" height={160}>
             <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
               <defs>

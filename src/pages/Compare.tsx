@@ -39,38 +39,38 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
         <div className="flex items-center gap-2">
           <img src={data.image.small} alt={data.name} className="w-8 h-8 rounded-full" />
           <div>
-            <Link to={`/coin/${data.id}`} className="font-semibold hover:text-cyan transition-colors text-sm">
+            <Link to={`/coin/${data.id}`} className="font-semibold hover:text-accent transition-colors text-sm">
               {data.name}
             </Link>
-            <p className="text-xs text-gray-100 uppercase">{data.symbol}</p>
+            <p className="text-xs text-muted uppercase">{data.symbol}</p>
           </div>
         </div>
-        <button onClick={() => removeFromCompare(coinId)} className="text-gray-100 hover:text-red transition-colors">
+        <button onClick={() => removeFromCompare(coinId)} className="text-muted hover:text-danger transition-colors">
           <X size={14} />
         </button>
       </div>
 
       <div className="space-y-2">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-100">Price</span>
+          <span className="text-muted">Price</span>
           <span className="font-semibold">{formatCurrency(price, currency)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-100">24H</span>
-          <span className={pct24h >= 0 ? 'text-green font-semibold' : 'text-red font-semibold'}>
+          <span className="text-muted">24H</span>
+          <span className={pct24h >= 0 ? 'text-success font-semibold' : 'text-danger font-semibold'}>
             {formatPercent(pct24h)}
           </span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-100">Mkt Cap</span>
+          <span className="text-muted">Mkt Cap</span>
           <span>{formatCompact(data.market_data.market_cap[currency] ?? 0)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-100">Volume</span>
+          <span className="text-muted">Volume</span>
           <span>{formatCompact(data.market_data.total_volume[currency] ?? 0)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-100">Rank</span>
+          <span className="text-muted">Rank</span>
           <span>#{data.market_cap_rank}</span>
         </div>
       </div>
@@ -146,9 +146,9 @@ const Compare = () => {
     return (
       <section className="w-full mt-8 mb-24">
         <Card tone="muted" className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-center px-4">
-          <GitCompare size={48} className="text-gray-100" />
+          <GitCompare size={48} className="text-muted" />
           <p className="text-lg font-semibold">Nothing to compare yet</p>
-          <p className="text-sm text-gray-100 max-w-sm">
+          <p className="text-sm text-muted max-w-sm">
             Tap the compare icon on any coin in the markets table to add it here. Up to 3 coins.
           </p>
           <Button asChild variant="secondary" size="sm" className="mt-2">
@@ -162,7 +162,7 @@ const Compare = () => {
   return (
     <section className="w-full mt-8 mb-24">
       <h1 className="text-xl font-bold mb-6 flex items-center gap-2">
-        <GitCompare size={20} className="text-cyan" /> Coin Comparison
+        <GitCompare size={20} className="text-accent" /> Coin Comparison
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
@@ -173,7 +173,7 @@ const Compare = () => {
 
       {compareCoins.length >= 2 && (
         <Card>
-          <h3 className="text-sm font-semibold mb-4 text-gray-100">
+          <h3 className="text-sm font-semibold mb-4 text-muted">
             30-Day Normalized Performance (%)
           </h3>
           <NormalizedChart coinIds={compareCoins} />

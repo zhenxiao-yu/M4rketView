@@ -12,34 +12,34 @@ const TrendingCoin = ({ data }: TrendingCoinProps) => {
     <Link
       to={`/coin/${data.id}`}
       className={cn(
-        'block w-full bg-gray-200 rounded-lg p-5 sm:p-6 pr-20 sm:pr-24 relative shadow-md',
-        'hover:bg-gray-100 hover:bg-opacity-60',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60',
+        'block w-full bg-surface rounded-lg p-5 sm:p-6 pr-20 sm:pr-24 relative shadow-md',
+        'hover:bg-muted hover:bg-opacity-60',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60',
         hoverScale,
       )}
       aria-label={`View details for ${data.name}`}
     >
       <h3 className="text-base flex items-center my-1">
-        <span className="text-gray-100 font-medium capitalize">Name:&nbsp;</span>
-        <span className="text-cyan font-bold">{data.name}</span>
-        <img src={data.small} alt="" aria-hidden="true" className="w-6 h-6 mx-2 rounded-full border border-gray-100" />
+        <span className="text-muted font-medium capitalize">Name:&nbsp;</span>
+        <span className="text-accent font-bold">{data.name}</span>
+        <img src={data.small} alt="" aria-hidden="true" className="w-6 h-6 mx-2 rounded-full border border-border" />
       </h3>
 
       <h3 className="text-base flex items-center my-1">
-        <span className="text-gray-100 font-medium capitalize">Market Cap Rank:&nbsp;</span>
-        <span className="text-cyan font-bold">{data.market_cap_rank}</span>
+        <span className="text-muted font-medium capitalize">Market Cap Rank:&nbsp;</span>
+        <span className="text-accent font-bold">{data.market_cap_rank}</span>
       </h3>
 
       <h3 className="text-base flex items-center my-1">
-        <span className="text-gray-100 font-medium capitalize">Price (BTC):&nbsp;</span>
-        <span className="text-cyan font-bold">
+        <span className="text-muted font-medium capitalize">Price (BTC):&nbsp;</span>
+        <span className="text-accent font-bold">
           ₿ {Number(data.price_btc).toExponential(4)}
         </span>
       </h3>
 
       <h3 className="text-base flex items-center my-1">
-        <span className="text-gray-100 font-medium capitalize">Score:&nbsp;</span>
-        <span className="text-cyan font-bold">{data.score}</span>
+        <span className="text-muted font-medium capitalize">Score:&nbsp;</span>
+        <span className="text-accent font-bold">{data.score}</span>
       </h3>
 
       <img

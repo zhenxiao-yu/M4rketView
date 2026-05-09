@@ -17,12 +17,12 @@ class ErrorBoundary extends Component<Props, State> {
 
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-5 text-center px-4">
-        <div className="w-16 h-16 rounded-full bg-red/10 flex items-center justify-center">
-          <AlertCircle size={32} className="text-red" />
+        <div className="w-16 h-16 rounded-full bg-danger/10 flex items-center justify-center">
+          <AlertCircle size={32} className="text-danger" />
         </div>
         <div>
           <p className="font-bold text-lg">Something went wrong</p>
-          <p className="text-sm text-gray-100 mt-2 max-w-md">
+          <p className="text-sm text-muted mt-2 max-w-md">
             {this.state.error?.message || 'An unexpected error occurred.'}
           </p>
         </div>
