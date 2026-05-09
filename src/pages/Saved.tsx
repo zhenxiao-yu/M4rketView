@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { staggerContainer, staggerChild } from '@/lib/motion'
+import { STALE_1MIN } from '@/lib/queryTimings'
 import type { CoinMarket } from '@/types/coingecko'
 
 const PctCell = ({ value }: { value: number | undefined }) => {
@@ -87,7 +88,7 @@ const Saved = () => {
         ids: coinIds.join(','),
       }),
     enabled: coinIds.length > 0,
-    staleTime: 60 * 1000,
+    staleTime: STALE_1MIN,
   })
 
   if (coinIds.length === 0) {

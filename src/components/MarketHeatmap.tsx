@@ -108,8 +108,10 @@ const MarketHeatmap = ({ coins }: Props) => {
       fullName: c.name,
     }))
 
-  const handleClick = (item: HeatmapItem) => {
-    if (item?.id) navigate(`/coin/${item.id}`)
+  const handleClick = (item: unknown) => {
+    if (item && typeof item === 'object' && 'id' in item && typeof item.id === 'string') {
+      navigate(`/coin/${item.id}`)
+    }
   }
 
   return (
@@ -121,7 +123,7 @@ const MarketHeatmap = ({ coins }: Props) => {
             data={data}
             dataKey="size"
             content={<CustomContent />}
-            onClick={(item) => handleClick(item as unknown as HeatmapItem)}
+            onClick={handleClick}
             isAnimationActive={false}
           >
             <Tooltip content={<HeatmapTooltip />} />

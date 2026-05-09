@@ -16,6 +16,7 @@ import DataStatusBadge from '@/components/ui/DataStatusBadge'
 import Disclaimer from '@/components/ui/Disclaimer'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { staggerContainer, staggerChild } from '@/lib/motion'
+import { PRICE_FLASH_MS } from '@/lib/queryTimings'
 import Pagination from './Pagination'
 import type { CoinMarket } from '@/types/coingecko'
 
@@ -80,7 +81,7 @@ const PriceCell = memo(function PriceCell({ coinId, basePrice, currency, livePri
     if (prevRef.current === price) return
     setFlash(price > prevRef.current ? 'up' : 'down')
     prevRef.current = price
-    const t = setTimeout(() => setFlash(null), 800)
+    const t = setTimeout(() => setFlash(null), PRICE_FLASH_MS)
     return () => clearTimeout(t)
   }, [price])
 

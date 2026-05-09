@@ -3,6 +3,7 @@ import type { BitcoinStats } from '@/types/coingecko'
 import { apiFetch } from '@/lib/fetch'
 import { withFallback } from '@/lib/fetchWithFallback'
 import { fetchBitcoinStatsViaBlockchair } from '@/api/blockchair'
+import { STALE_5MIN, CACHE_15MIN } from '@/lib/queryTimings'
 
 function fetchBitcoinStats(): Promise<BitcoinStats> {
   return withFallback(
@@ -15,7 +16,7 @@ export function useBitcoinStats() {
   return useQuery({
     queryKey: ['bitcoin', 'stats'],
     queryFn: fetchBitcoinStats,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    staleTime: STALE_5MIN,
+    gcTime: CACHE_15MIN,
   })
 }

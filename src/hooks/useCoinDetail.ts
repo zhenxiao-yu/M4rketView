@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchCoinDetail } from '@/api/coinGecko'
+import { STALE_3MIN } from '@/lib/queryTimings'
 
 export function useCoinDetail(id: string | undefined) {
   return useQuery({
     queryKey: ['coin', id],
     queryFn: () => fetchCoinDetail(id!),
     enabled: !!id,
-    staleTime: 3 * 60 * 1000,
+    staleTime: STALE_3MIN,
   })
 }
