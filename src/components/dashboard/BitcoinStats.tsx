@@ -63,7 +63,8 @@ const BitcoinStats = () => {
         <motion.div
           variants={staggerContainer}
           initial="initial"
-          animate="animate"
+          whileInView="animate"
+          viewport={{ once: true, amount: 0.15 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4"
         >
           <StatCard icon={<Zap size={18} />}            label="Hash Rate"     value={hashRate}   sub="Network security" />
