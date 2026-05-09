@@ -7,7 +7,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-        // alias kept so any lingering `font-nunito` class still resolves to the new sans stack
+        // Display face — geometric / block futuristic. Reserved for wordmark + hero headlines.
+        display: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
+        // alias kept so any lingering `font-nunito` class still resolves
         nunito: ['Inter', 'system-ui', 'sans-serif'],
       },
       // Semantic palette — Linear/Vercel-style premium dark dashboard.

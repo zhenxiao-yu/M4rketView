@@ -1,0 +1,14 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Full-bleed background — Android adaptive icons mask the outer 20% to round/square as the OS prefers -->
+  <rect width="512" height="512" fill="#7C73FF"/>
+  <!-- Inner safe zone is roughly 80% (centered). M-as-chart sized to fit. -->
+  <path
+    d="M155 360 V165 L256 256 L357 165 V360"
+    stroke="#0A0A0B"
+    stroke-width="34"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  <circle cx="357" cy="165" r="28" fill="#0A0A0B"/>
+</svg>

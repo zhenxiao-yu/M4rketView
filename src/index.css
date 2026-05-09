@@ -1,7 +1,9 @@
 /* Inter — UI text. Variable axis 100..900. Used by Vercel, Linear, GitHub, Stripe.
    JetBrains Mono — financial / numeric readouts. Tabular figures align column-by-column
-   so price columns don't dance as live prices update. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+   so price columns don't dance as live prices update.
+   Space Grotesk — geometric display face for the wordmark / brand surfaces.
+   Bolder, more "block futuristic" than Inter — fits the crypto / fintech tone. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap");
 
 @tailwind base;
 @tailwind components;

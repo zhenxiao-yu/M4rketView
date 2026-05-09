@@ -235,7 +235,10 @@ const Footer = () => (
         {/* Brand */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-bold text-accent tracking-tight">M4rketView</span>
+            <span className="font-display font-bold uppercase tracking-[0.08em] text-[13px] leading-none">
+              <span className="text-foreground">M4RKET</span>
+              <span className="text-accent">VIEW</span>
+            </span>
             <ChangelogDialog />
           </div>
           <p className="text-[11px] text-muted/80 leading-relaxed max-w-[260px]">
