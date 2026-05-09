@@ -1,21 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { renderHook, waitFor, act } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import type { ReactNode } from 'react'
 import { http, HttpResponse } from 'msw'
 import { server } from '@/test/mocks/server'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { useMarketStore } from '@/store/marketStore'
 import { mockCoinMarket } from '@/test/mocks/handlers'
-
-function makeWrapper() {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false, gcTime: 0 } },
-  })
-  return function TestWrapper({ children }: { children: ReactNode }) {
-    return <QueryClientProvider client={client}>{children}</QueryClientProvider>
-  }
-}
+import { makeQueryWrapper } from '@/test/helpers/queryWrapper'
 
 describe('useCryptoMarkets', () => {
   beforeEach(() => {
@@ -30,7 +20,7 @@ describe('useCryptoMarkets', () => {
   })
 
   it('returns market data from CoinGecko on success', async () => {
-    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeWrapper() })
+    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeQueryWrapper() })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toHaveLength(1)
     expect(result.current.data?.[0].id).toBe('bitcoin')
@@ -68,7 +58,7 @@ describe('useCryptoMarkets', () => {
       ),
     )
 
-    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeWrapper() })
+    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeQueryWrapper() })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data?.[0].id).toBe('btc-bitcoin')
   })
@@ -83,13 +73,13 @@ describe('useCryptoMarkets', () => {
       ),
     )
 
-    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeWrapper() })
+    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeQueryWrapper() })
     await waitFor(() => expect(result.current.isError).toBe(true))
     expect(result.current.error).toBeInstanceOf(Error)
   })
 
   it('re-runs when store filters change', async () => {
-    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeWrapper() })
+    const { result } = renderHook(() => useCryptoMarkets(), { wrapper: makeQueryWrapper() })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     const firstUpdatedAt = result.current.dataUpdatedAt
     expect(result.current.data?.[0].current_price).toBe(mockCoinMarket.current_price)
