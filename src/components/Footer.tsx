@@ -46,6 +46,17 @@ interface Release {
 
 const CHANGELOG: Release[] = [
   {
+    version: '1.3.2',
+    date: '2026-05-09',
+    tag: 'patch',
+    summary: 'Favicon matches in-app logo; changelog modal scrolls properly on mobile.',
+    changes: [
+      'favicon.svg now uses the same artwork as the in-app Logo (gradient + M-as-chart) so browser tabs match the app.',
+      'Cache-busting query string on icon links to force browsers to pick up the new favicon after deploy.',
+      'Changelog dialog: replaced unbounded max-h-full with dvh-aware max-height so the inner scroll area stays within the viewport on phones.',
+    ],
+  },
+  {
     version: '1.3.1',
     date: '2026-05-09',
     tag: 'patch',
@@ -184,7 +195,7 @@ function ChangelogDialog() {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="pointer-events-auto w-full max-w-2xl max-h-full bg-elevated border border-border-strong/70 ring-1 ring-white/5 rounded-2xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+              className="pointer-events-auto w-full max-w-2xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[min(85dvh,720px)] bg-elevated border border-border-strong/70 ring-1 ring-white/5 rounded-2xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
             >
               <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border/20">
                 <Dialog.Title className="font-bold text-base flex items-center gap-2">
