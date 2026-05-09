@@ -327,7 +327,7 @@ const CoinDetail = () => {
         </div>
 
         {/* RIGHT PANEL — Chart */}
-        <Card tone="muted" padding="md" className="lg:w-[58%] p-3 sm:p-4 min-h-[280px] sm:min-h-[360px] lg:min-h-[400px]">
+        <Card tone="muted" padding="md" className="lg:w-[58%] p-3 sm:p-4 h-[420px] sm:h-[460px] lg:h-[520px] flex flex-col">
           <PriceChart coinId={data.id} />
         </Card>
       </div>

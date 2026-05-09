@@ -35,8 +35,8 @@ const MetricCard = ({
   icon: ReactNode
   trend?: number
 }) => (
-  <motion.div variants={staggerChild}>
-    <Card className="flex flex-col gap-2">
+  <motion.div variants={staggerChild} className="h-full">
+    <Card className="flex flex-col gap-2 h-full">
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-100 capitalize">{title}</span>
         <span className="text-cyan">{icon}</span>
@@ -57,8 +57,8 @@ const FearGreedGauge = ({ value, label }: { value: number; label: string }) => {
   const color =
     value <= 25 ? '#e72179' : value <= 45 ? '#f97316' : value <= 55 ? '#eab308' : value <= 75 ? '#84cc16' : '#1ec471'
   return (
-    <motion.div variants={staggerChild}>
-      <Card className="flex flex-col gap-2">
+    <motion.div variants={staggerChild} className="h-full">
+      <Card className="flex flex-col gap-2 h-full">
         <span className="text-sm text-gray-100">Fear & Greed Index</span>
         <div className="flex items-center gap-4">
           <div

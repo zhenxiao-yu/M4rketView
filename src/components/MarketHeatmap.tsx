@@ -115,17 +115,19 @@ const MarketHeatmap = ({ coins }: Props) => {
   return (
     <Card className="mb-8">
       <h2 className="text-base font-semibold mb-4">Market Heatmap (24H)</h2>
-      <ResponsiveContainer width="100%" height={340}>
-        <Treemap
-          data={data}
-          dataKey="size"
-          content={<CustomContent />}
-          onClick={(item) => handleClick(item as unknown as HeatmapItem)}
-          isAnimationActive={false}
-        >
-          <Tooltip content={<HeatmapTooltip />} />
-        </Treemap>
-      </ResponsiveContainer>
+      <div className="h-[260px] sm:h-[300px] md:h-[340px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <Treemap
+            data={data}
+            dataKey="size"
+            content={<CustomContent />}
+            onClick={(item) => handleClick(item as unknown as HeatmapItem)}
+            isAnimationActive={false}
+          >
+            <Tooltip content={<HeatmapTooltip />} />
+          </Treemap>
+        </ResponsiveContainer>
+      </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-gray-100">
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#dc2626] inline-block" /> &lt;-5%</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#f87171] inline-block" /> -5% to 0</span>

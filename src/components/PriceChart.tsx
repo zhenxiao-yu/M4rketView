@@ -68,51 +68,55 @@ const PriceChart = ({ coinId }: PriceChartProps) => {
   }))
 
   const btnClass = (active: boolean) =>
-    `text-xs py-0.5 px-2 rounded-lg transition-all font-medium ${
+    `text-xs h-7 px-2.5 rounded-lg transition-all font-medium whitespace-nowrap ${
       active ? 'bg-cyan text-gray-300' : 'bg-gray-200 text-gray-100 hover:text-cyan'
     }`
 
   return (
-    <div className="w-full h-[60%] min-h-[200px]">
-      {isLoading ? (
-        <div className="w-full h-[90%] flex items-center justify-center">
-          <Spinner label="Loading chart" />
-        </div>
-      ) : (
-        <ResponsiveContainer width="100%" height="90%">
-          <AreaChart data={formattedData}>
-            <defs>
-              <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#B6EADA" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#B6EADA" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <Area
-              type="monotone"
-              dataKey="value"
-              stroke="#B6EADA"
-              strokeWidth={1.5}
-              fill="url(#chartGradient)"
-              dot={false}
-            />
-            <CartesianGrid stroke="#5B8FB9" strokeOpacity={0.2} />
-            <XAxis dataKey="date" hide />
-            <YAxis hide domain={['auto', 'auto']} />
-            <Tooltip
-              content={<CustomTooltip currency={currency} />}
-              cursor={{ stroke: '#5B8FB9', strokeWidth: 1, strokeDasharray: '4 4' }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      )}
+    <div className="w-full flex flex-col h-full min-h-[260px]">
+      <div className="flex-1 min-h-[180px]">
+        {isLoading ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Spinner label="Loading chart" />
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={formattedData}>
+              <defs>
+                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#B6EADA" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#B6EADA" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#B6EADA"
+                strokeWidth={1.5}
+                fill="url(#chartGradient)"
+                dot={false}
+              />
+              <CartesianGrid stroke="#5B8FB9" strokeOpacity={0.2} />
+              <XAxis dataKey="date" hide />
+              <YAxis hide domain={['auto', 'auto']} />
+              <Tooltip
+                content={<CustomTooltip currency={currency} />}
+                cursor={{ stroke: '#5B8FB9', strokeWidth: 1, strokeDasharray: '4 4' }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
+      </div>
 
-      <div className="flex flex-wrap gap-1.5 mt-2 px-1">
-        {CHART_TYPES.map((t) => (
-          <button key={t.key} className={btnClass(type === t.key)} onClick={() => setType(t.key)}>
-            {t.label}
-          </button>
-        ))}
-        <div className="ml-auto flex gap-1.5">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-3 px-1">
+        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Chart metric">
+          {CHART_TYPES.map((t) => (
+            <button key={t.key} className={btnClass(type === t.key)} onClick={() => setType(t.key)}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-1.5 sm:ml-auto" role="group" aria-label="Chart range">
           {CHART_DAYS.map((d) => (
             <button key={d.days} className={btnClass(days === d.days)} onClick={() => setDays(d.days)}>
               {d.label}

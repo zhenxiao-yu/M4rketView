@@ -34,7 +34,7 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
   const pct24h = data.market_data.price_change_percentage_24h
 
   return (
-    <Card padding="md" className="border-2" style={{ borderColor: color }}>
+    <Card padding="md" className="border-2 h-full flex flex-col" style={{ borderColor: color }}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <img src={data.image.small} alt={data.name} className="w-8 h-8 rounded-full" />
