@@ -157,7 +157,12 @@ const Dashboard = () => {
           </>
         ) : (
           <>
-            <motion.div variants={fadeInUp} initial="initial" animate="animate">
+            <motion.div
+              variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, amount: 0.2 }}
+            >
               <Card>
                 <h3 className="text-sm font-semibold text-success mb-3 flex items-center gap-1">
                   <TrendingUp size={14} /> Top Gainers (24H)
@@ -165,7 +170,13 @@ const Dashboard = () => {
                 {gainers.map((c) => <MoverCard key={c.id} coin={c} />)}
               </Card>
             </motion.div>
-            <motion.div variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.05 }}>
+            <motion.div
+              variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: 0.05 }}
+            >
               <Card>
                 <h3 className="text-sm font-semibold text-danger mb-3 flex items-center gap-1">
                   <TrendingDown size={14} /> Top Losers (24H)

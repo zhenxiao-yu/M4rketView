@@ -13,27 +13,27 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { dialogContent } from '@/lib/motion'
 
 const QUICK_LINKS = [
-  { to: '/',          label: 'Dashboard',  icon: <LayoutDashboard size={13} /> },
-  { to: '/markets',   label: 'Markets',    icon: <TrendingUp size={13} /> },
-  { to: '/trending',  label: 'Trending',   icon: <TrendingUp size={13} /> },
-  { to: '/saved',     label: 'Watchlist',  icon: <Bookmark size={13} /> },
-  { to: '/portfolio', label: 'Portfolio',  icon: <BarChart3 size={13} /> },
-  { to: '/compare',   label: 'Compare',    icon: <GitCompare size={13} /> },
-  { to: '/news',      label: 'News',       icon: <Newspaper size={13} /> },
-  { to: '/heatmap',   label: 'Heatmap',    icon: <Grid2X2 size={13} /> },
+  { to: '/',          label: 'Dashboard',  icon: <LayoutDashboard size={12} /> },
+  { to: '/markets',   label: 'Markets',    icon: <TrendingUp size={12} /> },
+  { to: '/trending',  label: 'Trending',   icon: <TrendingUp size={12} /> },
+  { to: '/saved',     label: 'Watchlist',  icon: <Bookmark size={12} /> },
+  { to: '/portfolio', label: 'Portfolio',  icon: <BarChart3 size={12} /> },
+  { to: '/compare',   label: 'Compare',    icon: <GitCompare size={12} /> },
+  { to: '/news',      label: 'News',       icon: <Newspaper size={12} /> },
+  { to: '/heatmap',   label: 'Heatmap',    icon: <Grid2X2 size={12} /> },
 ]
 
 const DATA_SOURCES = [
-  { label: 'CoinGecko',       href: 'https://www.coingecko.com',           desc: 'Markets & coin details (primary)' },
-  { label: 'CoinPaprika',     href: 'https://coinpaprika.com',             desc: 'Markets fallback when CoinGecko 429s' },
-  { label: 'Binance',         href: 'https://developers.binance.com',      desc: 'Live WebSocket prices + chart fallback' },
-  { label: 'DeFiLlama',       href: 'https://defillama.com',               desc: 'DeFi TVL & protocols' },
-  { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer', desc: 'Bitcoin on-chain stats (primary)' },
-  { label: 'Blockchair',      href: 'https://blockchair.com',              desc: 'Bitcoin stats fallback' },
-  { label: 'Alternative.me',  href: 'https://alternative.me/crypto',       desc: 'Fear & Greed Index' },
-  { label: 'CoinDesk RSS',    href: 'https://www.coindesk.com',            desc: 'Crypto news (via AllOrigins CORS proxy)' },
-  { label: 'CoinTelegraph',   href: 'https://cointelegraph.com',           desc: 'Crypto news (via AllOrigins CORS proxy)' },
-  { label: 'Decrypt',         href: 'https://decrypt.co',                  desc: 'Crypto news (via AllOrigins CORS proxy)' },
+  { label: 'CoinGecko',       href: 'https://www.coingecko.com' },
+  { label: 'CoinPaprika',     href: 'https://coinpaprika.com' },
+  { label: 'Binance',         href: 'https://developers.binance.com' },
+  { label: 'DeFiLlama',       href: 'https://defillama.com' },
+  { label: 'blockchain.info', href: 'https://www.blockchain.com/explorer' },
+  { label: 'Blockchair',      href: 'https://blockchair.com' },
+  { label: 'Alternative.me',  href: 'https://alternative.me/crypto' },
+  { label: 'CoinDesk',        href: 'https://www.coindesk.com' },
+  { label: 'CoinTelegraph',   href: 'https://cointelegraph.com' },
+  { label: 'Decrypt',         href: 'https://decrypt.co' },
 ]
 
 interface Release {
@@ -147,10 +147,10 @@ function ChangelogDialog() {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="inline-flex items-center gap-1.5 text-xs text-accent hover:text-accent/80 transition-colors font-mono group">
-          <Tag size={11} />
+        <button className="inline-flex items-center gap-1 text-[11px] text-accent hover:text-accent/80 transition-colors font-mono group">
+          <Tag size={10} />
           v{APP_VERSION}
-          <span className="text-muted group-hover:text-accent/60 transition-colors">— what&apos;s new?</span>
+          <span className="text-muted/70 group-hover:text-accent/60 transition-colors">— what&apos;s new?</span>
         </button>
       </Dialog.Trigger>
 
@@ -228,76 +228,71 @@ function ChangelogDialog() {
 }
 
 const Footer = () => (
-  <footer className="w-full max-w-7xl px-4 mt-16 mb-8">
-    <div className="border border-border/20 rounded-2xl bg-surface/20 backdrop-blur-sm overflow-hidden">
-      {/* Main grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+  <footer className="w-full max-w-7xl px-4 mt-10 mb-20 md:mb-6">
+    <div className="border border-border/20 rounded-xl bg-surface/20 backdrop-blur-sm overflow-hidden">
+      {/* Main grid — tighter padding + smaller gap; 1 col mobile / 3 col desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 p-4 sm:p-5">
         {/* Brand */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <span className="text-base font-bold text-accent tracking-wide font-nunito">M4rketView</span>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-bold text-accent tracking-wide font-nunito">M4rketView</span>
+            <ChangelogDialog />
           </div>
-          <p className="text-xs text-muted leading-relaxed max-w-[220px]">
-            A production-grade crypto dashboard built entirely on free, no-key public APIs.
-            Always live, always free.
+          <p className="text-[11px] text-muted/80 leading-relaxed max-w-[260px]">
+            A production-grade crypto dashboard built on free, no-key public APIs.
           </p>
-          <ChangelogDialog />
           <div className="flex items-center gap-3 mt-1">
             <a
               href="https://github.com/zhenxiao-yu/M4rketView"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-accent transition-colors"
             >
-              <Github size={13} />
+              <Github size={12} />
               Source
             </a>
             <a
               href="https://m4rket-view.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-accent transition-colors"
             >
-              <ExternalLink size={13} />
+              <ExternalLink size={12} />
               Live site
             </a>
           </div>
         </div>
 
-        {/* Quick links */}
-        <div className="flex flex-col gap-3">
-          <h3 className="text-xs font-semibold text-white uppercase tracking-wider">Pages</h3>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+        {/* Pages */}
+        <div className="flex flex-col gap-2">
+          <h3 className="text-[10px] font-semibold text-muted uppercase tracking-wider">Pages</h3>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
             {QUICK_LINKS.map(({ to, label, icon }) => (
               <Link
                 key={to}
                 to={to}
-                className="flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
+                className="inline-flex items-center gap-1.5 text-[11px] text-muted hover:text-accent transition-colors py-0.5"
               >
-                <span className="text-muted/60">{icon}</span>
+                <span className="text-muted/50">{icon}</span>
                 {label}
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Data sources */}
-        <div className="flex flex-col gap-3">
-          <h3 className="text-xs font-semibold text-white uppercase tracking-wider">Data Sources</h3>
-          <div className="flex flex-col gap-2">
-            {DATA_SOURCES.map(({ label, href, desc }) => (
+        {/* Data sources — chip wrap, no descriptions */}
+        <div className="flex flex-col gap-2">
+          <h3 className="text-[10px] font-semibold text-muted uppercase tracking-wider">Data Sources</h3>
+          <div className="flex flex-wrap gap-1.5">
+            {DATA_SOURCES.map(({ label, href }) => (
               <a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col gap-0.5"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface/60 border border-border/20 text-[10px] text-muted hover:text-accent hover:border-accent/30 transition-colors"
               >
-                <span className="text-xs text-muted group-hover:text-accent transition-colors flex items-center gap-1">
-                  {label}
-                  <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                </span>
-                <span className="text-xs text-muted/50">{desc}</span>
+                {label}
               </a>
             ))}
           </div>
@@ -305,8 +300,8 @@ const Footer = () => (
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border/10 px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <p className="text-xs text-muted/50">
+      <div className="border-t border-border/10 px-4 sm:px-5 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-1 text-[10px] text-muted/50">
+        <p>
           © {new Date().getFullYear()} Mark Yu · Released under the{' '}
           <a
             href="https://github.com/zhenxiao-yu/M4rketView/blob/main/LICENSE"
@@ -317,7 +312,7 @@ const Footer = () => (
             MIT License
           </a>
         </p>
-        <p className="text-xs text-muted/30 font-mono">
+        <p className="font-mono text-muted/40">
           No API keys · No tracking · No cost
         </p>
       </div>

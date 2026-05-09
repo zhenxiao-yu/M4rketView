@@ -8,6 +8,8 @@ import BottomNav from '@/components/BottomNav'
 import Footer from '@/components/Footer'
 import SearchCommand from '@/components/SearchCommand'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import ScrollToTop from '@/components/ScrollToTop'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { useTheme } from '@/hooks/useTheme'
 import { useCryptoMarkets } from '@/hooks/useCryptoMarkets'
 import { useAlertStore } from '@/store/alertStore'
@@ -66,6 +68,7 @@ const Home = () => {
         }}
       />
       <AlertChecker />
+      <ScrollToTop />
       <SearchCommand />
       <Logo />
       <Navigation />
@@ -85,6 +88,7 @@ const Home = () => {
         </ErrorBoundary>
       </div>
       <Footer />
+      <ScrollToTopButton />
       <BottomNav />
     </main>
   )
