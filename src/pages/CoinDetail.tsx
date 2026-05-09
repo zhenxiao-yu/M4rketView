@@ -214,7 +214,7 @@ const CoinDetail = () => {
   }
 
   return (
-    <main className="w-full max-w-5xl mx-auto px-4 py-8 font-nunito">
+    <main className="w-full max-w-5xl mx-auto px-4 py-8">
       <Button variant="secondary" size="default" onClick={() => navigate(-1)} className="mb-6" aria-label="Go back">
         <ArrowLeft size={16} /> Back
       </Button>

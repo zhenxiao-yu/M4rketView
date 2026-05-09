@@ -59,7 +59,7 @@ const Home = () => {
   const location = useLocation()
 
   return (
-    <main className="w-full min-h-screen min-h-[100dvh] flex flex-col items-center font-nunito text-white">
+    <main className="w-full min-h-screen min-h-[100dvh] flex flex-col items-center text-white">
       <div className="fixed inset-0 bg-background -z-10" />
       <Toaster
         position="bottom-right"
