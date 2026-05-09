@@ -3,6 +3,7 @@ import { Search as SearchIcon, X } from 'lucide-react'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useSearchCoins } from '@/hooks/useSearchCoins'
 import { useMarketStore } from '@/store/marketStore'
+import { Spinner } from '@/components/ui/Spinner'
 
 const Search = () => {
   const [searchText, setSearchText] = useState('')
@@ -39,22 +40,28 @@ const Search = () => {
       </div>
 
       {searchText.length >= 2 && (
-        <ul className="absolute top-9 left-0 w-full max-h-72 rounded-lg overflow-y-auto z-50 bg-gray-200 bg-opacity-95 backdrop-blur-md border border-gray-100 scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-gray-200">
+        <ul
+          role="listbox"
+          aria-label="Search results"
+          className="absolute top-9 left-0 w-full max-h-72 rounded-lg overflow-y-auto z-50 bg-gray-200 bg-opacity-95 backdrop-blur-md border border-gray-100 scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-gray-200"
+        >
           {isFetching ? (
             <li className="flex items-center justify-center py-6 gap-2">
-              <div className="w-5 h-5 border-2 border-cyan rounded-full border-b-transparent animate-spin" />
+              <Spinner size="sm" label="Searching" />
               <span className="text-sm text-gray-100">Searching...</span>
             </li>
           ) : searchData && searchData.length > 0 ? (
             searchData.slice(0, 20).map((coin) => (
-              <li
-                key={coin.id}
-                className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100/20 transition-colors"
-                onClick={() => selectCoin(coin.id)}
-              >
-                <img src={coin.thumb} alt={coin.name} className="w-5 h-5 rounded-full" />
-                <span className="text-sm font-medium">{coin.name}</span>
-                <span className="text-xs text-gray-100 uppercase ml-auto">{coin.symbol}</span>
+              <li key={coin.id} role="option" aria-selected={false}>
+                <button
+                  type="button"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-100/20 transition-colors focus-visible:outline-none focus-visible:bg-gray-100/20"
+                  onClick={() => selectCoin(coin.id)}
+                >
+                  <img src={coin.thumb} alt="" aria-hidden="true" className="w-5 h-5 rounded-full" />
+                  <span className="text-sm font-medium">{coin.name}</span>
+                  <span className="text-xs text-gray-100 uppercase ml-auto">{coin.symbol}</span>
+                </button>
               </li>
             ))
           ) : (

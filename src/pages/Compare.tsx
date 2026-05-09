@@ -6,6 +6,10 @@ import { useCoinDetail } from '@/hooks/useCoinDetail'
 import { useCompareCharts } from '@/hooks/useCompareCharts'
 import { useMarketStore } from '@/store/marketStore'
 import { formatCurrency, formatCompact, formatPercent } from '@/lib/utils'
+import { Card } from '@/components/ui/Card'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { Spinner } from '@/components/ui/Spinner'
+import { Button } from '@/components/ui/Button'
 
 const COIN_COLORS = ['#B6EADA', '#5B8FB9', '#e72179']
 
@@ -16,12 +20,12 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
 
   if (isLoading) {
     return (
-      <div className="bg-gray-200/40 rounded-xl p-4 border border-gray-100/20 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded mb-3" />
+      <Card padding="md">
+        <Skeleton className="h-16 w-full mb-3" />
         <div className="space-y-2">
-          {Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-4 bg-gray-200 rounded" />)}
+          {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-4 w-full" />)}
         </div>
-      </div>
+      </Card>
     )
   }
 
@@ -30,7 +34,7 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
   const pct24h = data.market_data.price_change_percentage_24h
 
   return (
-    <div className="bg-gray-200/40 rounded-xl p-4 border-2" style={{ borderColor: color }}>
+    <Card padding="md" className="border-2" style={{ borderColor: color }}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <img src={data.image.small} alt={data.name} className="w-8 h-8 rounded-full" />
@@ -70,7 +74,7 @@ const CoinCard = ({ coinId, color }: { coinId: string; color: string }) => {
           <span>#{data.market_cap_rank}</span>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -81,7 +85,7 @@ const NormalizedChart = ({ coinIds }: { coinIds: string[] }) => {
   if (isLoading) {
     return (
       <div className="h-64 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-cyan rounded-full border-b-transparent animate-spin" />
+        <Spinner size="md" label="Loading chart" />
       </div>
     )
   }
@@ -141,16 +145,16 @@ const Compare = () => {
   if (compareCoins.length === 0) {
     return (
       <section className="w-full mt-8 mb-24">
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 border border-gray-100 rounded-xl">
+        <Card tone="muted" className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-center px-4">
           <GitCompare size={48} className="text-gray-100" />
-          <p className="text-lg text-gray-100">No coins selected for comparison.</p>
-          <p className="text-sm text-gray-100">
-            Click the compare icon on any coin in the market table.
+          <p className="text-lg font-semibold">Nothing to compare yet</p>
+          <p className="text-sm text-gray-100 max-w-sm">
+            Tap the compare icon on any coin in the markets table to add it here. Up to 3 coins.
           </p>
-          <Link to="/markets" className="text-cyan hover:underline text-sm">
-            Go to Markets →
-          </Link>
-        </div>
+          <Button asChild variant="secondary" size="sm" className="mt-2">
+            <Link to="/markets">Browse markets</Link>
+          </Button>
+        </Card>
       </section>
     )
   }
@@ -168,12 +172,12 @@ const Compare = () => {
       </div>
 
       {compareCoins.length >= 2 && (
-        <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20">
+        <Card>
           <h3 className="text-sm font-semibold mb-4 text-gray-100">
             30-Day Normalized Performance (%)
           </h3>
           <NormalizedChart coinIds={compareCoins} />
-        </div>
+        </Card>
       )}
     </section>
   )

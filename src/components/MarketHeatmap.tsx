@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Treemap, ResponsiveContainer, Tooltip } from 'recharts'
 import type { CoinMarket } from '@/types/coingecko'
 import { formatCurrency, formatPercent } from '@/lib/utils'
+import { Card } from '@/components/ui/Card'
 
 function heatColor(pct: number): string {
   if (pct < -5) return '#dc2626'
@@ -112,7 +113,7 @@ const MarketHeatmap = ({ coins }: Props) => {
   }
 
   return (
-    <div className="bg-gray-200/40 rounded-xl p-5 border border-gray-100/20 mb-8">
+    <Card className="mb-8">
       <h2 className="text-base font-semibold mb-4">Market Heatmap (24H)</h2>
       <ResponsiveContainer width="100%" height={340}>
         <Treemap
@@ -131,7 +132,7 @@ const MarketHeatmap = ({ coins }: Props) => {
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#4ade80] inline-block" /> 0 to +5%</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#16a34a] inline-block" /> &gt;+5%</span>
       </div>
-    </div>
+    </Card>
   )
 }
 

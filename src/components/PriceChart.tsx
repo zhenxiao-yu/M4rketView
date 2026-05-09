@@ -11,6 +11,7 @@ import {
 import { useMarketChart } from '@/hooks/useMarketChart'
 import { useMarketStore } from '@/store/marketStore'
 import { formatCurrency } from '@/lib/utils'
+import { Spinner } from '@/components/ui/Spinner'
 import type { ChartType, ChartDays } from '@/types/coingecko'
 
 interface CustomTooltipProps {
@@ -75,7 +76,7 @@ const PriceChart = ({ coinId }: PriceChartProps) => {
     <div className="w-full h-[60%] min-h-[200px]">
       {isLoading ? (
         <div className="w-full h-[90%] flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-cyan rounded-full border-b-transparent animate-spin" />
+          <Spinner label="Loading chart" />
         </div>
       ) : (
         <ResponsiveContainer width="100%" height="90%">
