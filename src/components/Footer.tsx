@@ -46,6 +46,18 @@ interface Release {
 
 const CHANGELOG: Release[] = [
   {
+    version: '1.3.1',
+    date: '2026-05-09',
+    tag: 'patch',
+    summary: 'Brand typography refresh + footer polish.',
+    changes: [
+      'Display font (Space Grotesk) for headings and brand wordmark; consistent logo + wordmark heights across navigation and footer.',
+      'Body font swapped to Inter; mono font swapped to JetBrains Mono.',
+      'Footer compacted with a new scroll-to-top affordance.',
+      'Mobile a11y polish in the Footer.',
+    ],
+  },
+  {
     version: '1.3.0',
     date: '2026-05-08',
     tag: 'minor',
@@ -64,7 +76,7 @@ const CHANGELOG: Release[] = [
       'CoinPaprika fallback for the Markets list when CoinGecko 429s; Binance /klines fallback for the Coin Detail chart (top-20 coins via lib/binanceSymbols.ts); Blockchair fallback for blockchain.info Bitcoin stats.',
       'docs/mobile-qa.md — manual QA checklist for 320 / 375 / 390 / 430 / 768 px, iOS Safari, Android Chrome, landscape phones.',
       'body { overflow-x: hidden } to kill any incidental sideways scroll across the whole app.',
-      'Test suite: 33 → 71 (added withFallback unit tests, plus growth from earlier passes).',
+      'Test suite: 33 → 75 (added withFallback unit tests, plus growth from earlier passes).',
     ],
   },
   {
@@ -166,12 +178,13 @@ function ChangelogDialog() {
             />
           </Dialog.Overlay>
           <Dialog.Content asChild>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 pointer-events-none">
             <motion.div
               variants={dialogContent}
               initial="initial"
               animate="animate"
               exit="exit"
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[calc(100dvh-2rem)] sm:max-h-[80vh] bg-surface border border-accent/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+              className="pointer-events-auto w-full max-w-2xl max-h-full bg-elevated border border-border-strong/70 ring-1 ring-white/5 rounded-2xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
             >
               <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border/20">
                 <Dialog.Title className="font-bold text-base flex items-center gap-2">
@@ -220,6 +233,7 @@ function ChangelogDialog() {
                 <span className="ml-auto truncate">Built {formatBuildTime()}</span>
               </div>
             </motion.div>
+            </div>
           </Dialog.Content>
         </Dialog.Portal>
       </AnimatePresence>
