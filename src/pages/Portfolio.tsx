@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { staggerContainer, staggerChild } from '@/lib/motion'
 
-const COLORS = ['#B6EADA', '#5B8FB9', '#301E67', '#1ec471', '#e72179', '#f97316', '#eab308']
+const COLORS = ['#7C73FF', '#3FB57E', '#E0A93B', '#5BA3F5', '#E5484D', '#F08C3D', '#9089FF']
 
 const AddCoinForm = () => {
   const [searchText, setSearchText] = useState('')
@@ -47,7 +47,7 @@ const AddCoinForm = () => {
   return (
     <Card className="mb-6">
       <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
-        <PlusCircle size={16} className="text-cyan" /> Add Coin
+        <PlusCircle size={16} className="text-accent" /> Add Coin
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] sm:items-center gap-2 sm:gap-3">
         <div className="relative">
@@ -58,16 +58,16 @@ const AddCoinForm = () => {
             onChange={(e) => { setSearchText(e.target.value); setSelected(null) }}
           />
           {!selected && searchText.length >= 2 && searchData && (
-            <ul role="listbox" aria-label="Coin search results" className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-gray-200 border border-gray-100/30 rounded-lg z-10 shadow-xl">
+            <ul role="listbox" aria-label="Coin search results" className="absolute top-12 left-0 w-full max-h-48 overflow-y-auto bg-surface border border-border/30 rounded-lg z-10 shadow-xl">
               {searchData.slice(0, 8).map((coin) => (
                 <li key={coin.id} role="option" aria-selected={false}>
                   <button
                     type="button"
-                    className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-100/20 focus-visible:bg-gray-100/20 focus-visible:outline-none text-sm"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-muted/20 focus-visible:bg-muted/20 focus-visible:outline-none text-sm"
                     onClick={() => setSelected({ id: coin.id, name: coin.name, symbol: coin.symbol, image: coin.large })}
                   >
                     <img src={coin.thumb} alt="" aria-hidden="true" className="w-4 h-4 rounded-full" />
-                    {coin.name} <span className="text-gray-100 uppercase text-xs">{coin.symbol}</span>
+                    {coin.name} <span className="text-muted uppercase text-xs">{coin.symbol}</span>
                   </button>
                 </li>
               ))}
@@ -137,8 +137,8 @@ const Portfolio = () => {
   if (entries.length === 0) {
     return (
       <section className="w-full mt-8 mb-24">
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 border border-gray-100 rounded-xl">
-          <p className="text-lg text-gray-100">Your portfolio is empty.</p>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 border border-border rounded-xl">
+          <p className="text-lg text-muted">Your portfolio is empty.</p>
           <AddCoinForm />
         </div>
       </section>
@@ -158,20 +158,20 @@ const Portfolio = () => {
       >
         <motion.div variants={staggerChild}>
           <Card>
-            <p className="text-sm text-gray-100">Total Value</p>
+            <p className="text-sm text-muted">Total Value</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(totalValue, currency)}</p>
           </Card>
         </motion.div>
         <motion.div variants={staggerChild}>
           <Card>
-            <p className="text-sm text-gray-100">Invested</p>
+            <p className="text-sm text-muted">Invested</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(totalInvested, currency)}</p>
           </Card>
         </motion.div>
         <motion.div variants={staggerChild}>
           <Card>
-            <p className="text-sm text-gray-100">Total P&L</p>
-            <p className={`text-2xl font-bold mt-1 ${totalPnl >= 0 ? 'text-green' : 'text-red'}`}>
+            <p className="text-sm text-muted">Total P&L</p>
+            <p className={`text-2xl font-bold mt-1 ${totalPnl >= 0 ? 'text-success' : 'text-danger'}`}>
               {totalPnl >= 0 ? '+' : ''}{formatCurrency(totalPnl, currency)}
               <span className="text-sm ml-2">{formatPercent(totalPnlPct)}</span>
             </p>
@@ -201,13 +201,13 @@ const Portfolio = () => {
                     <img src={e.coinImage} alt={e.coinName} className="w-8 h-8 rounded-full shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold truncate">{e.coinName}</p>
-                      <p className="text-xs text-gray-100 uppercase">{e.coinSymbol}</p>
+                      <p className="text-xs text-muted uppercase">{e.coinSymbol}</p>
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-mono font-semibold">
                         {e.currentValue != null ? formatCurrency(e.currentValue, currency) : '—'}
                       </p>
-                      <p className={`text-xs font-semibold ${pnlPos ? 'text-green' : 'text-red'}`}>
+                      <p className={`text-xs font-semibold ${pnlPos ? 'text-success' : 'text-danger'}`}>
                         {e.pnl != null ? (
                           <span className="inline-flex items-center gap-0.5">
                             {pnlPos ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
@@ -220,7 +220,7 @@ const Portfolio = () => {
                       variant="ghost"
                       size="icon"
                       onClick={() => removeEntry(e.coinId)}
-                      className="ml-1 hover:text-red hover:bg-red/10"
+                      className="ml-1 hover:text-danger hover:bg-danger/10"
                       aria-label={`Remove ${e.coinName} from portfolio`}
                     >
                       <Trash2 size={16} />
@@ -228,15 +228,15 @@ const Portfolio = () => {
                   </div>
                   <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
                     <div>
-                      <p className="text-gray-100/70">Qty</p>
+                      <p className="text-muted/70">Qty</p>
                       <p className="font-mono">{e.quantity}</p>
                     </div>
                     <div>
-                      <p className="text-gray-100/70">Avg buy</p>
+                      <p className="text-muted/70">Avg buy</p>
                       <p className="font-mono">{formatCurrency(e.avgBuyPrice, currency)}</p>
                     </div>
                     <div>
-                      <p className="text-gray-100/70">Current</p>
+                      <p className="text-muted/70">Current</p>
                       <p className="font-mono">
                         {isLoading ? '...' : e.currentPrice != null ? formatCurrency(e.currentPrice, currency) : '—'}
                       </p>
@@ -249,9 +249,9 @@ const Portfolio = () => {
           </motion.div>
 
           {/* Desktop table — md+ */}
-          <div className="hidden md:block border border-gray-100 rounded-xl overflow-x-auto">
+          <div className="hidden md:block border border-border rounded-xl overflow-x-auto">
             <table className="w-full table-auto">
-              <thead className="text-xs text-gray-100 border-b border-gray-100 bg-gray-200/30">
+              <thead className="text-xs text-muted border-b border-border bg-surface/30">
                 <tr>
                   <th className="py-3 px-3 text-left">Coin</th>
                   <th className="py-3 px-3">Qty</th>
@@ -264,7 +264,7 @@ const Portfolio = () => {
               </thead>
               <tbody>
                 {enriched.map((e) => (
-                  <tr key={e.coinId} className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0">
+                  <tr key={e.coinId} className="text-center text-sm border-b border-border hover:bg-surface/50 last:border-b-0">
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
                         <img src={e.coinImage} alt={e.coinName} className="w-5 h-5 rounded-full" />
@@ -277,7 +277,7 @@ const Portfolio = () => {
                       {isLoading ? '...' : e.currentPrice != null ? formatCurrency(e.currentPrice, currency) : '—'}
                     </td>
                     <td className="py-3 px-3">{e.currentValue != null ? formatCurrency(e.currentValue, currency) : '—'}</td>
-                    <td className={`py-3 px-3 ${e.pnl != null && e.pnl >= 0 ? 'text-green' : 'text-red'}`}>
+                    <td className={`py-3 px-3 ${e.pnl != null && e.pnl >= 0 ? 'text-success' : 'text-danger'}`}>
                       {e.pnl != null ? (
                         <span className="flex items-center justify-center gap-0.5">
                           {e.pnl >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -288,7 +288,7 @@ const Portfolio = () => {
                     <td className="py-3 px-3">
                       <button
                         onClick={() => removeEntry(e.coinId)}
-                        className="text-gray-100 hover:text-red transition-colors"
+                        className="text-muted hover:text-danger transition-colors"
                         aria-label={`Remove ${e.coinName} from portfolio`}
                       >
                         <Trash2 size={14} />
@@ -320,7 +320,7 @@ const Portfolio = () => {
                 <li key={d.name} className="flex items-center gap-2 text-xs">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                   <span>{d.name}</span>
-                  <span className="ml-auto text-gray-100">{((d.value / totalValue) * 100).toFixed(1)}%</span>
+                  <span className="ml-auto text-muted">{((d.value / totalValue) * 100).toFixed(1)}%</span>
                 </li>
               ))}
             </ul>

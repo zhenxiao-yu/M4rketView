@@ -58,7 +58,7 @@ const Home = () => {
 
   return (
     <main className="w-full min-h-screen min-h-[100dvh] flex flex-col items-center font-nunito text-white">
-      <div className="fixed inset-0 bg-gray-300 -z-10" />
+      <div className="fixed inset-0 bg-background -z-10" />
       <Toaster
         position="bottom-right"
         toastOptions={{

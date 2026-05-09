@@ -11,10 +11,10 @@ interface Props {
 type VisibleStatus = Exclude<DataStatus, 'loading'>
 
 const CONFIG: Record<VisibleStatus, { icon: typeof CheckCircle2; label: string; color: string }> = {
-  fresh:          { icon: CheckCircle2, label: 'Live',         color: 'text-green' },
+  fresh:          { icon: CheckCircle2, label: 'Live',         color: 'text-success' },
   cached:         { icon: Clock,        label: 'Cached',       color: 'text-yellow-400' },
   'rate-limited': { icon: Clock,        label: 'Rate limited', color: 'text-yellow-400' },
-  error:          { icon: AlertCircle,  label: 'Unavailable',  color: 'text-red' },
+  error:          { icon: AlertCircle,  label: 'Unavailable',  color: 'text-danger' },
 }
 
 const DataStatusBadge = ({ status, dataUpdatedAt, source, className = '' }: Props) => {
@@ -34,7 +34,7 @@ const DataStatusBadge = ({ status, dataUpdatedAt, source, className = '' }: Prop
       <Icon size={11} />
       <span>{label}</span>
       {age && (
-        <span className="text-gray-100/50">· {age}</span>
+        <span className="text-muted/50">· {age}</span>
       )}
     </span>
   )

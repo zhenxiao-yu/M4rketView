@@ -5,10 +5,10 @@ import { formatCurrency, formatPercent } from '@/lib/utils'
 import { Card } from '@/components/ui/Card'
 
 function heatColor(pct: number): string {
-  if (pct < -5) return '#dc2626'
-  if (pct < 0) return '#f87171'
-  if (pct < 5) return '#4ade80'
-  return '#16a34a'
+  if (pct < -5) return '#B91C2A'
+  if (pct < 0) return '#E5484D'
+  if (pct < 5) return '#3FB57E'
+  return '#2A8A5C'
 }
 
 interface HeatmapItem {
@@ -82,10 +82,10 @@ const HeatmapTooltip = ({ active, payload }: { active?: boolean; payload?: Toolt
   const d = payload[0]?.payload
   if (!d) return null
   return (
-    <div className="bg-gray-300 border border-gray-100/20 rounded-lg p-3 text-xs shadow-lg">
+    <div className="bg-background border border-border/20 rounded-lg p-3 text-xs shadow-lg">
       <p className="font-bold mb-1">{d.fullName}</p>
-      <p className="text-gray-100">{formatCurrency(d.price, 'usd')}</p>
-      <p className={d.pct >= 0 ? 'text-green' : 'text-red'}>{formatPercent(d.pct)} (24h)</p>
+      <p className="text-muted">{formatCurrency(d.price, 'usd')}</p>
+      <p className={d.pct >= 0 ? 'text-success' : 'text-danger'}>{formatPercent(d.pct)} (24h)</p>
     </div>
   )
 }
@@ -115,22 +115,24 @@ const MarketHeatmap = ({ coins }: Props) => {
   return (
     <Card className="mb-8">
       <h2 className="text-base font-semibold mb-4">Market Heatmap (24H)</h2>
-      <ResponsiveContainer width="100%" height={340}>
-        <Treemap
-          data={data}
-          dataKey="size"
-          content={<CustomContent />}
-          onClick={(item) => handleClick(item as unknown as HeatmapItem)}
-          isAnimationActive={false}
-        >
-          <Tooltip content={<HeatmapTooltip />} />
-        </Treemap>
-      </ResponsiveContainer>
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-gray-100">
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#dc2626] inline-block" /> &lt;-5%</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#f87171] inline-block" /> -5% to 0</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#4ade80] inline-block" /> 0 to +5%</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#16a34a] inline-block" /> &gt;+5%</span>
+      <div className="h-[260px] sm:h-[300px] md:h-[340px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <Treemap
+            data={data}
+            dataKey="size"
+            content={<CustomContent />}
+            onClick={(item) => handleClick(item as unknown as HeatmapItem)}
+            isAnimationActive={false}
+          >
+            <Tooltip content={<HeatmapTooltip />} />
+          </Treemap>
+        </ResponsiveContainer>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 sm:justify-end text-xs text-muted">
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#B91C2A] inline-block" /> &lt;-5%</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#E5484D] inline-block" /> -5% to 0</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#3FB57E] inline-block" /> 0 to +5%</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#2A8A5C] inline-block" /> &gt;+5%</span>
       </div>
     </Card>
   )

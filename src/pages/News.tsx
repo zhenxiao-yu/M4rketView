@@ -53,7 +53,7 @@ const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-gray-200/40 rounded-xl border border-gray-100/20 overflow-hidden flex flex-col hover:border-cyan/40 transition-colors group"
+      className="bg-surface/40 rounded-xl border border-border/20 overflow-hidden flex flex-col hover:border-accent/40 transition-colors group"
     >
       {hasThumbnail ? (
         <img
@@ -67,13 +67,13 @@ const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
             if (parent) {
               ;(e.target as HTMLImageElement).remove()
               const div = document.createElement('div')
-              div.className = 'w-full h-36 bg-gradient-to-br from-cyan/20 to-purple-500/20'
+              div.className = 'w-full h-36 bg-gradient-to-br from-accent/20 to-purple-500/20'
               parent.insertBefore(div, parent.firstChild)
             }
           }}
         />
       ) : (
-        <div className="w-full h-36 bg-gradient-to-br from-cyan/20 to-purple-500/20" />
+        <div className="w-full h-36 bg-gradient-to-br from-accent/20 to-purple-500/20" />
       )}
 
       <div className="p-4 flex flex-col gap-2 flex-1">
@@ -81,18 +81,18 @@ const NewsCard = ({ item, sources }: { item: NewsItem; sources: string[] }) => {
           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${sourceColor(item.source, sources)}`}>
             {item.source}
           </span>
-          <span className="text-xs text-gray-100">{timeAgo(item.pubDate)}</span>
+          <span className="text-xs text-muted">{timeAgo(item.pubDate)}</span>
         </div>
 
-        <h3 className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-cyan transition-colors">
+        <h3 className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-accent transition-colors">
           {item.title}
         </h3>
 
         {item.description && (
-          <p className="text-xs text-gray-100 line-clamp-3 leading-relaxed">{item.description}</p>
+          <p className="text-xs text-muted line-clamp-3 leading-relaxed">{item.description}</p>
         )}
 
-        <div className="mt-auto pt-1 flex items-center gap-1 text-xs text-cyan font-medium">
+        <div className="mt-auto pt-1 flex items-center gap-1 text-xs text-accent font-medium">
           Read <ExternalLink size={11} />
         </div>
       </div>
@@ -119,7 +119,7 @@ const News = () => {
   return (
     <section className="w-full mt-8 mb-24">
       <h1 className="text-xl font-bold mb-6 flex items-center gap-2">
-        <Newspaper size={20} className="text-cyan" />
+        <Newspaper size={20} className="text-accent" />
         Crypto News
       </h1>
 
@@ -145,7 +145,7 @@ const News = () => {
         </div>
 
         <div className="relative flex-1 sm:max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-100 z-10 pointer-events-none" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted z-10 pointer-events-none" />
           <Input
             type="text"
             placeholder="Search articles..."
@@ -163,7 +163,7 @@ const News = () => {
       ) : isError ? (
         <ErrorCard error={new Error('Failed to load news. Please try again later.')} minHeight="min-h-[30vh]" />
       ) : filtered.length === 0 ? (
-        <p className="text-gray-100 text-sm text-center py-16">No articles found.</p>
+        <p className="text-muted text-sm text-center py-16">No articles found.</p>
       ) : (
         <motion.div
           variants={staggerContainer}

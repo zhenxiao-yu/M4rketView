@@ -20,8 +20,8 @@ const NAV_ITEMS = [
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-lg transition-all duration-150 whitespace-nowrap ${
     isActive
-      ? 'bg-cyan text-gray-300'
-      : 'text-gray-100 hover:text-cyan hover:bg-gray-200/40'
+      ? 'bg-accent text-accent-foreground'
+      : 'text-muted hover:text-accent hover:bg-surface/40'
   }`
 
 const Navigation = () => {
@@ -38,7 +38,7 @@ const Navigation = () => {
     <div className="flex items-center gap-1">
       <button
         onClick={() => setSearchOpen(true)}
-        className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-gray-200/50 text-gray-100 hover:text-cyan transition-colors"
+        className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-surface/50 text-muted hover:text-accent transition-colors"
         aria-label="Search (Ctrl+K)"
         title="Search (Ctrl+K)"
       >
@@ -46,13 +46,13 @@ const Navigation = () => {
       </button>
       <div className="relative">
         <button
-          className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-gray-200/50 text-gray-100 hover:text-cyan transition-colors"
+          className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg bg-surface/50 text-muted hover:text-accent transition-colors"
           aria-label="Price alerts"
         >
           <Bell size={18} />
         </button>
         {alertCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold pointer-events-none">
+          <span className="absolute -top-1 -right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold pointer-events-none">
             {alertCount}
           </span>
         )}
@@ -63,14 +63,14 @@ const Navigation = () => {
   return (
     <nav className="w-full max-w-5xl mt-6 px-4">
       {/* Desktop nav */}
-      <div className="hidden md:flex items-center justify-between border border-cyan/30 rounded-xl p-1 bg-gray-200/30 backdrop-blur-sm">
+      <div className="hidden md:flex items-center justify-between border border-accent/30 rounded-xl p-1 bg-surface/30 backdrop-blur-sm">
         <div className="flex flex-1 flex-wrap gap-0.5">
           {NAV_ITEMS.map(({ to, label, icon, end }) => (
             <NavLink key={to} to={to} end={end} className={linkClass}>
               {icon}
               {label}
               {label === 'Compare' && compareCoins.length > 0 && (
-                <span className="bg-cyan text-gray-300 rounded-full text-xs w-4 h-4 flex items-center justify-center font-bold">
+                <span className="bg-accent text-accent-foreground rounded-full text-xs w-4 h-4 flex items-center justify-center font-bold">
                   {compareCoins.length}
                 </span>
               )}
@@ -81,10 +81,10 @@ const Navigation = () => {
       </div>
 
       {/* Mobile top bar — current page + actions; primary nav lives in BottomNav */}
-      <div className="md:hidden border border-cyan/30 rounded-xl bg-gray-200/30 backdrop-blur-sm">
+      <div className="md:hidden border border-accent/30 rounded-xl bg-surface/30 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-2 px-3 py-2">
           <span
-            className="text-sm font-semibold text-cyan truncate flex-1 min-w-0"
+            className="text-sm font-semibold text-accent truncate flex-1 min-w-0"
             aria-live="polite"
           >
             {currentLabel}

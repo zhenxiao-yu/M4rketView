@@ -39,7 +39,7 @@ export const ScrollBar = forwardRef<
       )}
       {...props}
     >
-      <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-gray-100/30 hover:bg-cyan/40 transition-colors" />
+      <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-muted/30 hover:bg-accent/40 transition-colors" />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   )
 })

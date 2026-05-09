@@ -22,7 +22,7 @@ import type { CoinMarket } from '@/types/coingecko'
 const CardSkeleton = () => (
   <>
     {Array.from({ length: 5 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20">
+      <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-surface/30 border border-border/20">
         <div className="flex flex-col gap-1.5 shrink-0">
           <Skeleton className="w-4 h-4" />
           <Skeleton className="w-4 h-4" />
@@ -44,7 +44,7 @@ const CardSkeleton = () => (
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 10 }).map((_, i) => (
-      <tr key={i} className="border-b border-gray-100">
+      <tr key={i} className="border-b border-border">
         {Array.from({ length: 8 }).map((__, j) => (
           <td key={j} className="py-4 px-2">
             <Skeleton className="h-4 w-full" />
@@ -56,10 +56,10 @@ const TableSkeleton = () => (
 )
 
 const PctBadge = ({ value }: { value: number | undefined }) => {
-  if (value == null) return <span className="text-gray-100">—</span>
+  if (value == null) return <span className="text-muted">—</span>
   const pos = value >= 0
   return (
-    <span className={`flex items-center justify-center gap-0.5 ${pos ? 'text-green' : 'text-red'}`}>
+    <span className={`flex items-center justify-center gap-0.5 ${pos ? 'text-success' : 'text-danger'}`}>
       {pos ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
       {formatPercent(value)}
     </span>
@@ -88,7 +88,7 @@ const PriceCell = memo(function PriceCell({ coinId, basePrice, currency, livePri
     <motion.span
       key={`${coinId}-${price}`}
       className={`font-mono transition-colors duration-300 ${
-        flash === 'up' ? 'text-green' : flash === 'down' ? 'text-red' : ''
+        flash === 'up' ? 'text-success' : flash === 'down' ? 'text-danger' : ''
       }`}
       animate={flash ? { scale: [1, 1.06, 1] } : {}}
       transition={{ duration: 0.3 }}
@@ -113,11 +113,11 @@ const SaveBtn = memo(function SaveBtn({ coin }: { coin: CoinMarket }) {
 
   return (
     <button
-      className="flex-shrink-0 text-gray-100 hover:text-cyan transition-all hover:scale-110"
+      className="flex-shrink-0 text-muted hover:text-accent transition-all hover:scale-110"
       onClick={handleToggle}
       aria-label={saved ? 'Remove from watchlist' : 'Add to watchlist'}
     >
-      {saved ? <Star size={16} className="fill-cyan text-cyan" /> : <StarOff size={16} />}
+      {saved ? <Star size={16} className="fill-accent text-accent" /> : <StarOff size={16} />}
     </button>
   )
 })
@@ -129,7 +129,7 @@ const CompareBtn = memo(function CompareBtn({ coin }: { coin: CoinMarket }) {
 
   return (
     <button
-      className={`text-gray-100 transition-all hover:scale-110 ${inCompare ? 'text-cyan' : ''} ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:text-cyan'}`}
+      className={`text-muted transition-all hover:scale-110 ${inCompare ? 'text-accent' : ''} ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:text-accent'}`}
       onClick={(e) => {
         e.preventDefault()
         if (inCompare) removeFromCompare(coin.id); else addToCompare(coin.id)
@@ -149,7 +149,7 @@ const MobileCard = memo(function MobileCard({ coin, currency, livePrice }: {
   livePrice?: number
 }) {
   return (
-    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-200/30 border border-gray-100/20 hover:border-cyan/40 transition-colors">
+    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-surface/30 border border-border/20 hover:border-accent/40 transition-colors">
       <div className="flex flex-col items-center gap-1.5 shrink-0">
         <SaveBtn coin={coin} />
         <CompareBtn coin={coin} />
@@ -157,8 +157,8 @@ const MobileCard = memo(function MobileCard({ coin, currency, livePrice }: {
       <Link to={`/coin/${coin.id}`} className="flex items-center gap-3 flex-1 min-w-0 group">
         <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full shrink-0" loading="lazy" />
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm truncate group-hover:text-cyan transition-colors">{coin.name}</p>
-          <p className="text-xs text-gray-100 uppercase mt-0.5">{coin.symbol}</p>
+          <p className="font-semibold text-sm truncate group-hover:text-accent transition-colors">{coin.name}</p>
+          <p className="text-xs text-muted uppercase mt-0.5">{coin.symbol}</p>
         </div>
         <div className="text-right shrink-0">
           <div className="text-sm font-mono font-semibold">
@@ -179,7 +179,7 @@ const CryptoTable = () => {
 
   return (
     <>
-      <div className="flex flex-col mt-9 border border-gray-100 rounded-lg overflow-hidden">
+      <div className="flex flex-col mt-9 border border-border rounded-lg overflow-hidden">
         {error ? (
           <ErrorCard error={error as Error} minHeight="min-h-[50vh]" />
         ) : (
@@ -203,7 +203,7 @@ const CryptoTable = () => {
             <Tooltip.Provider delayDuration={300}>
             <div className="hidden md:block overflow-x-auto">
             <table className="w-full table-auto min-w-[640px]">
-              <thead className="capitalize text-sm text-gray-100 font-medium border-b border-gray-100 bg-gray-200/30">
+              <thead className="capitalize text-sm text-muted font-medium border-b border-border bg-surface/30">
                 <tr>
                   <th className="py-3 px-2 text-left">Asset</th>
                   <th className="py-3 px-2">Name</th>
@@ -212,12 +212,12 @@ const CryptoTable = () => {
                     {connected && (
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
-                          <Wifi size={11} className="inline ml-1 text-green animate-pulse cursor-help" />
+                          <Wifi size={11} className="inline ml-1 text-success animate-pulse cursor-help" />
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
-                          <Tooltip.Content className="bg-gray-200 border border-gray-100/20 text-xs px-2.5 py-1.5 rounded-lg shadow-lg z-50" sideOffset={5}>
+                          <Tooltip.Content className="bg-surface border border-border/20 text-xs px-2.5 py-1.5 rounded-lg shadow-lg z-50" sideOffset={5}>
                             Real-time via Binance WebSocket
-                            <Tooltip.Arrow className="fill-gray-200" />
+                            <Tooltip.Arrow className="fill-surface" />
                           </Tooltip.Content>
                         </Tooltip.Portal>
                       </Tooltip.Root>
@@ -237,7 +237,7 @@ const CryptoTable = () => {
                   data?.map((coin) => (
                     <tr
                       key={coin.id}
-                      className="text-center text-sm border-b border-gray-100 hover:bg-gray-200/50 last:border-b-0 transition-colors"
+                      className="text-center text-sm border-b border-border hover:bg-surface/50 last:border-b-0 transition-colors"
                     >
                       <td className="py-3 px-2">
                         <div className="flex items-center gap-1.5">
@@ -246,14 +246,14 @@ const CryptoTable = () => {
                           <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full" loading="lazy" />
                           <Link
                             to={`/coin/${coin.id}`}
-                            className="uppercase font-semibold hover:text-cyan transition-colors"
+                            className="uppercase font-semibold hover:text-accent transition-colors"
                           >
                             {coin.symbol}
                           </Link>
                         </div>
                       </td>
                       <td className="py-3 px-2">
-                        <Link to={`/coin/${coin.id}`} className="hover:text-cyan transition-colors">
+                        <Link to={`/coin/${coin.id}`} className="hover:text-accent transition-colors">
                           {coin.name}
                         </Link>
                       </td>
@@ -265,10 +265,10 @@ const CryptoTable = () => {
                           livePrice={prices[coin.id]}
                         />
                       </td>
-                      <td className="py-3 px-2 hidden md:table-cell text-gray-100">
+                      <td className="py-3 px-2 hidden md:table-cell text-muted">
                         {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(coin.total_volume)}
                       </td>
-                      <td className={`py-3 px-2 hidden md:table-cell ${coin.market_cap_change_percentage_24h >= 0 ? 'text-green' : 'text-red'}`}>
+                      <td className={`py-3 px-2 hidden md:table-cell ${coin.market_cap_change_percentage_24h >= 0 ? 'text-success' : 'text-danger'}`}>
                         {formatPercent(coin.market_cap_change_percentage_24h)}
                       </td>
                       <td className="py-3 px-2 hidden lg:table-cell">
@@ -293,9 +293,9 @@ const CryptoTable = () => {
 
       <div className="flex flex-wrap items-center justify-between mt-4 gap-y-2">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-100">
+          <span className="text-sm text-muted">
             Data by{' '}
-            <a href="https://www.coingecko.com" className="text-cyan hover:underline" target="_blank" rel="noreferrer">
+            <a href="https://www.coingecko.com" className="text-accent hover:underline" target="_blank" rel="noreferrer">
               CoinGecko
             </a>
           </span>

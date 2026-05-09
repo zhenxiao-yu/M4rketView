@@ -56,20 +56,20 @@ const SearchCommand = () => {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="relative w-full max-w-lg max-h-[calc(100dvh-3rem)] sm:max-h-[80vh] flex flex-col bg-gray-200 border border-cyan/30 rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg max-h-[calc(100dvh-3rem)] sm:max-h-[80vh] flex flex-col bg-surface border border-accent/30 rounded-2xl shadow-2xl overflow-hidden"
           >
             <Command shouldFilter={false} className="w-full flex flex-col flex-1 min-h-0">
-              <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-gray-100/20">
-                <Search size={16} className="text-gray-100 shrink-0" />
+              <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-border/20">
+                <Search size={16} className="text-muted shrink-0" />
                 <Command.Input
                   value={query}
                   onValueChange={setQuery}
                   placeholder="Search coins…"
-                  className="flex-1 min-w-0 bg-transparent text-sm outline-none placeholder-gray-100/60"
+                  className="flex-1 min-w-0 bg-transparent text-sm outline-none placeholder:text-muted/60"
                   autoFocus
                 />
                 <div className="flex items-center gap-2 shrink-0">
-                  <kbd className="hidden sm:inline-block text-xs text-gray-100/60 bg-gray-300/50 px-1.5 py-0.5 rounded font-mono">ESC</kbd>
+                  <kbd className="hidden sm:inline-block text-xs text-muted/60 bg-background/50 px-1.5 py-0.5 rounded font-mono">ESC</kbd>
                   <Button variant="ghost" size="icon-sm" onClick={close} aria-label="Close search">
                     <X size={18} />
                   </Button>
@@ -80,7 +80,7 @@ const SearchCommand = () => {
                 <Command.List className="py-2">
                   {debouncedQuery.length < 2 && (
                     <Command.Empty>
-                      <div className="flex flex-col items-center gap-2 py-8 text-gray-100/60 text-sm">
+                      <div className="flex flex-col items-center gap-2 py-8 text-muted/60 text-sm">
                         <TrendingUp size={24} />
                         Type at least 2 characters to search
                       </div>
@@ -88,7 +88,7 @@ const SearchCommand = () => {
                   )}
                   {debouncedQuery.length >= 2 && (!results || results.length === 0) && (
                     <Command.Empty>
-                      <p className="text-center py-8 text-sm text-gray-100/60">No results for &quot;{debouncedQuery}&quot;</p>
+                      <p className="text-center py-8 text-sm text-muted/60">No results for &quot;{debouncedQuery}&quot;</p>
                     </Command.Empty>
                   )}
                   {results?.slice(0, 8).map((coin) => (
@@ -96,19 +96,19 @@ const SearchCommand = () => {
                       key={coin.id}
                       value={coin.id}
                       onSelect={() => selectCoin(coin.id)}
-                      className="flex items-center gap-3 px-3 sm:px-4 py-2.5 cursor-pointer hover:bg-gray-300/40 data-[selected]:bg-gray-300/40 transition-colors"
+                      className="flex items-center gap-3 px-3 sm:px-4 py-2.5 cursor-pointer hover:bg-background/40 data-[selected]:bg-background/40 transition-colors"
                     >
                       {coin.large ? (
                         <img src={coin.large} alt={coin.name} className="w-7 h-7 rounded-full shrink-0" />
                       ) : (
-                        <div className="w-7 h-7 rounded-full bg-gray-300/50 shrink-0" />
+                        <div className="w-7 h-7 rounded-full bg-background/50 shrink-0" />
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold truncate">{coin.name}</p>
-                        <p className="text-xs text-gray-100/70 uppercase">{coin.symbol}</p>
+                        <p className="text-xs text-muted/70 uppercase">{coin.symbol}</p>
                       </div>
                       {coin.market_cap_rank && (
-                        <span className="text-xs text-gray-100/50 shrink-0">#{coin.market_cap_rank}</span>
+                        <span className="text-xs text-muted/50 shrink-0">#{coin.market_cap_rank}</span>
                       )}
                     </Command.Item>
                   ))}
@@ -116,15 +116,15 @@ const SearchCommand = () => {
               </ScrollArea>
 
               {/* Hint footer — hidden on phones where the on-screen keyboard makes it noise */}
-              <div className="hidden sm:flex border-t border-gray-100/20 px-4 py-2 items-center gap-4 text-xs text-gray-100/50">
+              <div className="hidden sm:flex border-t border-border/20 px-4 py-2 items-center gap-4 text-xs text-muted/50">
                 <span className="flex items-center gap-1">
-                  <kbd className="bg-gray-300/50 px-1 py-0.5 rounded font-mono">↑↓</kbd> navigate
+                  <kbd className="bg-background/50 px-1 py-0.5 rounded font-mono">↑↓</kbd> navigate
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="bg-gray-300/50 px-1 py-0.5 rounded font-mono">↵</kbd> open coin
+                  <kbd className="bg-background/50 px-1 py-0.5 rounded font-mono">↵</kbd> open coin
                 </span>
                 <span className="flex items-center gap-1 ml-auto">
-                  <kbd className="bg-gray-300/50 px-1 py-0.5 rounded font-mono">⌘K</kbd> toggle
+                  <kbd className="bg-background/50 px-1 py-0.5 rounded font-mono">⌘K</kbd> toggle
                 </span>
               </div>
             </Command>
