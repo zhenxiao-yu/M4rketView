@@ -2,11 +2,21 @@
 
 [![CI](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/ci.yml)
 [![Release](https://github.com/zhenxiao-yu/M4rketView/actions/workflows/release.yml/badge.svg)](https://github.com/zhenxiao-yu/M4rketView/releases/latest)
-[![Version](https://img.shields.io/badge/version-1.3.1-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
+[![Version](https://img.shields.io/badge/version-1.3.2-B6EADA?style=flat)](https://github.com/zhenxiao-yu/M4rketView/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
 [![Live](https://img.shields.io/badge/live-m4rket--view.vercel.app-301E67?style=flat&logo=vercel)](https://m4rket-view.vercel.app)
 
-A production-grade cryptocurrency market dashboard with live prices, news aggregation, DeFi analytics, and portfolio tracking — built entirely on free, no-key public APIs.
+A cryptocurrency market dashboard with live prices, news aggregation, DeFi analytics, and portfolio tracking — built entirely on free, no-key public APIs.
+
+It pairs a real-time Binance WebSocket price stream with CoinGecko market data, DeFiLlama TVL, on-chain Bitcoin stats, and an aggregated news feed, then layers on local-only portfolio, watchlist, and price-alert tools. No accounts, no API keys, no backend.
+
+**Live demo:** [m4rket-view.vercel.app](https://m4rket-view.vercel.app)
+
+---
+
+## Screenshots
+
+No screenshots are committed to the repository yet. See the [live demo](https://m4rket-view.vercel.app) for the current UI, or drop images into a `docs/screenshots/` folder and link them here.
 
 ---
 
@@ -17,7 +27,7 @@ A production-grade cryptocurrency market dashboard with live prices, news aggreg
 | **Live Prices** | Binance WebSocket stream — real-time price flash animations for 20 coins |
 | **Market Overview** | CoinGecko top 250 with sorting, filtering, search, pagination |
 | **Market Heatmap** | Recharts Treemap — instant green/red market snapshot |
-| **Crypto News** | CryptoCompare News API — 50+ articles, dynamic source filtering |
+| **Crypto News** | Aggregated RSS from CoinDesk, Cointelegraph, and Decrypt — dynamic source filtering |
 | **DeFi TVL** | DeFiLlama — top chains, top protocols, 90-day area chart |
 | **Bitcoin Network** | blockchain.info — hash rate, difficulty, tx volume, miner revenue |
 | **Fear & Greed** | Alternative.me sentiment gauge |
@@ -52,7 +62,8 @@ A production-grade cryptocurrency market dashboard with live prices, news aggreg
 | [blockchain.info](https://www.blockchain.com/explorer/api/blockchain_api) | primary | Bitcoin on-chain stats |
 | [Blockchair](https://blockchair.com/api/docs) | fallback | Bitcoin stats when blockchain.info fails |
 | [Alternative.me](https://alternative.me/crypto/fear-and-greed-index/) | primary | Fear & Greed Index |
-| [CryptoCompare](https://min-api.cryptocompare.com/documentation) | primary | Crypto news feed |
+| CoinDesk / Cointelegraph / Decrypt RSS | primary | Crypto news feeds |
+| [AllOrigins](https://allorigins.win/) | proxy | CORS proxy for the news RSS feeds |
 
 **Failover behavior** — primary endpoints try first; on `429`, network error, timeout, or 5xx
 the fallback fires automatically. All fallbacks are keyless and CORS-clean. If both primary
@@ -78,7 +89,7 @@ npm run build      # Production build → dist/
 npm run preview    # Preview production build locally
 npm run typecheck  # TypeScript check
 npm run lint       # ESLint
-npm test -- --run  # Vitest (single run, 71 tests)
+npm test -- --run  # Vitest (single run, 145 tests)
 npm run coverage   # Coverage report
 ```
 
@@ -90,7 +101,7 @@ Every push to `main` and every pull request runs four parallel jobs:
 |---|---|
 | Lint | `eslint .` |
 | Type check | `tsc --noEmit` |
-| Tests | `vitest --run` (71 tests) |
+| Tests | `vitest --run` (145 tests) |
 | Build | `vite build` → artifact uploaded |
 
 **Releases** — push a `v*` tag to trigger the release workflow: runs the full CI gate, builds, zips `dist/`, and creates a GitHub Release with auto-generated notes.
@@ -104,7 +115,7 @@ src/
 ├── api/            Fetch wrappers (one file per data source)
 ├── components/     Shared UI components
 │   ├── dashboard/  Dashboard widgets (BitcoinStats, DeFiTVL)
-│   └── ui/         Primitive components (ErrorCard)
+│   └── ui/         Primitive components (Badge, Button, Card, ErrorCard, …)
 ├── hooks/          TanStack Query hooks (one per data source)
 ├── lib/            Utilities (formatters, queryClient, errors, buildInfo)
 ├── pages/          Route pages (lazy-loaded via React.lazy)
