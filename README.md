@@ -173,4 +173,4 @@ See [SECURITY.md](SECURITY.md) for the vulnerability disclosure policy.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Released under the [MIT License](LICENSE).
